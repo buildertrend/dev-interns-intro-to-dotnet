@@ -33,8 +33,10 @@ namespace Blackjack
                     playerCards[0] = DealCard();
                     playerCards[1] = DealCard();
 
-                    playerTotal += playerCards[0].Value;
-                    playerTotal += playerCards[1].Value;
+                    //playerTotal += playerCards[0].Value;
+                    //playerTotal += playerCards[1].Value;
+
+                    calculateTotal();
 
 
                     //TODO: The dealer is dealt one card face up, one card face down.
@@ -51,7 +53,7 @@ namespace Blackjack
                     Console.WriteLine("Would you like to (H)it or (S)tay?");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("H"));
+                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
 
                 if (playerChoice.Equals("H"))
                 {
@@ -84,7 +86,32 @@ namespace Blackjack
         private static void DisplayWelcomeMessage()
         {
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
-            Console.WriteLine("Your playerTotall is {0} ", playerTotal);
+            Console.WriteLine("Your playerTotal is {0} ", playerTotal);
+            //TODO: Inform the player the value of the dealer's visible card.
+        }
+
+        private static int calculateTotal()
+        {
+            playerTotal = 0;
+            int i = playerCardCount;
+            for (int j = 0; j <= i; j++)
+            {
+                playerTotal += playerCards[j].Value;
+            }
+
+            if (playerTotal > 21)
+            {
+                for (int j = 0; j <= i; j++)
+                {
+                    if (playerCards[j].Value == 11)
+                    { playerTotal -= 10; }
+
+                    if (playerTotal <= 21) break;
+                }
+
+
+            }
+            return 0;
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
@@ -92,18 +119,19 @@ namespace Blackjack
         {
             playerCardCount += 1;
             playerCards[playerCardCount] = DealCard();
-            playerTotal += playerCards[playerCardCount].Value;
-            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
+            //playerTotal += playerCards[playerCardCount].Value;
+            calculateTotal();
+            Console.WriteLine("You card is {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
             //Is this true? I don't think it is.
             if (playerTotal.Equals(21))
             {
-                Console.WriteLine("Yuo got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+                Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
 
             }
             else if (playerTotal > 21)
             {
-                Console.WriteLine("You busted! Sorry! Teh dealer's Total was {0}", dealerTotal);
+                Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
 
             }
             else if (playerTotal < 21)
@@ -131,7 +159,7 @@ namespace Blackjack
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
+            //playerTotal += cardValue;
             return GetCardValue(cardValue);
         }
 
@@ -140,20 +168,21 @@ namespace Blackjack
         {
             return cardValue switch
             {
-                1 => new Card() { Name = "Two", Value = 2 },
-                2 => new Card() { Name = "Three", Value = 3 },
-                3 => new Card() { Name = "Four", Value = 4 },
-                4 => new Card() { Name = "Five", Value = 5 },
-                5 => new Card() { Name = "Six", Value = 6 },
-                6 => new Card() { Name = "Seven", Value = 7 },
-                7 => new Card() { Name = "Eihgt", Value = 8 },
-                8 => new Card() { Name = "Nine", Value = 9 },
-                9 => new Card() { Name = "Ten", Value = 10 },
-                10 => new Card() { Name = "Jack", Value = 10 },
-                11 => new Card() { Name = "Queen", Value = 10 },
-                12 => new Card() { Name = "King", Value = 10 },
-                13 => new Card() { Name = "Ace", Value = 11 },
-                _ => new Card() { Name = "Two", Value = 2 },
+                1 => new Card() { Name = "Ace", Value = 11 },
+                2 => new Card() { Name = "Two", Value = 2 },
+                3 => new Card() { Name = "Three", Value = 3 },
+                4 => new Card() { Name = "Four", Value = 4 },
+                5 => new Card() { Name = "Five", Value = 5 },
+                6 => new Card() { Name = "Six", Value = 6 },
+                7 => new Card() { Name = "Seven", Value = 7 },
+                8 => new Card() { Name = "Eight", Value = 8 },
+                9 => new Card() { Name = "Nine", Value = 9 },
+                10 => new Card() { Name = "Ten", Value = 10 },
+                11 => new Card() { Name = "Jack", Value = 10 },
+                12 => new Card() { Name = "Queen", Value = 10 },
+                13 => new Card() { Name = "King", Value = 10 },
+                //14 => new Card() { Name = "Ace", Value = 11 }
+                _ => new Card() { Name = "unknown", Value = 2 }
             };
         }
 
