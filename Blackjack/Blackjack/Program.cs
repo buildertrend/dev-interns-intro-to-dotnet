@@ -2,7 +2,7 @@
 
 namespace Blackjack
 {
-    class Program
+    partial class Program
     {
         static Random cardRandomizer = new Random();
 
@@ -29,12 +29,16 @@ namespace Blackjack
                 if (decision == "Y")
                 {
                     //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(15, 22);
+                    //dealerTotal = cardRandomizer.Next(15, 22);
+                    dealerCards[0] = DealCard();
+                    dealerCards[1] = DealCard();
                     playerCards[0] = DealCard();
                     playerCards[1] = DealCard();
 
                     playerTotal += playerCards[0].Value;
                     playerTotal += playerCards[1].Value;
+                    dealerTotal += dealerCards[0].Value;
+                    dealerTotal += dealerCards[1].Value;
 
 
                     //TODO: The dealer is dealt one card face up, one card face down.
@@ -48,10 +52,10 @@ namespace Blackjack
                 /* START GAME LOOP */
                 do
                 {
-                    Console.WriteLine("Would you like to (H)it or (S)tay?");
+                    Console.WriteLine("The Dealer card is a {0}. Would you like to (H)it or (S)tay?", dealerCards[0].Name);
                     playerChoice = Console.ReadLine().ToUpper();
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("H"));
+                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
 
                 if (playerChoice.Equals("H"))
                 {
@@ -93,6 +97,16 @@ namespace Blackjack
             playerCardCount += 1;
             playerCards[playerCardCount] = DealCard();
             playerTotal += playerCards[playerCardCount].Value;
+            //Checks if player woulod normally bust with an Ace, converts Ace to value of 1 if possible
+            for (int card = 0; card <= playerCardCount; card++)
+            {
+                if (playerTotal > 21 && playerCards[card].Value == 11)
+                {
+                    playerCards[card].Value = 1;
+                    playerTotal -= 10;
+                }
+            }
+            
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
             //Is this true? I don't think it is.
@@ -110,7 +124,7 @@ namespace Blackjack
             {
                 do
                 {
-                    Console.WriteLine("Would you like to hit or stay? h for hit s for stay");
+                    Console.WriteLine("Would you like to (H)it or (S)tay?");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
                 while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
@@ -121,17 +135,10 @@ namespace Blackjack
             }
         }
 
-        //TODO: Move this class to it's own file.
-        private class Card
-        {
-            public int Value;
-            public string Name;
-        }
-
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
+          //  playerTotal += cardValue;
             return GetCardValue(cardValue);
         }
 
