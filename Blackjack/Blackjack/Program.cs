@@ -23,7 +23,7 @@ namespace Blackjack
             while (playAgain.ToUpper() == "Y")
             {
                 //StartGame
-                Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
+                Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o (E)xtra");
                 var decision = Console.ReadLine().ToUpper();
 
                 if (decision == "Y")
@@ -39,6 +39,21 @@ namespace Blackjack
 
                     //TODO: The dealer is dealt one card face up, one card face down.
                     DisplayWelcomeMessage();
+                }
+                if (decision == "E")
+                {
+                    Console.WriteLine("Is Ian good at Super Smash Bros? (Y)es (N)o");
+                    var isIanGoodAtSuperSmashBros = Console.ReadLine().ToUpper();
+
+                    if(isIanGoodAtSuperSmashBros == "Y")
+                    {
+                        ReevaluateIan();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Correct! Ian is not good at Super Smash Bros. Nich is the best in office.");
+                        Environment.Exit(0);
+                    }
                 }
                 else
                 {
@@ -187,6 +202,23 @@ namespace Blackjack
                     Console.Read();
                     Environment.Exit(0);
                 }
+            }
+        }
+
+        private static void ReevaluateIan()
+        {
+            Console.WriteLine("Fatal error. The variable IsIanGoodAtSuperSmashBros should always be false.");
+            Console.WriteLine("Is Ian good at Super Smash Bros? (Y)es (N)o");
+            var isIanGoodAtSuperSmashBros = Console.ReadLine().ToUpper();
+
+            if (isIanGoodAtSuperSmashBros == "Y")
+            {
+                ReevaluateIan();
+            }
+            else
+            {
+                Console.WriteLine("Correct! Ian is not good at Super Smash Bros. Nich is the best in office.");
+                Environment.Exit(0);
             }
         }
     }
