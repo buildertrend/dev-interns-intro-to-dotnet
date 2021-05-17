@@ -74,7 +74,7 @@ namespace Blackjack
                         Hit();
                     }
 
-                    if (playerChoice.Equals("S"))
+                    else if (playerChoice.Equals("S"))
                     {
                         if (playerTotal > dealerTotal && playerTotal <= 21)
                         {
@@ -184,12 +184,7 @@ namespace Blackjack
             }
         }
 
-        //TODO: Move this class to it's own file.
-        private class Card
-        {
-            public int Value;
-            public string Name;
-        }
+        
 
         static Card DealCard()
         {
