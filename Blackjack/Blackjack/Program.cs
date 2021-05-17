@@ -98,7 +98,7 @@ namespace Blackjack
             {
                 playerTotal += playerCards[j].Value;
             }
-
+            //we check if there is an ace in case the total is greater than 21
             if (playerTotal > 21)
             {
                 for (int j = 0; j <= i; j++)
@@ -112,7 +112,6 @@ namespace Blackjack
 
             }
             return 0;
-            //TODO: Inform the player the value of the dealer's visible card.
         }
 
         static void Hit()
@@ -182,7 +181,7 @@ namespace Blackjack
                 12 => new Card() { Name = "Queen", Value = 10 },
                 13 => new Card() { Name = "King", Value = 10 },
                 //14 => new Card() { Name = "Ace", Value = 11 }
-                _ => new Card() { Name = "unknown", Value = 2 }
+                _ => new Card() { Name = "unknown", Value = 0 }
             };
         }
 
