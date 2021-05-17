@@ -31,12 +31,15 @@ namespace Blackjack
                     //Currently, just get a value between 16-21 for the dealer
                     dealerTotal = cardRandomizer.Next(15, 22);
                     playerCards[0] = DealCard();
+                    //Hit();
                     playerCards[1] = DealCard();
 
                     //playerTotal += playerCards[0].Value;
                     //playerTotal += playerCards[1].Value;
 
                     calculateTotal();
+
+                    
 
 
                     //TODO: The dealer is dealt one card face up, one card face down.
@@ -48,30 +51,42 @@ namespace Blackjack
                 }
 
                 /* START GAME LOOP */
-                do
+                if (playerTotal < 22)
                 {
-                    Console.WriteLine("Would you like to (H)it or (S)tay?");
-                    playerChoice = Console.ReadLine().ToUpper();
-                }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
-
-                if (playerChoice.Equals("H"))
-                {
-                    //hit will get them a card / check the total and ask for another hit
-                    Hit();
-                }
-
-                if (playerChoice.Equals("S"))
-                {
-                    if (playerTotal > dealerTotal && playerTotal <= 21)
+                    do
                     {
-                        Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                        Console.WriteLine("Would you like to (H)it or (S)tay?");
+                        playerChoice = Console.ReadLine().ToUpper();
                     }
-                    else if (playerTotal < dealerTotal)
+                    while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
+
+                    if (playerChoice.Equals("H"))
                     {
-                        Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+                        //hit will get them a card / check the total and ask for another hit
+                        Hit();
+                    }
+
+                    if (playerChoice.Equals("S"))
+                    {
+                        if (playerTotal > dealerTotal && playerTotal <= 21)
+                        {
+                            Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                        }
+                        else if (playerTotal < dealerTotal)
+                        {
+                            Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+                        }
                     }
                 }
+                else if (playerTotal == 21)
+                {
+                    Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+                }
+                else
+                {
+                    Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
+                }
+                
 
                 /* END GAME LOOP */
 
@@ -137,13 +152,25 @@ namespace Blackjack
             {
                 do
                 {
-                    Console.WriteLine("Would you like to hit or stay? h for hiit s for stay");
+                    Console.WriteLine("Would you like to hit or stay? H for hit S for stay");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
                 while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
                 if (playerChoice.ToUpper() == "H")
                 {
                     Hit();
+                }
+                else 
+                {
+
+                    if (playerTotal > dealerTotal && playerTotal <= 21)
+                    {
+                        Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                    }
+                    else if (playerTotal < dealerTotal)
+                    {
+                        Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+                    }
                 }
             }
         }
