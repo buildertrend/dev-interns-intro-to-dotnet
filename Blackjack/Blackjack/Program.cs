@@ -121,13 +121,6 @@ namespace Blackjack
             }
         }
 
-        //TODO: Move this class to it's own file.
-        private class Card
-        {
-            public int Value;
-            public string Name;
-        }
-
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
