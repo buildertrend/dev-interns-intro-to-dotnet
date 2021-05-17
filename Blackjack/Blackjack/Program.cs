@@ -29,7 +29,15 @@ namespace Blackjack
                 if (decision == "Y")
                 {
                     //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(15, 22);
+                    //dealerTotal = cardRandomizer.Next(15, 22);
+
+                    dealerCards[0] = DealCard();
+                    dealerCards[1] = DealCard();
+
+                    dealerTotal = dealerCards[0].Value + dealerCards[1].Value;
+
+
+
                     playerCards[0] = DealCard();
                     //Hit();
                     playerCards[1] = DealCard();
@@ -100,6 +108,7 @@ namespace Blackjack
         /// </summary>
         private static void DisplayWelcomeMessage()
         {
+            Console.WriteLine("One of dealer's card is {0}", dealerCards[0].Name);
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
             //TODO: Inform the player the value of the dealer's visible card.
