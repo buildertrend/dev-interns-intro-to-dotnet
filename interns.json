@@ -1,13 +1,17 @@
 [
     {
         "name": "Saljooq Altaf",
-        "hometown": "",
-        "hobbies": []
+        "hometown": "Ames, IA",
+        "hobbies": ["Cooking", "Travelling"]
     },
     {
         "name": "Ian Baer",
-        "hometown": "",
-        "hobbies": []
+        "hometown": "Silver City, IA",
+        "hobbies": [
+            "Golf",
+            "Video Games",
+            "Reading"
+        ]
     },
     {
         "name": "Andrew Damon",
@@ -20,8 +24,12 @@
     },
     {
         "name": "David Harmon",
-        "hometown": "",
-        "hobbies": []
+        "hometown": "Fort Collins, CO",
+        "hobbies": [
+            "Video Games",
+            "Board Games",
+            "Game Development"
+        ]
     },
     {
         "name": "Vincent Nguyen",
@@ -34,22 +42,26 @@
     },
     {
         "name": "Tyler Johnson",
-        "hometown": "",
-        "hobbies": []
+        "hometown": "Ames, IA",
+        "hobbies": [
+            "Hiking",
+            "Videogames",
+            "Reading"
+        ]
     },
     {
         "name": "David Swanson",
-<<<<<<< HEAD
-        "hometown": "Omaha"
-=======
-        "hometown": "",
+        "hometown": "Omaha",
         "hobbies": []
->>>>>>> master
     },
     {
         "name": "Brevin Wapp",
-        "hometown": "",
-        "hobbies": []
+        "hometown": "Ames, IA",
+        "hobbies": [
+            "Gardening",
+            "Videogames",
+            "Traveling"
+        ]
     },
     {
         "name": "Cole Weber",
