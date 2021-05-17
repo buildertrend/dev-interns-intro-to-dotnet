@@ -1,23 +1,46 @@
 ﻿using System;
 
-public class Card
+namespace Blackjack
 {
-    public int Value;
-    public string Name;
-
-    public Card()
+    public class Card
     {
+        public int Value { get; set; }
+        public Rank Name { get; set; }
 
+        public override string ToString()
+        {
+            return Name + " --- " + Value;
+        }
     }
 
-    public Card(int value, string name)
+    public enum Color
     {
-        this.Value = value;
-        this.Name = name;
+        RED,
+        BLACK
     }
 
-    public override string ToString()
+    public enum Suit
     {
-        return Name + " --- " + Value;
+        HEARTS,
+        DIAMONDS,
+        SPADES,
+        CLUBS
+    }
+
+    public enum Rank
+    {
+        TWO,
+        THREE,
+        FOUR,
+        FIVE,
+        SIX,
+        SEVEN,
+        EIGHT,
+        NINE,
+        TEN,
+        JACK,
+        QUEEN,
+        KING,
+        ACE
     }
 }
