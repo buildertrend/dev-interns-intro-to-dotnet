@@ -38,8 +38,12 @@
     },
     {
         "name": "Tyler Johnson",
-        "hometown": "",
-        "hobbies": []
+        "hometown": "Ames, IA",
+        "hobbies": [
+            "Hiking",
+            "Videogames",
+            "Reading"
+        ]
     },
     {
         "name": "David Swanson",
