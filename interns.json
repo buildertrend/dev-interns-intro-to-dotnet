@@ -39,8 +39,12 @@
     },
     {
         "name": "David Swanson",
-        "hometown": "Omaha",
-        "hobbies": ["cars", "music"]
+<<<<<<< HEAD
+        "hometown": "Omaha"
+=======
+        "hometown": "",
+        "hobbies": []
+>>>>>>> master
     },
     {
         "name": "Brevin Wapp",
