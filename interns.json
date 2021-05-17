@@ -6,8 +6,12 @@
     },
     {
         "name": "Ian Baer",
-        "hometown": "",
-        "hobbies": []
+        "hometown": "Silver City, IA",
+        "hobbies": [
+            "Golf",
+            "Video Games",
+            "Reading"
+        ]
     },
     {
         "name": "Andrew Damon",
