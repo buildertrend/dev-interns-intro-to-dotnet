@@ -10,8 +10,8 @@ namespace Blackjack
         static int playerTotal = 0;
         static int playerCardCount = 1;
         private static readonly Card[] dealerCards = new Card[11];
-        static int dealerTotal = 0;
-        static int dealerCardCount = 0;
+        static int dealerTotal = 1;
+        static int dealerCardCount = 1;
 
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
@@ -36,6 +36,8 @@ namespace Blackjack
 
                     dealerTotal = dealerCards[0].Value + dealerCards[1].Value;
 
+ 
+             
 
 
                     playerCards[0] = DealCard();
@@ -76,23 +78,39 @@ namespace Blackjack
 
                     else if (playerChoice.Equals("S"))
                     {
+                        dealer_hit();
                         if (playerTotal > dealerTotal && playerTotal <= 21)
                         {
                             Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                            print_dealer();
+                        }
+                        else if (dealerTotal > 21)
+                        {
+                            Console.WriteLine("You won! Dealer got busted. The dealer's total was {0}", dealerTotal);
+                            print_dealer();
                         }
                         else if (playerTotal < dealerTotal)
                         {
                             Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+                            print_dealer();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Tie with the dealer! The dealer's total was {0}", dealerTotal);
+                            print_dealer();
                         }
                     }
                 }
                 else if (playerTotal == 21)
                 {
+                    dealer_hit();
                     Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+                    print_dealer();
                 }
                 else
                 {
                     Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
+                    print_dealer();
                 }
                 
 
@@ -101,6 +119,35 @@ namespace Blackjack
                 Console.WriteLine("Wuold you like to play again? (Y)es or (N)o?");
                 PlayAgain();
             }
+        }
+
+        private static void dealer_hit()
+        {
+            while (dealerTotal < 17)
+            {
+                dealerCardCount++;
+                dealerCards[dealerCardCount] = DealCard();
+                dealerTotal += dealerCards[dealerCardCount].Value;
+
+                //if total is greater than 21, we check for ace
+                if (dealerTotal > 21)
+                {
+                    for(int i = 0; i <= dealerCardCount; i++)
+                    {
+                        if (dealerCards[i].Value == 11) dealerTotal -= 10;
+
+                        if (dealerTotal <= 21) break;
+                    }
+                }
+
+            }
+        }
+
+        private static void print_dealer()
+        {
+            Console.Write("Dealer has the following cards : ");
+            for (int i = 0; i <= dealerCardCount; i++) { Console.Write("  {0}", dealerCards[i].Name); }
+            Console.WriteLine();
         }
 
         /// <summary>
@@ -150,11 +197,13 @@ namespace Blackjack
             if (playerTotal.Equals(21))
             {
                 Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+                print_dealer();
 
             }
             else if (playerTotal > 21)
             {
                 Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
+                print_dealer();
 
             }
             else if (playerTotal < 21)
@@ -171,14 +220,27 @@ namespace Blackjack
                 }
                 else 
                 {
+                    dealer_hit();
 
                     if (playerTotal > dealerTotal && playerTotal <= 21)
                     {
                         Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                        print_dealer();
+                    }
+                    else if (dealerTotal > 21)
+                    {
+                        Console.WriteLine("You won! Dealer got busted. The dealer's total was {0}", dealerTotal);
+                        print_dealer();
                     }
                     else if (playerTotal < dealerTotal)
                     {
                         Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+                        print_dealer();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Tie with the dealer! The dealer's total was {0}", dealerTotal);
+                        print_dealer();
                     }
                 }
             }
