@@ -52,7 +52,10 @@
     {
         "name": "David Swanson",
         "hometown": "Omaha",
-        "hobbies": []
+        "hobbies": [
+            "cars",
+            "music"
+        ]
     },
     {
         "name": "Brevin Wapp",
