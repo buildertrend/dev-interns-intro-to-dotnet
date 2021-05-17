@@ -22,6 +22,10 @@ namespace Blackjack
         {
             while (playAgain.ToUpper() == "Y")
             {
+                Deck deck = new Deck();
+                deck.Shuffle();
+                deck.DisplayDeck();
+
                 //StartGame
                 Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
                 var decision = Console.ReadLine().ToUpper();
@@ -134,7 +138,7 @@ namespace Blackjack
         }
 
 
-        static Card GetCardValue(int cardValue)
+        public static Card GetCardValue(int cardValue)
         {
             return cardValue switch
             {
