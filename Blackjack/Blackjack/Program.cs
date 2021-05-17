@@ -73,7 +73,7 @@ namespace Blackjack
 
                 /* END GAME LOOP */
 
-                Console.WriteLine("Wuold you like to play again? (Y)es or (N)o?");
+                Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
                 PlayAgain();
             }
         }
@@ -98,19 +98,19 @@ namespace Blackjack
             //Is this true? I don't think it is.
             if (playerTotal.Equals(21))
             {
-                Console.WriteLine("Yuo got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+                Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
 
             }
             else if (playerTotal > 21)
             {
-                Console.WriteLine("You busted! Sorry! Teh dealer's Total was {0}", dealerTotal);
+                Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
 
             }
             else if (playerTotal < 21)
             {
                 do
                 {
-                    Console.WriteLine("Would you like to hit or stay? h for hiit s for stay");
+                    Console.WriteLine("Would you like to hit or stay? h for hit s for stay");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
                 while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
@@ -146,7 +146,7 @@ namespace Blackjack
                 4 => new Card() { Name = "Five", Value = 5 },
                 5 => new Card() { Name = "Six", Value = 6 },
                 6 => new Card() { Name = "Seven", Value = 7 },
-                7 => new Card() { Name = "Eihgt", Value = 8 },
+                7 => new Card() { Name = "Eight", Value = 8 },
                 8 => new Card() { Name = "Nine", Value = 9 },
                 9 => new Card() { Name = "Ten", Value = 10 },
                 10 => new Card() { Name = "Jack", Value = 10 },
