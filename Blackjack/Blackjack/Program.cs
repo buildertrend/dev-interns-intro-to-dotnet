@@ -177,7 +177,7 @@ namespace Blackjack
             }
             else if (playAgain.Equals("N"))
             {
-                Console.WriteLine("End game initiated");
+                //Console.WriteLine("End game initiated");
                 ConsoleKeyInfo info = Console.ReadKey();
                 if (info.Key == ConsoleKey.Enter)
                 {
