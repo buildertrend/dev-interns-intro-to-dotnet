@@ -56,8 +56,12 @@
     },
     {
         "name": "Brevin Wapp",
-        "hometown": "",
-        "hobbies": []
+        "hometown": "Ames, IA",
+        "hobbies": [
+            "Gardening",
+            "Videogames",
+            "Traveling"
+        ]
     },
     {
         "name": "Cole Weber",
