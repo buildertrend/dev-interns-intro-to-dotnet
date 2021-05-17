@@ -33,8 +33,8 @@ namespace Blackjack
                     playerCards[0] = DealCard();
                     playerCards[1] = DealCard();
 
-                    playerTotal += playerCards[0].Value;
-                    playerTotal += playerCards[1].Value;
+                    //playerTotal += playerCards[0].Value;
+                    //playerTotal += playerCards[1].Value;
 
 
                     //TODO: The dealer is dealt one card face up, one card face down.
@@ -51,7 +51,7 @@ namespace Blackjack
                     Console.WriteLine("Would you like to (H)it or (S)tay?");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("H"));
+                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
 
                 if (playerChoice.Equals("H"))
                 {
@@ -73,7 +73,8 @@ namespace Blackjack
 
                 /* END GAME LOOP */
 
-                Console.WriteLine("Wuold you like to play again? (Y)es or (N)o?");
+                Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
+                playAgain = Console.ReadLine().ToUpper();
                 PlayAgain();
             }
         }
