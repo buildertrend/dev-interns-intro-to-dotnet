@@ -29,9 +29,25 @@ namespace Blackjack
                 if (decision == "Y")
                 {
                     //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(15, 22);
+                    //dealerTotal = cardRandomizer.Next(15, 22);
+
+                 
+
+                    while(dealerTotal < 17)
+                    {
+                        dealerCards[dealerCardCount] = DealCard();
+                        dealerTotal += dealerCards[dealerCardCount].Value;
+                        dealerCardCount++;
+                    }
+                 
+
                     playerCards[0] = DealCard();
                     playerCards[1] = DealCard();
+
+                    //Console.WriteLine("You were dealt the value : " + playerCards[0].Value + " and " +playerCards[1].Value);
+                    //Console.WriteLine("You were dealt the cards : " + playerCards[1].Value);
+
+                    //Console.WriteLine("You were dealt the value total : " + playerTotal);
 
                     playerTotal += playerCards[0].Value;
                     playerTotal += playerCards[1].Value;
@@ -51,7 +67,7 @@ namespace Blackjack
                     Console.WriteLine("Would you like to (H)it or (S)tay?");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("H"));
+                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
 
                 if (playerChoice.Equals("H"))
                 {
@@ -73,7 +89,7 @@ namespace Blackjack
 
                 /* END GAME LOOP */
 
-                Console.WriteLine("Wuold you like to play again? (Y)es or (N)o?");
+                Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
                 PlayAgain();
             }
         }
@@ -83,9 +99,9 @@ namespace Blackjack
         /// </summary>
         private static void DisplayWelcomeMessage()
         {
-            Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
-            Console.WriteLine("Your playerTotall is {0} ", playerTotal);
-            //Console.WriteLine("The dealer's visible card is : {0} ", dealerCards[0].Value);
+            Console.WriteLine("You were dealt the cards : {0} and {1}", playerCards[0].Name, playerCards[1].Name);
+            Console.WriteLine("Your playerTotal is {0} ", playerTotal);
+            Console.WriteLine("The value of the dealer's visible card is {0}", dealerCards[1].Value);
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
@@ -104,14 +120,14 @@ namespace Blackjack
             }
             else if (playerTotal > 21)
             {
-                Console.WriteLine("You busted! Sorry! Teh dealer's Total was {0}", dealerTotal);
+                Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
 
             }
             else if (playerTotal < 21)
             {
                 do
                 {
-                    Console.WriteLine("Would you like to hit or stay? h for hiit s for stay");
+                    Console.WriteLine("Would you like to hit or stay? h for hit s for stay");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
                 while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
@@ -132,7 +148,11 @@ namespace Blackjack
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
+            //playerTotal += cardValue;
+
+            //Console.WriteLine("Function: You were dealt the value total : " + cardValue + " total of " + playerTotal);
+            //Console.WriteLine("return getcardvalue : " + GetCardValue(cardValue).Value);
+
             return GetCardValue(cardValue);
         }
 
@@ -147,7 +167,7 @@ namespace Blackjack
                 4 => new Card() { Name = "Five", Value = 5 },
                 5 => new Card() { Name = "Six", Value = 6 },
                 6 => new Card() { Name = "Seven", Value = 7 },
-                7 => new Card() { Name = "Eihgt", Value = 8 },
+                7 => new Card() { Name = "Eight", Value = 8 },
                 8 => new Card() { Name = "Nine", Value = 9 },
                 9 => new Card() { Name = "Ten", Value = 10 },
                 10 => new Card() { Name = "Jack", Value = 10 },
@@ -178,7 +198,10 @@ namespace Blackjack
             }
             else if (playAgain.Equals("N"))
             {
+
+                Console.WriteLine("Press enter to end the game!");
                 ConsoleKeyInfo info = Console.ReadKey();
+
                 if (info.Key == ConsoleKey.Enter)
                 {
                     Environment.Exit(0);
