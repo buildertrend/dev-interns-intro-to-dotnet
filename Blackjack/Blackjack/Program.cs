@@ -65,7 +65,7 @@ namespace Blackjack
                     {
                         Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
                     }
-                    else if (playerTotal < dealerTotal)
+                    else if (playerTotal <= dealerTotal)
                     {
                         Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
                     }
@@ -74,7 +74,7 @@ namespace Blackjack
                 /* END GAME LOOP */
 
                 Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
-                playAgain = Console.ReadLine().ToUpper();
+                //playAgain = Console.ReadLine().ToUpper();
                 PlayAgain();
             }
         }
@@ -93,11 +93,10 @@ namespace Blackjack
         {
             playerCardCount += 1;
             playerCards[playerCardCount] = DealCard();
-            playerTotal += playerCards[playerCardCount].Value;
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
             //Is this true? I don't think it is.
-            if (playerTotal.Equals(21))
+            if (playerTotal == 21)
             {
                 Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
 
@@ -132,7 +131,7 @@ namespace Blackjack
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
+            playerTotal += GetCardValue(cardValue).Value;
             return GetCardValue(cardValue);
         }
 
@@ -147,7 +146,7 @@ namespace Blackjack
                 4 => new Card() { Name = "Five", Value = 5 },
                 5 => new Card() { Name = "Six", Value = 6 },
                 6 => new Card() { Name = "Seven", Value = 7 },
-                7 => new Card() { Name = "Eihgt", Value = 8 },
+                7 => new Card() { Name = "Eight", Value = 8 },
                 8 => new Card() { Name = "Nine", Value = 9 },
                 9 => new Card() { Name = "Ten", Value = 10 },
                 10 => new Card() { Name = "Jack", Value = 10 },
@@ -178,6 +177,7 @@ namespace Blackjack
             }
             else if (playAgain.Equals("N"))
             {
+                Console.WriteLine("End game initiated");
                 ConsoleKeyInfo info = Console.ReadKey();
                 if (info.Key == ConsoleKey.Enter)
                 {
@@ -185,6 +185,7 @@ namespace Blackjack
                 }
                 else
                 {
+                    //Is this necessary? What does this accomplish?
                     Console.Read();
                     Environment.Exit(0);
                 }
