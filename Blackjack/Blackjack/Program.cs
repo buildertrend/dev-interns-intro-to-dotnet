@@ -11,7 +11,7 @@ namespace Blackjack
         static int playerCardCount = 1;
         private static readonly Card[] dealerCards = new Card[11];
         static int dealerTotal = 0;
-        static int dealerCardCount = 0;
+        static int dealerCardCount = 1;
 
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
@@ -28,12 +28,16 @@ namespace Blackjack
 
                 if (decision == "Y")
                 {
-                    //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(15, 22);
+                    // Deal 2 initial cards to the dealer
+                    //dealerTotal = cardRandomizer.Next(15, 22);
+                    dealerCards[0] = DealCard();
+                    dealerCards[1] = DealCard();
+
+                    dealerTotal += dealerCards[0].Value;
+                    dealerTotal += dealerCards[1].Value;
+
                     playerCards[0] = DealCard();
                     playerCards[1] = DealCard();
-
-                    Console.WriteLine("Card value1 == {0} card value2 == {1}", playerCards[0].Value, playerCards[1].Value);
 
                     playerTotal += playerCards[0].Value;
                     playerTotal += playerCards[1].Value;
@@ -87,7 +91,7 @@ namespace Blackjack
         {
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
-            //TODO: Inform the player the value of the dealer's visible card.
+            Console.WriteLine("Dealer's first card: {0}. Value: {1}", dealerCards[0].Name, dealerCards[0].Value);
         }
 
         static void Hit()
@@ -121,13 +125,6 @@ namespace Blackjack
                     Hit();
                 }
             }
-        }
-
-        //TODO: Move this class to it's own file.
-        private class Card
-        {
-            public int Value;
-            public string Name;
         }
 
         static Card DealCard()
@@ -175,6 +172,7 @@ namespace Blackjack
                 dealerTotal = 0;
                 playerCardCount = 1;
                 playerTotal = 0;
+                dealerCardCount = 1;
             }
             else if (playAgain.Equals("N"))
             {
