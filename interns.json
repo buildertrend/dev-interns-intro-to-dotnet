@@ -20,8 +20,12 @@
     },
     {
         "name": "David Harmon",
-        "hometown": "",
-        "hobbies": []
+        "hometown": "Fort Collins, CO",
+        "hobbies": [
+            "Video Games",
+            "Board Games",
+            "Game Development"
+        ]
     },
     {
         "name": "Vincent Nguyen",
