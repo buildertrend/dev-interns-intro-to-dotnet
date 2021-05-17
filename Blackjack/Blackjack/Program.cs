@@ -18,6 +18,7 @@ namespace Blackjack
 
         static string playAgain = "Y";
 
+        //hit 16 and under and soft 17s
         static void Main(string[] args)
         {
             while (playAgain.ToUpper() == "Y")
@@ -30,11 +31,18 @@ namespace Blackjack
                 {
                     //Currently, just get a value between 16-21 for the dealer
                     dealerTotal = cardRandomizer.Next(15, 22);
+
+                    dealerCards[0] = DealCard();
+                    dealerCards[1] = DealCard();
+
+                    dealerTotal += dealerCards[0].Value;
+                    dealerTotal += dealerCards[1].Value;
+
                     playerCards[0] = DealCard();
                     playerCards[1] = DealCard();
 
-                    //playerTotal += playerCards[0].Value;
-                    //playerTotal += playerCards[1].Value;
+                    playerTotal += playerCards[0].Value;
+                    playerTotal += playerCards[1].Value;
 
 
                     //TODO: The dealer is dealt one card face up, one card face down.
@@ -43,6 +51,13 @@ namespace Blackjack
                 else
                 {
                     Environment.Exit(0);
+                }
+
+
+                /* DEALER LOGIC */
+                while(dealerTotal < 17)
+                {
+                    Hit(false);
                 }
 
                 /* START GAME LOOP */
@@ -56,16 +71,26 @@ namespace Blackjack
                 if (playerChoice.Equals("H"))
                 {
                     //hit will get them a card / check the total and ask for another hit
-                    Hit();
+                    Hit(true);
                 }
 
                 if (playerChoice.Equals("S"))
                 {
-                    if (playerTotal > dealerTotal && playerTotal <= 21)
+                    if (playerTotal == 21)
+                    {
+                        Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+
+                    }
+                    else if (playerTotal > dealerTotal && playerTotal <= 21)
                     {
                         Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
                     }
-                    else if (playerTotal <= dealerTotal)
+                    else if (dealerTotal > 21 && playerTotal <= 21)
+                    {
+                        Console.WriteLine("Congrats! You won the game! The dealer bust ");
+
+                    }
+                    else if (playerTotal < dealerTotal)
                     {
                         Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
                     }
@@ -87,37 +112,47 @@ namespace Blackjack
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
             //TODO: Inform the player the value of the dealer's visible card.
+            Console.WriteLine("The dealer was dealt a face down card, and the card {0} ", dealerCards[0].Name);
         }
 
-        static void Hit()
+        static void Hit(bool player)
         {
-            playerCardCount += 1;
-            playerCards[playerCardCount] = DealCard();
-            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
-
-            //Is this true? I don't think it is.
-            if (playerTotal == 21)
+            if (player)
             {
-                Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+                playerCardCount += 1;
+                playerCards[playerCardCount] = DealCard();
+                playerTotal += playerCards[playerCardCount].Value;
+                Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
-            }
-            else if (playerTotal > 21)
-            {
-                Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
-
-            }
-            else if (playerTotal < 21)
-            {
-                do
+                if (playerTotal == 21)
                 {
-                    Console.WriteLine("Would you like to hit or stay? h for hit, s for stay");
-                    playerChoice = Console.ReadLine().ToUpper();
+                    Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
-                if (playerChoice.ToUpper() == "H")
+                else if (playerTotal > 21)
                 {
-                    Hit();
+                    Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
+
                 }
+                else if (playerTotal < 21)
+                {
+                    do
+                    {
+                        Console.WriteLine("Would you like to hit or stay? h for hit, s for stay");
+                        playerChoice = Console.ReadLine().ToUpper();
+                    }
+                    while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
+                    if (playerChoice.ToUpper() == "H")
+                    {
+                        Hit(true);
+                    }
+                }
+            }
+            else
+            {
+                dealerCardCount += 1;
+                dealerCards[dealerCardCount] = DealCard();
+                dealerTotal += dealerCards[dealerCardCount].Value;
             }
         }
 
@@ -131,7 +166,6 @@ namespace Blackjack
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += GetCardValue(cardValue).Value;
             return GetCardValue(cardValue);
         }
 
@@ -153,6 +187,7 @@ namespace Blackjack
                 11 => new Card() { Name = "Queen", Value = 10 },
                 12 => new Card() { Name = "King", Value = 10 },
                 13 => new Card() { Name = "Ace", Value = 11 },
+                //exception?
                 _ => new Card() { Name = "Two", Value = 2 },
             };
         }
