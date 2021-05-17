@@ -85,6 +85,7 @@ namespace Blackjack
         {
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your playerTotall is {0} ", playerTotal);
+            //Console.WriteLine("The dealer's visible card is : {0} ", dealerCards[0].Value);
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
