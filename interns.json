@@ -21,7 +21,11 @@
     {
         "name": "David Harmon",
         "hometown": "Fort Collins, CO",
-        "hobbies": []
+        "hobbies": [
+            "Video Games",
+            "Board Games",
+            "Game Development"
+        ]
     },
     {
         "name": "Vincent Nguyen",
