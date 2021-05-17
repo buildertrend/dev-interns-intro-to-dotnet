@@ -52,10 +52,7 @@
     {
         "name": "David Swanson",
         "hometown": "Omaha",
-        "hobbies": [
-            "cars",
-            "music"
-        ]
+        "hobbies": ["cars", "music"]
     },
     {
         "name": "Brevin Wapp",
@@ -68,7 +65,7 @@
     },
     {
         "name": "Cole Weber",
-        "hometown": "",
-        "hobbies": []
+        "hometown": "Waterloo, IA",
+        "hobbies": ["Music", "Lifting"]
     }
 ]
