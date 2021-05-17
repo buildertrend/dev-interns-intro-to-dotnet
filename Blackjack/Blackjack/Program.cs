@@ -33,6 +33,8 @@ namespace Blackjack
                     playerCards[0] = DealCard();
                     playerCards[1] = DealCard();
 
+                    Console.WriteLine("Card value1 == {0} card value2 == {1}", playerCards[0].Value, playerCards[1].Value);
+
                     playerTotal += playerCards[0].Value;
                     playerTotal += playerCards[1].Value;
 
@@ -93,7 +95,7 @@ namespace Blackjack
             playerCardCount += 1;
             playerCards[playerCardCount] = DealCard();
             playerTotal += playerCards[playerCardCount].Value;
-            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
+            Console.WriteLine("Your card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
             //Is this true? I don't think it is.
             if (playerTotal.Equals(21))
@@ -131,7 +133,6 @@ namespace Blackjack
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
             return GetCardValue(cardValue);
         }
 
