@@ -2,11 +2,14 @@
 
 namespace Blackjack
 {
+    /// <summary>
+    /// Contains flow of program.
+    /// </summary>
     class Program
-    {
-        static readonly Random cardRandomizer = new Random();
+    {        
+        static Deck deck = new Deck();
 
-        static readonly Card[] playerCards = new Card[11];
+        static Random cardRandomizer = new Random();
         static int playerTotal = 0;
         static int playerCardCount = 1;
         private static readonly Card[] dealerCards = new Card[11];
@@ -27,15 +30,8 @@ namespace Blackjack
                 var decision = Console.ReadLine().ToUpper();
 
                 if (decision == "Y")
-                {
-                    //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(15, 22);
-                    playerCards[0] = DealCard();
-                    playerCards[1] = DealCard();
-
-                    playerTotal += playerCards[0].Value;
-                    playerTotal += playerCards[1].Value;
-
+                {                    
+                    //TODO: Player deal card from Deck
 
                     //TODO: The dealer is dealt one card face up, one card face down.
                     DisplayWelcomeMessage();
@@ -83,16 +79,22 @@ namespace Blackjack
         /// </summary>
         private static void DisplayWelcomeMessage()
         {
+            //TODO: create Player that stores current score
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your playerTotall is {0} ", playerTotal);
             //TODO: Inform the player the value of the dealer's visible card.
+            Console.WriteLine("Dealer's hand is: {0}", //player.Hand());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         static void Hit()
         {
-            playerCardCount += 1;
-            playerCards[playerCardCount] = DealCard();
-            playerTotal += playerCards[playerCardCount].Value;
+            //TODO: implement deal for Deck
+            //Card card = deck.DealCard();
+
+            //TODO: create a player that stores current score
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
             //Is this true? I don't think it is.
@@ -135,9 +137,8 @@ namespace Blackjack
                 Console.WriteLine("Press enter to restart the game!");
                 Console.ReadLine();
                 Console.Clear();
-                dealerTotal = 0;
-                playerCardCount = 1;
-                playerTotal = 0;
+                deck = new Deck();
+                //TODO: Create new hands for players
             }
             else if (playAgain.Equals("N"))
             {
