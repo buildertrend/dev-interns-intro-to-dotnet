@@ -2,71 +2,97 @@
 
 namespace Blackjack
 {
-    class Program
+    class BlackjackMain
     {
+        // Deck of cards for the drawing pile
         private static Deck deck;
+
+        // Cards that the player has been dealt
         private static Hand playerHand;
+
+        // Cards that the dealer has been dealt
         private static Hand dealerHand;
 
-        //users to store the player choice (hit or stay)
+        // Stores whether the player wants to (H)it or (S)tay
         static string playerChoice = "";
 
-        static string playAgain = "Y";
+        // Stores whether the player wants to play another round or not (Y or N)
+        static string playAgain = "";
 
         static void Main(string[] args)
         {
-            while (playAgain.ToUpper() == "Y")
+            // Initialize playAgain to be "Yes" for the first round
+            playAgain = "Y";
+
+            // Initialize the deck 
+            deck = new Deck();
+
+            while (playAgain.ToUpper().Equals("Y"))
             {
-                deck = new Deck();
+                // Reset the game (deck and hands)
                 ResetGame();
 
-                //StartGame
-                Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
-                var decision = Console.ReadLine().ToUpper();
+                // Start the game
+                StartGame();
 
-                if (decision == "Y")
-                {
-                    DisplayWelcomeMessage();
-                }
-                else
-                {
-                    Environment.Exit(0);
-                }
+                // Main Game Loop
+                MainGameLoop();
 
-                /* START GAME LOOP */
-                do
-                {
-                    Console.WriteLine("Would you like to (H)it or (S)tay?");
-                    playerChoice = Console.ReadLine().ToUpper();
-                }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
+                // Ask the player to play again
+                PlayAgain();
+            }
+        }
 
-                if (playerChoice.Equals("H"))
-                {
-                    //hit will get them a card / check the total and ask for another hit
-                    Hit();
-                }
+        private static void StartGame()
+        {
+            Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
+            var decision = Console.ReadLine().ToUpper();
 
-                if (playerChoice.Equals("S"))
+            if (decision.Equals("Y"))
+            {
+                DisplayWelcomeMessage();
+            }
+            else
+            {
+                Environment.Exit(0);
+            }
+        }
+
+        private static void MainGameLoop()
+        {
+            do
+            {
+                Console.WriteLine("Would you like to (H)it or (S)tay?");
+                playerChoice = Console.ReadLine().ToUpper();
+            }
+            while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
+
+            if (playerChoice.Equals("H"))
+            {
+                //hit will get them a card / check the total and ask for another hit
+                Hit();
+            }
+
+            if (playerChoice.Equals("S"))
+            {
+                // Check to make sure the player is <= 21
+                if (playerHand.getTotal() <= 21)
                 {
-                    if (playerHand.getTotal() > dealerHand.getTotal() && playerHand.getTotal() <= 21)
+                    // Check to make sure player's total is larger OR if the dealer busted
+                    if (playerHand.getTotal() > dealerHand.getTotal() || dealerHand.getTotal() > 21)
                     {
                         Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerHand.getTotal());
                     }
-                    else if (playerHand.getTotal() <= dealerHand.getTotal())
-                    {
-                        Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerHand.getTotal());
-                    }
                 }
-
-                Console.WriteLine("Player total == {0}", playerHand.getTotal());
-                Console.WriteLine("Dealer total == {0}", dealerHand.getTotal());
-
-                /* END GAME LOOP */
-
-                Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
-                PlayAgain();
+                else if (playerHand.getTotal() <= dealerHand.getTotal())
+                {
+                    // otherwise, verify player got a score <= the dealer's score
+                    Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerHand.getTotal());
+                }
             }
+
+            Console.WriteLine("Player total == {0}", playerHand.getTotal());
+            Console.WriteLine("Dealer total == {0}", dealerHand.getTotal());
         }
 
         /// <summary>
@@ -96,6 +122,7 @@ namespace Blackjack
             }
             else if (playerHand.getTotal() < 21)
             {
+                // Prompt the user to enter a choice (H or S) until a valid choice is entered
                 do
                 {
                     Console.WriteLine("Would you like to (H)it or (S)tay?");
@@ -111,6 +138,9 @@ namespace Blackjack
 
         static void PlayAgain()
         {
+            // Prompt user for choice
+            Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
+
             //Loop until they make a valid choice
             do
             {
