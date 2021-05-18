@@ -30,7 +30,7 @@ namespace Blackjack.Types
         Ace
     }
 
-    class Card
+    public class Card
     {
 
         public CardRank Rank;
