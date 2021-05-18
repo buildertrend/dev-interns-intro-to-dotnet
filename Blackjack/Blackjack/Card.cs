@@ -8,5 +8,8 @@ namespace Blackjack
     {
         public int Value;
         public string Name;
+        public suits suit;
+        public names name;
+        //public color;
     }
 }
