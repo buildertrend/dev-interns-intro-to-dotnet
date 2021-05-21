@@ -9,32 +9,43 @@ namespace Blackjack
 		private static Random cardRandomizer = new Random();
 
 		private List<Card> deck;
-		public Deck()
-		{
-			RefillDeck();
+
+		public Deck(int numberOfDecks)
+        {
+			RefillDeck(numberOfDecks);
+        }
+
+		public Deck() : this(1) { }
+
+		public void RefillDeck(int numberOfDecks)
+        {
+			deck = new List<Card>();
+            for (int n = 0; n < numberOfDecks; n++)
+            {
+				for (int i = 0; i < 4; i++)
+				{
+					int value = 2;
+					deck.Add(new Card { Name = Rank.TWO, Value = value++ });
+					deck.Add(new Card { Name = Rank.THREE, Value = value++ });
+					deck.Add(new Card { Name = Rank.FOUR, Value = value++ });
+					deck.Add(new Card { Name = Rank.FIVE, Value = value++ });
+					deck.Add(new Card { Name = Rank.SIX, Value = value++ });
+					deck.Add(new Card { Name = Rank.SEVEN, Value = value++ });
+					deck.Add(new Card { Name = Rank.EIGHT, Value = value++ });
+					deck.Add(new Card { Name = Rank.NINE, Value = value++ });
+					deck.Add(new Card { Name = Rank.TEN, Value = value });
+					deck.Add(new Card { Name = Rank.JACK, Value = value });
+					deck.Add(new Card { Name = Rank.QUEEN, Value = value });
+					deck.Add(new Card { Name = Rank.KING, Value = value });
+					deck.Add(new Card { Name = Rank.ACE, Value = value + 1 });
+				}
+			}
 		}
 
 		public void RefillDeck()
         {
-			deck = new List<Card>();
-			for (int i = 0; i < 4; i++)
-			{
-				int value = 2;
-				deck.Add(new Card { Name = Rank.TWO, Value = value++ });
-				deck.Add(new Card { Name = Rank.THREE, Value = value++ });
-				deck.Add(new Card { Name = Rank.FOUR, Value = value++ });
-				deck.Add(new Card { Name = Rank.FIVE, Value = value++ });
-				deck.Add(new Card { Name = Rank.SIX, Value = value++ });
-				deck.Add(new Card { Name = Rank.SEVEN, Value = value++ });
-				deck.Add(new Card { Name = Rank.EIGHT, Value = value++ });
-				deck.Add(new Card { Name = Rank.NINE, Value = value++ });
-				deck.Add(new Card { Name = Rank.TEN, Value = value });
-				deck.Add(new Card { Name = Rank.JACK, Value = value });
-				deck.Add(new Card { Name = Rank.QUEEN, Value = value });
-				deck.Add(new Card { Name = Rank.KING, Value = value });
-				deck.Add(new Card { Name = Rank.ACE, Value = value + 1});
-			}
-		}
+			RefillDeck(1);
+        }
 
 		public Card DealCard()
 		{

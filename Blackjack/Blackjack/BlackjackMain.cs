@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Blackjack
 {
@@ -7,8 +8,11 @@ namespace Blackjack
         // Deck of cards for the drawing pile
         private static Deck deck;
 
+        // List of all players in the game
+        private static List<Player> players;
+
         // Cards that the player has been dealt
-        private static Hand playerHand;
+//        private static Hand playerHand;
 
         // Cards that the dealer has been dealt
         private static Hand dealerHand;
@@ -32,18 +36,26 @@ namespace Blackjack
                 // Reset the game (deck and hands)
                 ResetGame();
 
-                // Start the game
-                StartGame();
+                // Loop through each player to take their turn
+                foreach (Player player in players)
+                {
+                    Hand currentHand = player.Hand;
+                    
+                    Console.WriteLine(player.Name);
 
-                // Main Game Loop
-                MainGameLoop();
+                    // Start the game
+                    StartGame(currentHand);
 
-                // Ask the player to play again
-                PlayAgain();
+                    // Main Game Loop
+                    MainGameLoop(currentHand);
+
+                    // Ask the player to play again
+                    PlayAgain();
+                }
             }
         }
 
-        private static void StartGame()
+        private static void StartGame(Hand playerHand)
         {
             BlackjackConsoleColor.WriteLineOption(
                 new string[] { "Welcome to Blackjack - are you ready to play? ", " or " },
@@ -53,7 +65,7 @@ namespace Blackjack
 
             if (decision.Equals("Y"))
             {
-                DisplayWelcomeMessage();
+                DisplayWelcomeMessage(playerHand);
             }
             else
             {
@@ -61,7 +73,7 @@ namespace Blackjack
             }
         }
 
-        private static void MainGameLoop()
+        private static void MainGameLoop(Hand playerHand)
         {
             do
             {
@@ -76,11 +88,11 @@ namespace Blackjack
   
             if (playerChoice.Equals("H"))
             {
-                Hit();
+                Hit(playerHand);
             }
             if (playerChoice.Equals("S")) 
             {
-                Stay();
+                Stay(playerHand);
             }
 
             BlackjackConsoleColor.WriteLineValue(
@@ -96,7 +108,7 @@ namespace Blackjack
         /// <summary>
         /// Displays a friendly message to the user and shows their current hand.
         /// </summary>
-        private static void DisplayWelcomeMessage()
+        private static void DisplayWelcomeMessage(Hand playerHand)
         {
             // Display player cards
             BlackjackConsoleColor.WriteLineValue(
@@ -117,7 +129,7 @@ namespace Blackjack
             );
         }
 
-        private static void Hit()
+        private static void Hit(Hand playerHand)
         {
             playerHand.addCard(deck.DealCard());
             BlackjackConsoleColor.WriteLineValue(
@@ -155,12 +167,12 @@ namespace Blackjack
                 while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
                 if (playerChoice.ToUpper() == "H")
                 {
-                    Hit();
+                    Hit(playerHand);
                 }
             }
         }
 
-        private static void Stay()
+        private static void Stay(Hand playerHand)
         {
             // Check to make sure the player is <= 21
             if (playerHand.getTotal() <= 21)
@@ -237,14 +249,49 @@ namespace Blackjack
             }
         }
 
+        private static void ResetPlayers()
+        {
+            players = new List<Player>();
+            int numberPlayers = 0;
+
+            // Continuously ask user to enter the number of players until a valid number is entered
+            do
+            {
+                BlackjackConsoleColor.WriteLineOption(
+                    new string[] { "How many players would you like? " },
+                    new string[] { "[1-7]" }
+                );
+
+                // Grab number of players from the console
+                try
+                {
+                    numberPlayers = Int32.Parse(BlackjackConsoleColor.ReadLine());
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Please enter a valid number. [1-7]");
+                }
+            } while (numberPlayers < 1 || numberPlayers > 7);
+            for (int i = 0; i < numberPlayers; i++)
+            {
+                string name = "Player " + (i + 1);
+                players.Add(new Player() { Name = name });
+            }
+        }
+
         private static void ResetGame()
         {
+            ResetPlayers();
+
             // Refill and reshuffle the entire deck
             deck.RefillDeck();
             deck.Shuffle();
 
             // Deal a hand of 2 cards to both the player and the dealer
-            playerHand = new Hand(2, deck);
+            foreach (Player player in players)
+            {
+                player.Hand = new Hand(2, deck);
+            }
             dealerHand = new Hand(2, deck);
 
             // Keep dealing cards to the dealer until his score is more than 17
