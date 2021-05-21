@@ -72,45 +72,15 @@ namespace Blackjack
                 playerChoice = BlackjackConsoleColor.ReadLine().ToUpper();
             }
             while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
-
+            
+  
             if (playerChoice.Equals("H"))
             {
-                //hit will get them a card / check the total and ask for another hit
                 Hit();
             }
-
-            if (playerChoice.Equals("S"))
+            if (playerChoice.Equals("S")) 
             {
-                // Check to make sure the player is <= 21
-                if (playerHand.getTotal() <= 21)
-                {
-                    // Check to make sure player's total is larger OR if the dealer busted
-                    if (playerHand.getTotal() > dealerHand.getTotal() || dealerHand.getTotal() > 21)
-                    {
-                        //Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerHand.getTotal());
-                        BlackjackConsoleColor.WriteLineValue(
-                            new string[] { "Congrats! You won the game! The dealer's total is " },
-                            new string[] { dealerHand.getTotal().ToString() }
-                        );
-                    } else
-                    {
-                        //Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerHand.getTotal());
-                        BlackjackConsoleColor.WriteLineValue(
-                            new string[] { "Sorry, you lost! The dealer's total was " },
-                            new string[] { dealerHand.getTotal().ToString() }
-                        );
-                    }
-                }
-                else if (playerHand.getTotal() <= dealerHand.getTotal())
-                {
-                    // otherwise, verify player got a score <= the dealer's score
-                    //Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerHand.getTotal());
-                    BlackjackConsoleColor.WriteLineValue(
-                        new string[] { "Sorry, you lost! The dealer's total was " },
-                        new string[] { dealerHand.getTotal().ToString() }
-                    );
-
-                }
+                Stay();
             }
 
             BlackjackConsoleColor.WriteLineValue(
@@ -188,6 +158,41 @@ namespace Blackjack
                     Hit();
                 }
             }
+        }
+
+        private static void Stay()
+        {
+            // Check to make sure the player is <= 21
+            if (playerHand.getTotal() <= 21)
+            {
+                // Check to make sure player's total is larger OR if the dealer busted
+                if (playerHand.getTotal() > dealerHand.getTotal() || dealerHand.getTotal() > 21)
+                {
+                    //Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerHand.getTotal());
+                    BlackjackConsoleColor.WriteLineValue(
+                        new string[] { "Congrats! You won the game! The dealer's total is " },
+                        new string[] { dealerHand.getTotal().ToString() }
+                    );
+                }
+                else
+                {
+                    //Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerHand.getTotal());
+                    BlackjackConsoleColor.WriteLineValue(
+                        new string[] { "Sorry, you lost! The dealer's total was " },
+                        new string[] { dealerHand.getTotal().ToString() }
+                    );
+                }
+            }
+            else if (playerHand.getTotal() <= dealerHand.getTotal())
+            {
+                // otherwise, verify player got a score <= the dealer's score
+                //Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerHand.getTotal());
+                BlackjackConsoleColor.WriteLineValue(
+                    new string[] { "Sorry, you lost! The dealer's total was " },
+                    new string[] { dealerHand.getTotal().ToString() }
+                );
+            }
+
         }
 
         private static void PlayAgain()
