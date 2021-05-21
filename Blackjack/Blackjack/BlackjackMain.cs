@@ -14,12 +14,12 @@ namespace Blackjack
         private static Hand dealerHand;
 
         // Stores whether the player wants to (H)it or (S)tay
-        static string playerChoice = "";
+        private static string playerChoice = "";
 
         // Stores whether the player wants to play another round or not (Y or N)
-        static string playAgain = "";
+        private static string playAgain = "";
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             // Initialize playAgain to be "Yes" for the first round
             playAgain = "Y";
@@ -45,8 +45,11 @@ namespace Blackjack
 
         private static void StartGame()
         {
-            Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
-            var decision = Console.ReadLine().ToUpper();
+            BlackjackConsoleColor.WriteLineOption(
+                new string[] { "Welcome to Blackjack - are you ready to play? ", " or " },
+                new string[] { "(Y)es", "(N)o" }
+            );
+            var decision = BlackjackConsoleColor.ReadLine().ToUpper();
 
             if (decision.Equals("Y"))
             {
@@ -62,8 +65,11 @@ namespace Blackjack
         {
             do
             {
-                Console.WriteLine("Would you like to (H)it or (S)tay?");
-                playerChoice = Console.ReadLine().ToUpper();
+                BlackjackConsoleColor.WriteLineOption(
+                    new string[] { "Would you like to ", " or " },
+                    new string[] { "(H)it", "(S)tay" }
+                );
+                playerChoice = BlackjackConsoleColor.ReadLine().ToUpper();
             }
             while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
 
@@ -81,18 +87,40 @@ namespace Blackjack
                     // Check to make sure player's total is larger OR if the dealer busted
                     if (playerHand.getTotal() > dealerHand.getTotal() || dealerHand.getTotal() > 21)
                     {
-                        Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerHand.getTotal());
+                        //Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerHand.getTotal());
+                        BlackjackConsoleColor.WriteLineValue(
+                            new string[] { "Congrats! You won the game! The dealer's total is " },
+                            new string[] { dealerHand.getTotal().ToString() }
+                        );
+                    } else
+                    {
+                        //Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerHand.getTotal());
+                        BlackjackConsoleColor.WriteLineValue(
+                            new string[] { "Sorry, you lost! The dealer's total was " },
+                            new string[] { dealerHand.getTotal().ToString() }
+                        );
                     }
                 }
                 else if (playerHand.getTotal() <= dealerHand.getTotal())
                 {
                     // otherwise, verify player got a score <= the dealer's score
-                    Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerHand.getTotal());
+                    //Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerHand.getTotal());
+                    BlackjackConsoleColor.WriteLineValue(
+                        new string[] { "Sorry, you lost! The dealer's total was " },
+                        new string[] { dealerHand.getTotal().ToString() }
+                    );
+
                 }
             }
 
-            Console.WriteLine("Player total == {0}", playerHand.getTotal());
-            Console.WriteLine("Dealer total == {0}", dealerHand.getTotal());
+            BlackjackConsoleColor.WriteLineValue(
+                new string[] { "Player total == " },
+                new string[] { playerHand.getTotal().ToString() }
+            );
+            BlackjackConsoleColor.WriteLineValue(
+                new string[] { "Dealer total == " },
+                new string[] { dealerHand.getTotal().ToString() }
+            );
         }
 
         /// <summary>
@@ -100,33 +128,59 @@ namespace Blackjack
         /// </summary>
         private static void DisplayWelcomeMessage()
         {
-            Console.WriteLine("You were dealt the cards : {0} and {1} ", playerHand.getCard(0).Name, playerHand.getCard(1).Name);
-            Console.WriteLine("Your playerTotal is {0} ", playerHand.getTotal());
-            Console.WriteLine("Dealer's first card: {0}", dealerHand.getCard(0).Name);
+            // Display player cards
+            BlackjackConsoleColor.WriteLineValue(
+                new string[] { "You were dealt the cards : ", " and " }, 
+                new string[] { playerHand.getCard(0).Name.ToString(), playerHand.getCard(1).Name.ToString() }
+            );
+
+            // Display player total
+            BlackjackConsoleColor.WriteLineValue(
+                new string[] { "Your playerTotal is " },
+                new string[] { playerHand.getTotal().ToString() }
+            );
+
+            // Display dealer card
+            BlackjackConsoleColor.WriteLineValue(
+                new string[] { "Dealer's first card: " },
+                new string[] { dealerHand.getCard(0).Name.ToString() }
+            );
         }
 
         private static void Hit()
         {
             playerHand.addCard(deck.DealCard());
-            Console.WriteLine("Your card is a(n) {0} and your new Total is {1}. ", playerHand.getCard(playerHand.getHandSize() - 1).Name, playerHand.getTotal());
+            BlackjackConsoleColor.WriteLineValue(
+                new string[] { "Your card is a(n) ", " and your new Total is ", "." },
+                new string[] { playerHand.getCard(playerHand.getHandSize() - 1).Name.ToString(), playerHand.getTotal().ToString() }
+            );
 
             if (playerHand.getTotal() == 21)
             {
-                Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerHand.getTotal());
-
+                //Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerHand.getTotal());
+                BlackjackConsoleColor.WriteLineValue(
+                    new string[] { "You got Blackjack! The dealer's Total was " },
+                    new string[] { dealerHand.getTotal().ToString() }
+                );
             }
             else if (playerHand.getTotal() > 21)
             {
-                Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerHand.getTotal());
-
+                //Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerHand.getTotal());
+                BlackjackConsoleColor.WriteLineValue(
+                    new string[] { "You busted! Sorry! The dealer's Total was " },
+                    new string[] { dealerHand.getTotal().ToString() }
+                );
             }
             else if (playerHand.getTotal() < 21)
             {
                 // Prompt the user to enter a choice (H or S) until a valid choice is entered
                 do
                 {
-                    Console.WriteLine("Would you like to (H)it or (S)tay?");
-                    playerChoice = Console.ReadLine().ToUpper();
+                    BlackjackConsoleColor.WriteLineOption(
+                        new string[] { "Would you like to ", " or " },
+                        new string[] { "(H)it", "(S)tay" }
+                    );
+                    playerChoice = BlackjackConsoleColor.ReadLine().ToUpper();
                 }
                 while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
                 if (playerChoice.ToUpper() == "H")
@@ -136,21 +190,27 @@ namespace Blackjack
             }
         }
 
-        static void PlayAgain()
+        private static void PlayAgain()
         {
             // Prompt user for choice
-            Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
+            BlackjackConsoleColor.WriteLineOption(
+                new string[] { "Would you like to play again? ", " or " },
+                new string[] { "(Y)es", "(N)o" }
+            );
 
             //Loop until they make a valid choice
             do
             {
-                playAgain = Console.ReadLine().ToUpper();
+                playAgain = BlackjackConsoleColor.ReadLine().ToUpper();
             }
             while (!playAgain.Equals("Y") && !playAgain.Equals("N"));
 
             if (playAgain.Equals("Y"))
             {
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("Press enter to restart the game!");
+                Console.ForegroundColor = ConsoleColor.White;
+                
                 Console.ReadLine();
                 Console.Clear();
 
@@ -158,6 +218,7 @@ namespace Blackjack
             }
             else if (playAgain.Equals("N"))
             {
+                // Require the user to hit enter once more to exit the game
                 ConsoleKeyInfo info = Console.ReadKey();
                 if (info.Key == ConsoleKey.Enter)
                 {
