@@ -23,6 +23,7 @@ namespace Blackjack
             while (playAgain.ToUpper() == "Y")
             {
                 //StartGame
+                Console.BackgroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
                 var decision = Console.ReadLine().ToUpper();
 
@@ -63,6 +64,7 @@ namespace Blackjack
 
                 if (playerChoice.Equals("S"))
                 {
+                    Console.WriteLine("dealers Second card was : {0}", dealerCards[1].Name);
                     if (playerTotal >= dealerTotal && playerTotal <= 21)
                     {
                         Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
@@ -85,9 +87,13 @@ namespace Blackjack
         /// </summary>
         private static void DisplayWelcomeMessage()
         {
+            Console.BackgroundColor = ConsoleColor.Green;
+
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
             Console.WriteLine("Dealer's first card : {0}", dealerCards[0].Name);
+            Console.BackgroundColor = ConsoleColor.Red;
+
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
