@@ -11,7 +11,7 @@ namespace Blackjack
         static int playerCardCount = 1;
         private static readonly Card[] dealerCards = new Card[11];
         static int dealerTotal = 0;
-        static int dealerCardCount = 0;
+        static int dealerCardCount = 1;
 
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
@@ -28,16 +28,13 @@ namespace Blackjack
 
                 if (decision == "Y")
                 {
-                    //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(15, 22);
-                    playerCards[0] = DealCard();
-                    playerCards[1] = DealCard();
+                    // Deal cards and add values for dealer and player
+                    dealerCards[0] = DealCard(true);
+                    dealerCards[1] = DealCard(true);
 
-                    playerTotal += playerCards[0].Value;
-                    playerTotal += playerCards[1].Value;
+                    playerCards[0] = DealCard(false);
+                    playerCards[1] = DealCard(false);
 
-
-                    //TODO: The dealer is dealt one card face up, one card face down.
                     DisplayWelcomeMessage();
                 }
                 else
@@ -51,7 +48,7 @@ namespace Blackjack
                     Console.WriteLine("Would you like to (H)it or (S)tay?");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("H"));
+                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
 
                 if (playerChoice.Equals("H"))
                 {
@@ -69,6 +66,10 @@ namespace Blackjack
                     {
                         Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
                     }
+                    else
+                    {
+                        Console.WriteLine("You tied with the dealer!");
+                    }
                 }
 
                 /* END GAME LOOP */
@@ -85,14 +86,15 @@ namespace Blackjack
         {
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your player Total is {0} ", playerTotal);
-            //TODO: Inform the player the value of the dealer's visible card.
+
+            // Inform the player the value of the dealer's visible card.
+            Console.WriteLine("The dealer was dealt : {0} ", dealerCards[0].Name);
         }
 
         static void Hit()
         {
             playerCardCount += 1;
-            playerCards[playerCardCount] = DealCard();
-            playerTotal += playerCards[playerCardCount].Value;
+            playerCards[playerCardCount] = DealCard(false);
             Console.WriteLine("Your card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
             //Is this true? I don't think it is.
@@ -121,20 +123,21 @@ namespace Blackjack
             }
         }
 
-        //TODO: Move this class to it's own file.
-        private class Card
-        {
-            public int Value;
-            public string Name;
-        }
-
-        static Card DealCard()
+        static Card DealCard(bool isDealer)
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
+
+            if (isDealer)
+            {
+                dealerTotal += (cardValue + 1);
+            }
+            else
+            {
+                playerTotal += (cardValue + 1);
+            }
+            
             return GetCardValue(cardValue);
         }
-
 
         static Card GetCardValue(int cardValue)
         {
