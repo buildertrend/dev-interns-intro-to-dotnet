@@ -31,10 +31,9 @@ namespace Blackjack
                     //Currently, just get a value between 16-21 for the dealer
                     dealerTotal = cardRandomizer.Next(15, 22);
                     playerCards[0] = DealCard();
+                    playerCardCount++;
                     playerCards[1] = DealCard();
-
-                    playerTotal += playerCards[0].Value;
-                    playerTotal += playerCards[1].Value;
+                    playerCardCount++;
 
 
                     //TODO: The dealer is dealt one card face up, one card face down.
@@ -92,7 +91,6 @@ namespace Blackjack
         {
             playerCardCount += 1;
             playerCards[playerCardCount] = DealCard();
-            playerTotal += playerCards[playerCardCount].Value;
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
             //Is this true? I don't think it is.
@@ -118,14 +116,18 @@ namespace Blackjack
                 {
                     Hit();
                 }
+                if (playerChoice.Equals("S"))
+                {
+                    if (playerTotal > dealerTotal && playerTotal <= 21)
+                    {
+                        Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                    }
+                    else if (playerTotal < dealerTotal)
+                    {
+                        Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+                    }
+                }
             }
-        }
-
-        //TODO: Move this class to it's own file.
-        private class Card
-        {
-            public int Value;
-            public string Name;
         }
 
         static Card DealCard()
@@ -146,7 +148,7 @@ namespace Blackjack
                 4 => new Card() { Name = "Five", Value = 5 },
                 5 => new Card() { Name = "Six", Value = 6 },
                 6 => new Card() { Name = "Seven", Value = 7 },
-                7 => new Card() { Name = "Eihgt", Value = 8 },
+                7 => new Card() { Name = "Eight", Value = 8 },
                 8 => new Card() { Name = "Nine", Value = 9 },
                 9 => new Card() { Name = "Ten", Value = 10 },
                 10 => new Card() { Name = "Jack", Value = 10 },
