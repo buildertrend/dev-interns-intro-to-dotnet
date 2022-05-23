@@ -29,11 +29,10 @@ namespace Blackjack
                 if (decision == "Y")
                 {
                     //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(15, 22);
-                    playerCards[0] = DealCard();
-                    playerCardCount++;
-                    playerCards[1] = DealCard();
-                    playerCardCount++;
+                    dealerCards[0] = DealCard(Player.DEALER);
+                    dealerCards[1] = DealCard(Player.DEALER);
+                    playerCards[0] = DealCard(Player.PLAYER);
+                    playerCards[1] = DealCard(Player.PLAYER);
 
 
                     //TODO: The dealer is dealt one card face up, one card face down.
@@ -82,6 +81,7 @@ namespace Blackjack
         /// </summary>
         private static void DisplayWelcomeMessage()
         {
+            Console.WriteLine("The dealer was dealt a {0} and an unknown card.", dealerCards[0].Name);
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
             //TODO: Inform the player the value of the dealer's visible card.
@@ -90,7 +90,7 @@ namespace Blackjack
         static void Hit()
         {
             playerCardCount += 1;
-            playerCards[playerCardCount] = DealCard();
+            playerCards[playerCardCount] = DealCard(Player.PLAYER);
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
             //Is this true? I don't think it is.
@@ -130,11 +130,18 @@ namespace Blackjack
             }
         }
 
-        static Card DealCard()
+        enum Player
+        {
+            DEALER, PLAYER
+        }
+
+        static Card DealCard(Player player)
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
-            return GetCardValue(cardValue);
+            Card card = GetCardValue(cardValue);
+            if (player == Player.PLAYER) playerTotal += card.Value;
+            else if (player == Player.DEALER) dealerTotal += card.Value;
+            return card;
         }
 
 
