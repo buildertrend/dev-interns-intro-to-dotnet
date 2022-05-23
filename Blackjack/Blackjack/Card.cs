@@ -10,5 +10,6 @@ namespace Blackjack
     {
         public int Value;
         public string Name;
+      //  public ConsoleColor Color;
     }
 }
