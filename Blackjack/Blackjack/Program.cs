@@ -67,11 +67,18 @@ namespace Blackjack
                 {
                     if (playerTotal > dealerTotal && playerTotal <= 21)
                     {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                        Console.ForegroundColor = ConsoleColor.White;
+
                     }
                     else if (playerTotal < dealerTotal)
                     {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+
                         Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+                        Console.ForegroundColor = ConsoleColor.White;
+
                     }
                 }
 
@@ -103,12 +110,17 @@ namespace Blackjack
             //Is this true? I don't think it is.
             if (playerTotal.Equals(21))
             {
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+                Console.ForegroundColor = ConsoleColor.White;
+
 
             }
             else if (playerTotal > 21)
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("You are busted! Sorry! The dealer's Total was {0}", dealerTotal);
+                Console.ForegroundColor = ConsoleColor.White;
 
             }
             else if (playerTotal < 21)
