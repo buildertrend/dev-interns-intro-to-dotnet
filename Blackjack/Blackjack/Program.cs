@@ -93,17 +93,17 @@ namespace Blackjack
             playerCardCount += 1;
             playerCards[playerCardCount] = DealCard();
             playerTotal += playerCards[playerCardCount].Value;
-            Console.WriteLine("You card is a(n) {0} and your new total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
+            Console.WriteLine("Your card is a(n) {0} and your new total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
             //Is this true? I don't think it is.
             if (playerTotal.Equals(21))
             {
-                Console.WriteLine("Yuo got Blackjack! The dealer's total was {0}. ", dealerTotal);
+                Console.WriteLine("You got Blackjack! The dealer's total was {0}. ", dealerTotal);
 
             }
             else if (playerTotal > 21)
             {
-                Console.WriteLine("You busted! Sorry! The dealer's total was {0}", dealerTotal);
+                Console.WriteLine("You're busted! Sorry! The dealer's total was {0}", dealerTotal);
 
             }
             else if (playerTotal < 21)
@@ -131,7 +131,7 @@ namespace Blackjack
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
+            //playerTotal += cardValue;
             return GetCardValue(cardValue);
         }
 
