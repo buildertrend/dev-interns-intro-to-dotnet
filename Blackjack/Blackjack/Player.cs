@@ -11,6 +11,11 @@ namespace Blackjack
         public string name;
         public List<Card> cards;
 
+        public Player()
+        {
+            cards = new List<Card>();
+        }
+
         public int getTotal()
         {
             int sum = 0;

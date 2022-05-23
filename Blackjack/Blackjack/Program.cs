@@ -44,6 +44,11 @@ namespace Blackjack
 
                     } while (playersNumber < 1 || playersNumber > 6);
                     
+                    for (int i = 0; i< playersNumber; i++)
+                    {
+                        players.Add(new Player());
+                    }
+
                     foreach (Player player in players)
                     {
                         DealCard(player);
@@ -115,7 +120,7 @@ namespace Blackjack
         /// </summary>
         private static void DisplayWelcomeMessage(Player player)
         {
-            Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
+            Console.WriteLine("You were dealt the cards : {0} and {1} ", player.cards[0].Name, player.cards[0].Name);
             Console.WriteLine("Your player Total is {0} ", player.getTotal());
             Console.WriteLine("The dealer was dealt the card : {0} and one face down card", dealerCards[0].Name);
             //TODO: Inform the player the value of the dealer's visible card.
