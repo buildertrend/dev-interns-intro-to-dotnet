@@ -73,7 +73,7 @@ namespace Blackjack
 
                 /* END GAME LOOP */
 
-                Console.WriteLine("Wuold you like to play again? (Y)es or (N)o?");
+                Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
                 PlayAgain();
             }
         }
@@ -93,7 +93,7 @@ namespace Blackjack
             playerCardCount += 1;
             playerCards[playerCardCount] = DealCard();
             playerTotal += playerCards[playerCardCount].Value;
-            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
+            Console.WriteLine("Your card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
             //Is this true? I don't think it is.
             if (playerTotal.Equals(21))
@@ -103,7 +103,7 @@ namespace Blackjack
             }
             else if (playerTotal > 21)
             {
-                Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
+                Console.WriteLine("You are busted! Sorry! The dealer's Total was {0}", dealerTotal);
 
             }
             else if (playerTotal < 21)
@@ -131,7 +131,6 @@ namespace Blackjack
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
             return GetCardValue(cardValue);
         }
 
