@@ -29,7 +29,9 @@ namespace Blackjack
                 if (decision == "Y")
                 {
                     //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(15, 22);
+                    //dealerTotal = cardRandomizer.Next(15, 22);
+                    dealerCards[0] = DealDealerCard();
+                    dealerCards[1] = DealDealerCard();
                     playerCards[0] = DealCard();
                     playerCards[1] = DealCard();
 
@@ -51,7 +53,7 @@ namespace Blackjack
                     Console.WriteLine("Would you like to (H)it or (S)tay?");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("H"));
+                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
 
                 if (playerChoice.Equals("H"))
                 {
@@ -61,7 +63,7 @@ namespace Blackjack
 
                 if (playerChoice.Equals("S"))
                 {
-                    if (playerTotal > dealerTotal && playerTotal <= 21)
+                    if (playerTotal >= dealerTotal && playerTotal <= 21)
                     {
                         Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
                     }
@@ -85,6 +87,7 @@ namespace Blackjack
         {
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
+            Console.WriteLine("Dealer's first card : {0}", dealerCards[0].Name);
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
@@ -135,6 +138,12 @@ namespace Blackjack
             return GetCardValue(cardValue);
         }
 
+        static Card DealDealerCard()
+        {
+            int cardValue = cardRandomizer.Next(1, 14);
+            dealerTotal += cardValue;
+            return GetCardValue(cardValue);
+        }
 
         static Card GetCardValue(int cardValue)
         {
