@@ -33,8 +33,8 @@ namespace Blackjack
                     playerCards[0] = DealCard();
                     playerCards[1] = DealCard();
 
-                    playerTotal += playerCards[0].Value;
-                    playerTotal += playerCards[1].Value;
+                    //playerTotal += playerCards[0].Value;
+                    //playerTotal += playerCards[1].Value;
 
 
                     //TODO: The dealer is dealt one card face up, one card face down.
@@ -92,7 +92,7 @@ namespace Blackjack
         {
             playerCardCount += 1;
             playerCards[playerCardCount] = DealCard();
-            playerTotal += playerCards[playerCardCount].Value;
+            //playerTotal += playerCards[playerCardCount].Value;
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
             //Is this true? I don't think it is.
@@ -122,11 +122,11 @@ namespace Blackjack
         }
 
         //TODO: Move this class to it's own file.
-        private class Card
-        {
-            public int Value;
-            public string Name;
-        }
+        //private class Card
+        //{
+        //    public int Value;
+        //    public string Name;
+        //}
 
         static Card DealCard()
         {
