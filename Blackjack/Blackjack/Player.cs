@@ -8,9 +8,9 @@ namespace Blackjack
 {
     internal class Player
     {
-        private static Card[] cards = new Card[11];
-        private static int total = 0;
-        private static int cardCount = 0;
+        private Card[] cards = new Card[11];
+        private int total = 0;
+        private int cardCount = 0;
 
         public void addCard(Card newCard)
         {

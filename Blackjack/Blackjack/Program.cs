@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 namespace Blackjack
 {
     class Program
@@ -40,32 +39,46 @@ namespace Blackjack
                 Console.WriteLine(" (N)o", colors);
                 Console.ResetColor();
 
-                players[0] = new Player();
-                //Console.WriteLine("How many players? (1-4)");
-
-
                 var decision = Console.ReadLine().ToUpper();
 
                 if (decision == "Y")
                 {
-                    //Currently, just get a value between 16-21 for the dealer
-
-                    DealCard(player);
-                    DealCard(player);
-
-                    playerTotal = players[0].getTotal();
-
-                    //TODO: The dealer is dealt one card face up, one card face down.
                     dealerCards[0] = DealCard(dealer);
                     dealerFaceUp = dealerCards[0].Value;
                     dealerCards[1] = DealCard(dealer);
 
-                    DisplayWelcomeMessage();
+                    Console.WriteLine("How many players? (1-4)");
+                    var pCount = Console.ReadLine();
+                    int playerCount = Int32.Parse(pCount);
+
+                    Console.WriteLine("The dealer was dealt the card {0}", dealerCards[0].Name);
+
+                    for (int i = 0; i < playerCount; i++)
+                    {
+                        players[i] = new Player();
+                        DealPlayer(i);
+                        DealPlayer(i);
+                        Console.WriteLine("Player{0} was dealt the cards: {1} and {2} ", i, players[i].getCard(0).Name, players[i].getCard(1).Name);
+                    }
+
+                    playerTotal = players[0].getTotal();
+
+                    //TODO: The dealer is dealt one card face up, one card face down.
+                    
+
+                    //DisplayWelcomeMessage();
                 }
                 else
                 {
                     Environment.Exit(0);
                 }
+
+                for (int i = 0; i < playerCount; i++)
+                {
+                    Console.WriteLine("Player{0}", i);
+
+                }
+
 
                 /* START GAME LOOP */
                 do
@@ -166,6 +179,14 @@ namespace Blackjack
             return GetCardValue(cardValue);
         }
 
+        static Card DealPlayer(int index)
+        {
+            int cardValue = cardRandomizer.Next(1, 14);
+
+            players[index].addCard(GetCardValue(cardValue));
+
+            return GetCardValue(cardValue);
+        }
 
         static Card GetCardValue(int cardValue)
         {
