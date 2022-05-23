@@ -12,6 +12,7 @@ namespace Blackjack
         private static readonly Card[] dealerCards = new Card[11];
         static int dealerTotal = 0;
         static int dealerCardCount = 1;
+        static ConsoleColor defaultColor = Console.ForegroundColor;
 
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
@@ -60,11 +61,15 @@ namespace Blackjack
                 {
                     if (playerTotal > dealerTotal && playerTotal <= 21)
                     {
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                        Console.ForegroundColor = defaultColor;
                     }
                     else if (playerTotal < dealerTotal)
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;                        
                         Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+                        Console.ForegroundColor = defaultColor;
                     }
                     else
                     {
@@ -100,13 +105,16 @@ namespace Blackjack
             //Is this true? I don't think it is.
             if (playerTotal.Equals(21))
             {
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+                Console.ForegroundColor = defaultColor;
 
             }
             else if (playerTotal > 21)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
-
+                Console.ForegroundColor = defaultColor;
             }
             else if (playerTotal < 21)
             {
