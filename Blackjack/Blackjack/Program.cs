@@ -31,13 +31,17 @@ namespace Blackjack
                     //Currently, just get a value between 16-21 for the dealer
                     //dealerTotal = cardRandomizer.Next(15, 22);
                     //dealerCards
-                    playerCards[0] = DealCard();
-                    playerCards[1] = DealCard();
 
-                 
+                    playerCards[0] = DealCard(false);
+                    playerCards[1] = DealCard(false);
+
+
 
 
                     //TODO: The dealer is dealt one card face up, one card face down.
+                    dealerCards[0] = DealCard(true);
+                    dealerCards[1] = DealCard(true);
+
                     DisplayWelcomeMessage();
                 }
                 else
@@ -51,7 +55,7 @@ namespace Blackjack
                     Console.WriteLine("Would you like to (H)it or (S)tay?");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("H"));
+                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
 
                 if (playerChoice.Equals("H"))
                 {
@@ -85,13 +89,14 @@ namespace Blackjack
         {
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your player Total is {0} ", playerTotal);
+            Console.WriteLine("The dealer was dealt the card : {0} and one face down card", dealerCards[0].Name);
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
         static void Hit()
         {
             playerCardCount += 1;
-            playerCards[playerCardCount] = DealCard();
+            playerCards[playerCardCount] = DealCard(false);
             //playerTotal += playerCards[playerCardCount].Value;
             Console.WriteLine("Your card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
@@ -123,10 +128,19 @@ namespace Blackjack
 
 
 
-        static Card DealCard()
+        static Card DealCard(Boolean isDealer)
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += GetCardValue(cardValue).Value;
+            if (isDealer)
+            {
+                dealerTotal += GetCardValue(cardValue).Value;
+            }
+            else
+            {
+                playerTotal += GetCardValue(cardValue).Value;
+
+            }
+
             return GetCardValue(cardValue);
         }
 
