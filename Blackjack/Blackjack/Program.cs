@@ -102,6 +102,7 @@ namespace Blackjack
         /// </summary>
         private static void DisplayWelcomeMessage()
         {
+            Console.ForegroundColor = DEALER_COLOR;
             Console.WriteLine("The dealer was dealt a {0} and an unknown card.", dealerCards[0].Name);
             //TODO: Inform the player the value of the dealer's visible card.
         }
@@ -133,7 +134,7 @@ namespace Blackjack
             {
                 do
                 {
-                    Console.WriteLine("Would you like to hit or stay? h for hit s for stay");
+                    Console.WriteLine("Would you like to (H)it or (S)tay?");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
                 while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
@@ -190,12 +191,12 @@ namespace Blackjack
         static void EndGame()
         {
             Console.ForegroundColor = DEALER_COLOR;
-            Console.WriteLine($"The dealer's second card is a {dealerCards[1].Name}");
+            Console.WriteLine($"The dealer's second card is a {dealerCards[1].Name}. The dealer's total is {dealerTotal}.");
             while (dealerTotal < 17)
             {
                 dealerCardCount += 1;
                 dealerCards[dealerCardCount] = DealCard(Player.DEALER, 0);
-                Console.WriteLine($"The dealer drew a {dealerCards[dealerCardCount].Name}. The new dealer total is {dealerTotal}.");
+                Console.WriteLine($"The dealer drew a {dealerCards[dealerCardCount].Name}. The dealer's new total is {dealerTotal}.");
             }
             for (int p = 0; p < numPlayers; p++)
             {
@@ -211,15 +212,15 @@ namespace Blackjack
                 }
                 else if (playerTotals[p] > dealerTotal || (playerTotals[p] < dealerTotal && dealerTotal > 21))
                 {
-                    Console.WriteLine($"Congrats, Player {p + 1}! You won the game! The dealer's total is {dealerTotal} ");
+                    Console.WriteLine($"Congrats, Player {p + 1}! You won the game! The dealer's total is {dealerTotal}. ");
                 }
                 else if (playerTotals[p] < dealerTotal)
                 {
-                    Console.WriteLine($"Sorry, Player {p + 1}, you lost! The dealer's total was {dealerTotal}");
+                    Console.WriteLine($"Sorry, Player {p + 1}, you lost! The dealer's total was {dealerTotal}.");
                 }
                 else if (playerTotals[p] == dealerTotal)
                 {
-                    Console.WriteLine($"Whew, Player {p + 1}. You drew the dealer. The dealer's total was {dealerTotal}");
+                    Console.WriteLine($"Whew, Player {p + 1}. You drew the dealer. The dealer's total was {dealerTotal}.");
                 }
             }
         }
