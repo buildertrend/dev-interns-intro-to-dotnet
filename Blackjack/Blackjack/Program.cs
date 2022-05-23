@@ -7,9 +7,12 @@ namespace Blackjack
     {
         static Random cardRandomizer = new Random();
 
-        static readonly Card[] playerCards = new Card[11];
+        static readonly Card[,] playerCards = new Card[4, 11];
         static int playerTotal = 0;
         static int playerCardCount = 1;
+        static int playerCount = 0;
+        static Player[] players = new Player[4];
+
         private static readonly Card[] dealerCards = new Card[11];
         static int dealerTotal = 0;
         static int dealerCardCount = 1;
@@ -24,18 +27,33 @@ namespace Blackjack
 
         static void Main(string[] args)
         {
+
+            ConsoleColor[] colors = (ConsoleColor[])ConsoleColor.GetValues(typeof(ConsoleColor));
+
             while (playAgain.ToUpper() == "Y")
             {
                 //StartGame
-                Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
+                Console.Write("Welcome to Blackjack - are you ready to play?");
+                Console.ForegroundColor = colors[10];
+                Console.Write(" (Y)es", colors);
+                Console.ForegroundColor = colors[12];
+                Console.WriteLine(" (N)o", colors);
+                Console.ResetColor();
+
+                players[0] = new Player();
+                //Console.WriteLine("How many players? (1-4)");
+
+
                 var decision = Console.ReadLine().ToUpper();
 
                 if (decision == "Y")
                 {
                     //Currently, just get a value between 16-21 for the dealer
-                    //dealerTotal = cardRandomizer.Next(15, 22);
-                    playerCards[0] = DealCard(player);
-                    playerCards[1] = DealCard(player);
+
+                    DealCard(player);
+                    DealCard(player);
+
+                    playerTotal = players[0].getTotal();
 
                     //TODO: The dealer is dealt one card face up, one card face down.
                     dealerCards[0] = DealCard(dealer);
@@ -43,7 +61,6 @@ namespace Blackjack
                     dealerCards[1] = DealCard(dealer);
 
                     DisplayWelcomeMessage();
-
                 }
                 else
                 {
@@ -66,6 +83,9 @@ namespace Blackjack
 
                 if (playerChoice.Equals("S"))
                 {
+
+                    Console.WriteLine("The dealer's second card is {0} ", dealerCards[1].Name);
+
                     if (playerTotal > dealerTotal && playerTotal <= 21)
                     {
                         Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
@@ -88,17 +108,20 @@ namespace Blackjack
         /// </summary>
         private static void DisplayWelcomeMessage()
         {
-            Console.WriteLine("You were dealt the cards: {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
-            Console.WriteLine("Your player total is {0}, dealercard 1 is {0}", playerTotal, dealerCards[0].Name);
+            Console.WriteLine("You were dealt the cards: {0} and {1} ", players[0].getCard(0).Name, players[0].getCard(1).Name);
+            Console.WriteLine("Your player total is {0}, dealercard 1 is {0}", players[0].getTotal(), dealerCards[0].Name);
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
         static void Hit()
         {
-            playerCardCount += 1;
-            playerCards[playerCardCount] = DealCard(player);
-            //playerTotal += playerCards[playerCardCount].Value;
-            Console.WriteLine("Your card is a(n) {0} and your new total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
+            playerCardCount = players[0].getCardCount();
+            
+            DealCard(player);
+
+            playerTotal = players[0].getTotal();
+
+            Console.WriteLine("Your card is a(n) {0} and your new total is {1}. ", players[0].getCard(players[0].getCardCount() -1).Name, playerTotal);
 
             //Is this true? I don't think it is.
             if (playerTotal.Equals(21))
@@ -126,22 +149,13 @@ namespace Blackjack
             }
         }
 
-        /*
-        //TODO: Move this class to it's own file.
-        private class Card
-        {
-            public int Value;
-            public string Name;
-        }
-        */
-
         static Card DealCard(bool isPlayer)
         {
             int cardValue = cardRandomizer.Next(1, 14);
 
             if (isPlayer)
             {
-                playerTotal += cardValue;
+                players[0].addCard(GetCardValue(cardValue));
             }
 
             else
