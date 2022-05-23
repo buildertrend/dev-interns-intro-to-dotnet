@@ -73,7 +73,7 @@ namespace Blackjack
 
                 /* END GAME LOOP */
 
-                Console.WriteLine("Wuold you like to play again? (Y)es or (N)o?");
+                Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
                 PlayAgain();
             }
         }
