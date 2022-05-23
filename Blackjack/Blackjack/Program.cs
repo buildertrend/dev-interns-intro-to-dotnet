@@ -8,7 +8,7 @@ namespace Blackjack
 
         static readonly Card[] playerCards = new Card[11];
         static int playerTotal = 0;
-        static int playerCardCount = 1;
+        static int playerCardCount = 0;
         private static readonly Card[] dealerCards = new Card[11];
         static int dealerTotal = 0;
         static int dealerCardCount = 0;
@@ -102,10 +102,9 @@ namespace Blackjack
 
         static void Hit()
         {
-            playerCardCount += 1;
             playerCards[playerCardCount] = DealCard(false);
             //playerTotal += playerCards[playerCardCount].Value;
-            Console.WriteLine("Your card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
+            Console.WriteLine("Your card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount-1].Name, playerTotal);
 
             //Is this true? I don't think it is.
             if (playerTotal.Equals(21))
@@ -146,10 +145,12 @@ namespace Blackjack
             if (isDealer)
             {
                 dealerTotal += GetCardValue(cardValue).Value;
+                dealerCardCount += 1;
             }
             else
             {
                 playerTotal += GetCardValue(cardValue).Value;
+                playerCardCount += 1;
 
             }
 
@@ -194,7 +195,7 @@ namespace Blackjack
                 Console.ReadLine();
                 Console.Clear();
                 dealerTotal = 0;
-                playerCardCount = 1;
+                playerCardCount = 0;
                 playerTotal = 0;
             }
             else if (playAgain.Equals("N"))
