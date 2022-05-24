@@ -66,6 +66,8 @@ namespace Blackjack
                     Player currentPlayer = allPlayers[i];
                     Console.WriteLine("\nPlayer {0}: ", currentPlayer.GetPlayerNum());
 
+                    SuggestStrategy(currentPlayer.GetTotalPoints());
+
                     var playerChoice = "";
                     do
                     {
@@ -117,6 +119,52 @@ namespace Blackjack
                 Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
                 PlayAgain();
             }
+        }
+
+        private static void WriteStrategy(bool shouldHit)
+        {
+            if (shouldHit)
+            {
+                Console.WriteLine("I think you should Hit.");
+            }
+            else
+            {
+                Console.WriteLine("I think you should Stay.");
+            }
+        }
+
+        private static void SuggestStrategy(int playerPoints)
+        {
+            // Strategies based on: https://blog.grosvenorcasinos.com/blackjack-strategy-hit-or-stand
+            Card dealerCard = dealerCards[0];
+            Console.ForegroundColor = ConsoleColor.Yellow;
+
+            switch(dealerCard.Value)
+            {
+                case 2:
+                case 3:
+                    WriteStrategy(playerPoints < 13 || playerPoints == dealerCard.Value);
+                    break;
+                case 4:
+                case 5:
+                case 6:
+                    WriteStrategy(playerPoints < 12 || playerPoints == dealerCard.Value);
+                    break;
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                    WriteStrategy(playerPoints < 16);
+                    break;
+                case 11:
+                    WriteStrategy(playerPoints < 17);
+                    break;
+                default:
+                    Console.WriteLine("I'm not sure what you should do.");
+                    break;
+            }
+
+            Console.ForegroundColor = defaultTextColor;
         }
 
         private static List<Card> MakeCardDeck()
@@ -191,6 +239,9 @@ namespace Blackjack
             else if (playerTotal < 21)
             {
                 Console.WriteLine("Player {0}: ", player.GetPlayerNum());
+
+                SuggestStrategy(player.GetTotalPoints());
+
                 var playerChoice = "";
                 do
                 {

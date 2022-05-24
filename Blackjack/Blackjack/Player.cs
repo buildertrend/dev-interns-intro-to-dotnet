@@ -32,7 +32,7 @@
             return this.playerNum;
         }
 
-        public Card[] GetCards ()
+        public Card[] GetCards()
         {
             return this.cards;
         }
