@@ -6,6 +6,7 @@ namespace Blackjack
     class Program
     {
         static Random cardRandomizer = new Random();
+        static List<Card> deck = new List<Card>();
 
         static Player[] allPlayers;
         static List<Player> winningPlayers = new List<Player>();
@@ -19,6 +20,30 @@ namespace Blackjack
 
         static void Main(string[] args)
         {
+            // Setup card deck
+            for (int i = 0; i < 52; i++)
+            {
+                Card newCard = Card.GetCardValue(i % 13);
+                if (i / 13 < 1)
+                {
+                    newCard.Suit = "Hearts";
+                }
+                else if (i / 13 < 2)
+                {
+                    newCard.Suit = "Diamonds";
+                }
+                else if (i / 13 < 3)
+                {
+                    newCard.Suit = "Spades";
+                }
+                else
+                {
+                    newCard.Suit = "Clubs";
+                }
+                deck.Add(newCard);
+            }
+
+            // Decide number of players
             Console.WriteLine("Before we begin Blackjack, enter 1 to play just against the dealer or enter the number of friends you'd like to play with.");
             var numPlayers = int.Parse(Console.ReadLine());
             allPlayers = new Player[numPlayers];
@@ -122,20 +147,20 @@ namespace Blackjack
             for (int i = 0; i < allPlayers.Length; i++)
             {
                 Player currentPlayer = allPlayers[i];
-                Console.WriteLine("Player {0} was dealt the cards: {1} and {2}.", currentPlayer.GetPlayerNum(), currentPlayer.GetCards()[0].Name, currentPlayer.GetCards()[1].Name);
+                Console.WriteLine("Player {0} was dealt the cards: {1} and {2}.", currentPlayer.GetPlayerNum(), currentPlayer.GetCards()[0], currentPlayer.GetCards()[1]);
                 Console.WriteLine("Player {0}'s Total is {1}.\n", currentPlayer.GetPlayerNum(), currentPlayer.GetTotalPoints());
             }
 
             // Inform the player the value of the dealer's visible card.
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("The dealer was dealt a(n) {0}.", dealerCards[0].Name);
+            Console.WriteLine("The dealer was dealt a(n) {0}.", dealerCards[0]);
             Console.ForegroundColor = defaultTextColor;
         }
 
         static void Hit(Player player)
         {
             player.AddCardToHand(DealCard());
-            Console.WriteLine("\nPlayer {0}'s card is a(n) {1} and their new Total is {2}.", player.GetPlayerNum(), player.GetMostRecentCard().Name, player.GetTotalPoints());
+            Console.WriteLine("\nPlayer {0}'s card is a(n) {1} and their new Total is {2}.", player.GetPlayerNum(), player.GetMostRecentCard(), player.GetTotalPoints());
 
             //Is this true? I don't think it is.
             int playerTotal = player.GetTotalPoints();
@@ -171,36 +196,18 @@ namespace Blackjack
 
         static Card DealCard()
         {
-            int cardValue = cardRandomizer.Next(1, 14);
-            return GetCardValue(cardValue);
+            // TODO: need to add checks for if deck is empty
+            int randIndex = cardRandomizer.Next(0, deck.Count);
+            Card newCard = deck[randIndex];
+            deck.RemoveAt(randIndex);
+            return newCard;
         }
 
         static Card DealCardDealer()
         {
-            int cardValue = cardRandomizer.Next(1, 14);
-            dealerTotal += (cardValue + 1);
-            return GetCardValue(cardValue);
-        }
-
-        static Card GetCardValue(int cardValue)
-        {
-            return cardValue switch
-            {
-                1 => new Card() { Name = "Two", Value = 2 },
-                2 => new Card() { Name = "Three", Value = 3 },
-                3 => new Card() { Name = "Four", Value = 4 },
-                4 => new Card() { Name = "Five", Value = 5 },
-                5 => new Card() { Name = "Six", Value = 6 },
-                6 => new Card() { Name = "Seven", Value = 7 },
-                7 => new Card() { Name = "Eight", Value = 8 },
-                8 => new Card() { Name = "Nine", Value = 9 },
-                9 => new Card() { Name = "Ten", Value = 10 },
-                10 => new Card() { Name = "Jack", Value = 10 },
-                11 => new Card() { Name = "Queen", Value = 10 },
-                12 => new Card() { Name = "King", Value = 10 },
-                13 => new Card() { Name = "Ace", Value = 11 },
-                _ => new Card() { Name = "Two", Value = 2 },
-            };
+            Card newCard = DealCard();
+            dealerTotal += newCard.Value;
+            return newCard;
         }
 
         static void PlayAgain()
