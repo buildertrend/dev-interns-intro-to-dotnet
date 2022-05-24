@@ -7,7 +7,6 @@ namespace Blackjack
     {
         static Random cardRandomizer = new Random();
 
-        static readonly Card[] playerCards = new Card[11];
         private static readonly Card[] dealerCards = new Card[11];
         static int dealerTotal = 0;
         static int dealerCardCount = 0;     
@@ -22,7 +21,7 @@ namespace Blackjack
         {
             while (playAgain.ToUpper() == "Y")
             {
-                //StartGame
+                //StartGame0
                 Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
                 var decision = Console.ReadLine().ToUpper();
 
@@ -43,7 +42,7 @@ namespace Blackjack
 
 
                     } while (playersNumber < 1 || playersNumber > 6);
-                    
+                    players = new List<Player>();
                     for (int i = 0; i< playersNumber; i++)
                     {
                         players.Add(new Player());
@@ -90,22 +89,13 @@ namespace Blackjack
 
                     if (playerChoice.Equals("S"))
                     {
-                        if (player.getTotal() > dealerTotal && player.getTotal() <= 21)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
-                            Console.ForegroundColor = ConsoleColor.White;
-
-                        }
-                        else if (player.getTotal() < dealerTotal)
-                        {
-                            Console.ForegroundColor = ConsoleColor.DarkRed;
-
-                            Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
-                            Console.ForegroundColor = ConsoleColor.White;
-
-                        }
+                        
                     }
+                }
+
+                foreach(Player player in players)
+                {
+                    DisplayScoringMessage(player);
                 }
 
                 /* END GAME LOOP */
@@ -115,12 +105,30 @@ namespace Blackjack
             }
         }
 
+        private static void DisplayScoringMessage(Player player)
+        {
+            if (player.getTotal() > dealerTotal && player.getTotal() <= 21)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                Console.ForegroundColor = ConsoleColor.White;
+
+            }
+            else if (player.getTotal() < dealerTotal)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+
+                Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+                Console.ForegroundColor = ConsoleColor.White;
+
+            }
+        }
         /// <summary>
         /// Displays a friendly message to the user and shows their current hand.
         /// </summary>
         private static void DisplayWelcomeMessage(Player player)
         {
-            Console.WriteLine("You were dealt the cards : {0} and {1} ", player.cards[0].Name, player.cards[0].Name);
+            Console.WriteLine("You were dealt the cards : {0} and {1} ", player.cards[0].Name, player.cards[1].Name);
             Console.WriteLine("Your player Total is {0} ", player.getTotal());
             Console.WriteLine("The dealer was dealt the card : {0} and one face down card", dealerCards[0].Name);
             //TODO: Inform the player the value of the dealer's visible card.
@@ -130,13 +138,13 @@ namespace Blackjack
         {
             DealCard(player);
             //playerTotal += playerCards[playerCardCount].Value;
-            Console.WriteLine("Your card is a(n) {0} and your new Total is {1}. ", playerCards[player.cards.Count-1].Name, player.getTotal());
+            Console.WriteLine("Your card is a(n) {0} and your new Total is {1}. ", player.cards[player.cards.Count-1], player.getTotal());
 
             //Is this true? I don't think it is.
             if (player.getTotal().Equals(21))
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+                Console.WriteLine("You got Blackjack!");
                 Console.ForegroundColor = ConsoleColor.White;
 
 
@@ -144,7 +152,7 @@ namespace Blackjack
             else if (player.getTotal() > 21)
             {
                 Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine("You are busted! Sorry! The dealer's Total was {0}", dealerTotal);
+                Console.WriteLine("You are busted! Sorry!");
                 Console.ForegroundColor = ConsoleColor.White;
 
             }
