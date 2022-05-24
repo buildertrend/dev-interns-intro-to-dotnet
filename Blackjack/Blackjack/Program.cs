@@ -81,8 +81,7 @@ namespace Blackjack
                         //hit will get them a card / check the total and ask for another hit
                         Hit(currentPlayer);
                     }
-
-                    if (playerChoice.Equals("S"))
+                    else
                     {
                         int playerTotal = currentPlayer.GetTotalPoints();
 
@@ -249,9 +248,17 @@ namespace Blackjack
                     playerChoice = Console.ReadLine().ToUpper();
                 }
                 while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
+
                 if (playerChoice.ToUpper() == "H")
                 {
                     Hit(player);
+                }
+                else
+                {
+                    if (playerTotal > dealerTotal && playerTotal <= 21)
+                    {
+                        winningPlayers.Add(player);
+                    }
                 }
             }
         }
