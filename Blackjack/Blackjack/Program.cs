@@ -21,27 +21,7 @@ namespace Blackjack
         static void Main(string[] args)
         {
             // Setup card deck
-            for (int i = 0; i < 52; i++)
-            {
-                Card newCard = Card.GetCardValue(i % 13);
-                if (i / 13 < 1)
-                {
-                    newCard.Suit = "Hearts";
-                }
-                else if (i / 13 < 2)
-                {
-                    newCard.Suit = "Diamonds";
-                }
-                else if (i / 13 < 3)
-                {
-                    newCard.Suit = "Spades";
-                }
-                else
-                {
-                    newCard.Suit = "Clubs";
-                }
-                deck.Add(newCard);
-            }
+            deck = MakeCardDeck();
 
             // Decide number of players
             Console.WriteLine("Before we begin Blackjack, enter 1 to play just against the dealer or enter the number of friends you'd like to play with.");
@@ -139,6 +119,37 @@ namespace Blackjack
             }
         }
 
+        private static List<Card> MakeCardDeck()
+        {
+            List<Card> newDeck = new List<Card>();
+
+            for (int i = 0; i < 52; i++)
+            {
+                Card newCard = Card.GetCardValue(i % 13);
+
+                if (i / 13 < 1)
+                {
+                    newCard.Suit = "Hearts";
+                }
+                else if (i / 13 < 2)
+                {
+                    newCard.Suit = "Diamonds";
+                }
+                else if (i / 13 < 3)
+                {
+                    newCard.Suit = "Spades";
+                }
+                else
+                {
+                    newCard.Suit = "Clubs";
+                }
+
+                newDeck.Add(newCard);
+            }
+
+            return newDeck;
+        }
+
         /// <summary>
         /// Displays a friendly message to the user and shows their current hand.
         /// </summary>
@@ -196,7 +207,12 @@ namespace Blackjack
 
         static Card DealCard()
         {
-            // TODO: need to add checks for if deck is empty
+            if (deck.Count <= 0)
+            {
+                // Act like adding a second deck
+                deck = MakeCardDeck();
+            }
+
             int randIndex = cardRandomizer.Next(0, deck.Count);
             Card newCard = deck[randIndex];
             deck.RemoveAt(randIndex);
