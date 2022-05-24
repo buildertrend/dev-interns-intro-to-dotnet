@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Blackjack
 {
@@ -24,8 +25,19 @@ namespace Blackjack
 
         static string playAgain = "Y";
 
+        static List<Card> deck = new List<Card>();
+
         static void Main(string[] args)
         {
+            for (int i = 1; i < 14; i++)
+            {
+                foreach (Suit s in Enum.GetValues(typeof(Suit)))
+                {
+                    Card c = Card.GetCardValue(i);
+                    c.suit = s;
+                    deck.Add(c);
+                }
+            }
             while (playAgain.ToUpper() == "Y")
             {
                 //StartGame
@@ -38,7 +50,7 @@ namespace Blackjack
                     playerChoice = Console.ReadLine();
                     while (!Int32.TryParse(playerChoice, out numPlayers) || numPlayers > MAX_PLAYERS)
                     {
-                        if (numPlayers > 8) Console.WriteLine("Too many players!");
+                        if (numPlayers > MAX_PLAYERS) Console.WriteLine("Too many players!");
                         Console.WriteLine("How many players are there?");
                         playerChoice = Console.ReadLine();
                     }
@@ -67,7 +79,7 @@ namespace Blackjack
                 {
                     Console.ForegroundColor = PLAYER_COLORS[i];
                     Console.WriteLine($"Player {i + 1} is up.");
-                    Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[i, 0].Name, playerCards[i, 1].Name);
+                    Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[i, 0].CardName(), playerCards[i, 1].CardName());
                     Console.WriteLine("Your playerTotal is {0} ", playerTotals[i]);
                     do
                     {
@@ -81,11 +93,11 @@ namespace Blackjack
                         //hit will get them a card / check the total and ask for another hit
                         Hit(i);
                     }
-
-                    if (playerChoice.Equals("S"))
+                    else if (playerChoice.Equals("S"))
                     {
-                        if (i != numPlayers - 1) continue;
-                        EndGame();
+                        if (i == numPlayers - 1) {
+                            EndGame();
+                        }
                     }
                 }
 
@@ -103,7 +115,7 @@ namespace Blackjack
         private static void DisplayWelcomeMessage()
         {
             Console.ForegroundColor = DEALER_COLOR;
-            Console.WriteLine("The dealer was dealt a {0} and an unknown card.", dealerCards[0].Name);
+            Console.WriteLine("The dealer was dealt a {0} and an unknown card.", dealerCards[0].CardName());
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
@@ -111,7 +123,7 @@ namespace Blackjack
         {
             playerCardCounts[playerId] += 1;
             playerCards[playerId, playerCardCounts[playerId]] = DealCard(Player.PLAYER, playerId);
-            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerId, playerCardCounts[playerId]].Name, playerTotals[playerId]);
+            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerId, playerCardCounts[playerId]].CardName(), playerTotals[playerId]);
 
             //Is this true? I don't think it is.
             if (playerTotals[playerId].Equals(21))
@@ -142,7 +154,7 @@ namespace Blackjack
                 {
                     Hit(playerId);
                 }
-                if (playerChoice.Equals("S"))
+                else if (playerChoice.Equals("S"))
                 {
                     if (playerId == numPlayers - 1)
                     {
@@ -159,44 +171,23 @@ namespace Blackjack
 
         static Card DealCard(Player player, int playerId)
         {
-            int cardValue = cardRandomizer.Next(1, 14);
-            Card card = GetCardValue(cardValue);
+            int cardValue = cardRandomizer.Next(0, deck.Count);
+            Card card = deck[cardValue];
+            deck.Remove(card);
             if (player == Player.PLAYER) playerTotals[playerId] += card.Value;
             else if (player == Player.DEALER) dealerTotal += card.Value;
             return card;
         }
 
-
-        static Card GetCardValue(int cardValue)
-        {
-            return cardValue switch
-            {
-                1 => new Card() { Name = "Two", Value = 2 },
-                2 => new Card() { Name = "Three", Value = 3 },
-                3 => new Card() { Name = "Four", Value = 4 },
-                4 => new Card() { Name = "Five", Value = 5 },
-                5 => new Card() { Name = "Six", Value = 6 },
-                6 => new Card() { Name = "Seven", Value = 7 },
-                7 => new Card() { Name = "Eight", Value = 8 },
-                8 => new Card() { Name = "Nine", Value = 9 },
-                9 => new Card() { Name = "Ten", Value = 10 },
-                10 => new Card() { Name = "Jack", Value = 10 },
-                11 => new Card() { Name = "Queen", Value = 10 },
-                12 => new Card() { Name = "King", Value = 10 },
-                13 => new Card() { Name = "Ace", Value = 11 },
-                _ => new Card() { Name = "Two", Value = 2 },
-            };
-        }
-
         static void EndGame()
         {
             Console.ForegroundColor = DEALER_COLOR;
-            Console.WriteLine($"The dealer's second card is a {dealerCards[1].Name}. The dealer's total is {dealerTotal}.");
+            Console.WriteLine($"The dealer's second card is a {dealerCards[1].CardName()}. The dealer's total is {dealerTotal}.");
             while (dealerTotal < 17)
             {
                 dealerCardCount += 1;
                 dealerCards[dealerCardCount] = DealCard(Player.DEALER, 0);
-                Console.WriteLine($"The dealer drew a {dealerCards[dealerCardCount].Name}. The dealer's new total is {dealerTotal}.");
+                Console.WriteLine($"The dealer drew a {dealerCards[dealerCardCount].CardName()}. The dealer's new total is {dealerTotal}.");
             }
             for (int p = 0; p < numPlayers; p++)
             {
