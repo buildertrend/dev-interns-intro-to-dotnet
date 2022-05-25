@@ -10,5 +10,15 @@ namespace Blackjack
     {
         public int Value;
         public string Name;
+        public string Suit;
+
+        public String getName()
+        {
+            if (Suit.Equals("notValid"))
+            {
+                return Name;
+            }
+            return Name + String.Format(" of {0}", Suit);
+        }
     }
 }
