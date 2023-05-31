@@ -13,13 +13,10 @@ namespace BlackjackUpdated
         //Colors used f
         static ConsoleColor tableColor = ConsoleColor.DarkGreen;
         static ConsoleColor textColor = ConsoleColor.White;
-
-        static Player player1 = new Player();
         static Player[] players;
         static int currentPLayer = 0;
-        private static readonly Card[] dealerCards = new Card[11];
-        static int dealerTotal = 0;
-        static int dealerCardCount = 0;
+        static Player dealer; 
+     
 
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
@@ -59,15 +56,8 @@ namespace BlackjackUpdated
 
 
                     //Dealing a dealer two cards
-                    dealerCards[0] = DealCard();
-                    dealerCards[1] = DealCard();
-
-                    //Adding dealt value to dealer's total
-                    dealerTotal += dealerCards[0].Value;
-                    dealerTotal += dealerCards[1].Value;
-                    dealerCardCount += 2;
-
-
+                    dealer.AddCardToHand(DealCard());
+                    dealer.AddCardToHand(DealCard());
 
                     
                 }
@@ -101,16 +91,54 @@ namespace BlackjackUpdated
 
                 if (playerChoice.Equals("S"))
                 {
-                    if (players[currentPLayer].getPlayerTotal() > dealerTotal && players[currentPLayer].getPlayerTotal() <= 21)
+                        if(currentPLayer != players.Length - 1)
+                        {
+                            Console.WriteLine("Moving to next player");
+                        }
+                       
+                   
+                }
+
+                }
+
+                //here see if dealer needs more cards
+                while(dealer.getPlayerTotal() < 17 )
+                {
+                    dealer.AddCardToHand(DealCard());
+                    if(dealer.getPlayerTotal() > 21)
                     {
-                        Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                        Console.WriteLine("The dealer has busted!");
                     }
-                    else if ( players[currentPLayer].getPlayerTotal() < dealerTotal)
+                    bool dealerWin = true;
+                    for (int i = 0; i < players.Length; i++)
                     {
-                        Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+                        
+                        if(dealer.getPlayerTotal() < players[i].getPlayerTotal())
+                        {
+                            dealerWin = false;
+                        }
+                    }
+
+                    if (dealerWin)
+                    {
+                        break;
                     }
                 }
 
+                //here check which players win
+                for(int i = 0; i < players.Length; i++){
+                    if(dealer.getPlayerTotal() > 21 && players[i].getPlayerTotal() <= 21)
+                    {
+                        Console.WriteLine("Congrats Player {0}! You won the game! The dealer busted ", i + 1);
+                    }
+                    else if (players[i].getPlayerTotal() > dealer.getPlayerTotal() && players[i].getPlayerTotal() <= 21)
+                    {
+                        Console.WriteLine("Congrats Player {0}! You won the game! The dealer's total is {1} ", i + 1, dealer.getPlayerTotal());
+                    }
+                    else if ( players[i].getPlayerTotal() < dealer.getPlayerTotal())
+                    {
+                        Console.WriteLine("Sorry Player {0}, you lost! The dealer's total was {1}", i + 1, dealer.getPlayerTotal());
+                    }
                 }
 
 
@@ -127,26 +155,29 @@ namespace BlackjackUpdated
         private static void DisplayWelcomeMessage()
         {
             //Inform the player of the dealer's cards
-            Console.WriteLine("The dealer currently face up value is {0}", dealerCards[0].Value);
-            Console.WriteLine("Player {0}, you were dealt the cards : {1} and {2} ", currentPLayer + 1, players[currentPLayer].playerCards[0].Name, players[currentPLayer].playerCards[1].Name);
+            Console.WriteLine("The dealer's face up card is a {0}", dealer.playerCards[0].Name);
+
+            //Inform the user of their cards and total
+            Console.WriteLine("Player {0}, you were dealt the cards: {1} and a {2} ", currentPLayer + 1, players[currentPLayer].playerCards[0].Name, players[currentPLayer].playerCards[1].Name);
             Console.WriteLine("Your player total is {0} ", players[currentPLayer].getPlayerTotal());
-            //TODO: Inform the player the value of the dealer's visible card.
+            
         }
 
         static void Hit()
         {
-            player1.AddCardToHand(DealCard());
-            Console.WriteLine("You card is an {0} and your new Total is {1}. ", players[currentPLayer].GetLastCard().Name, players[currentPLayer].getPlayerTotal());
+            Card drawCard = DealCard();
+            players[currentPLayer].AddCardToHand(drawCard);
+            Console.WriteLine("You card is an {0} and your new Total is {1}. ", drawCard.Name, players[currentPLayer].getPlayerTotal());
 
            
             if (players[currentPLayer].getPlayerTotal().Equals(21))
             {
-                Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+                Console.WriteLine("Player {0} got Blackjack!", currentPLayer + 1);
 
             }
             else if (players[currentPLayer].getPlayerTotal() > 21)
             {
-                Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
+                Console.WriteLine("Player {0} busted! Sorry!", currentPLayer + 1);
 
             }
             else if (players[currentPLayer].getPlayerTotal() < 21)
@@ -207,8 +238,6 @@ namespace BlackjackUpdated
                 Console.WriteLine("Press enter to restart the game!");
                 Console.ReadLine();
                 Console.Clear();
-                dealerTotal = 0;
-                player1 = new Player();
             }
             else if (playAgain.Equals("N"))
             {
@@ -227,6 +256,7 @@ namespace BlackjackUpdated
 
         static void CreatePlayers(int numberOfPlayers)
         {
+            dealer = new Player();
             players = new Player[numberOfPlayers];
             for (int i = 0; i < numberOfPlayers; i++)
             {
