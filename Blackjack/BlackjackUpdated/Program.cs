@@ -1,4 +1,7 @@
-﻿namespace BlackjackUpdated
+﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
+namespace BlackjackUpdated
 {
     class Program
     {
@@ -18,10 +21,19 @@
 
         static void Main(string[] args)
         {
+            SetConsoleCtrlHandler(new HandlerRoutine(ConsoleCtrlCheck), true);
             while (playAgain.ToUpper() == "Y")
             {
                 //StartGame
-                Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
+                try
+                {
+                    Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)esss (N)o");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("hi");
+                }
+                
                 var decision = Console.ReadLine().ToUpper();
 
                 if (decision == "Y")
@@ -187,5 +199,45 @@
                 }
             }
         }
+
+        private static bool ConsoleCtrlCheck(CtrlTypes ctrlType)
+        {
+            // Put your own handler here
+            switch (ctrlType)
+            {
+                case CtrlTypes.CTRL_C_EVENT:
+                case CtrlTypes.CTRL_BREAK_EVENT:
+                case CtrlTypes.CTRL_CLOSE_EVENT:                    
+                case CtrlTypes.CTRL_LOGOFF_EVENT:
+                case CtrlTypes.CTRL_SHUTDOWN_EVENT:
+                    Environment.Exit(0);
+                    break;
+            }
+            return true;
+        }
+
+        #region unmanaged
+
+        // Declare the SetConsoleCtrlHandler function
+        // as external and receiving a delegate.
+        [DllImport("Kernel32")]
+        public static extern bool SetConsoleCtrlHandler(HandlerRoutine Handler, bool Add);
+
+        // A delegate type to be used as the handler routine
+        // for SetConsoleCtrlHandler.
+        public delegate bool HandlerRoutine(CtrlTypes CtrlType);
+
+        // An enumerated type for the control messages
+        // sent to the handler routine.
+        public enum CtrlTypes
+        {
+            CTRL_C_EVENT = 0,
+            CTRL_BREAK_EVENT,
+            CTRL_CLOSE_EVENT,
+            CTRL_LOGOFF_EVENT = 5,
+            CTRL_SHUTDOWN_EVENT
+        }
+
+        #endregion
     }
 }
