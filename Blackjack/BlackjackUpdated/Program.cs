@@ -8,7 +8,7 @@ namespace BlackjackUpdated
     class Program
     {
         static Random cardRandomizer = new Random();
-
+        ConsoleColor[] colors = (ConsoleColor[])ConsoleColor.GetValues(typeof(ConsoleColor));
         static readonly Card[] playerCards = new Card[11];
         static int playerTotal = 0;
         static int playerCardCount = 1;
@@ -23,13 +23,14 @@ namespace BlackjackUpdated
 
         static void Main(string[] args)
         {
+            Console.BackgroundColor = ConsoleColor.DarkGreen;
             SetConsoleCtrlHandler(new HandlerRoutine(ConsoleCtrlCheck), true);
             while (playAgain.ToUpper() == "Y")
             {
                 //StartGame
                 try
                 {
-                    Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)esss (N)o");
+                    Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
                 }
                 catch (Exception ex)
                 {
