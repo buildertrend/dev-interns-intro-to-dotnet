@@ -1,4 +1,9 @@
-﻿namespace BlackjackUpdated
+﻿using Blackjack;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using static Blackjack.ConsoleControlHandler;
+
+namespace BlackjackUpdated
 {
     class Program
     {
@@ -18,10 +23,19 @@
 
         static void Main(string[] args)
         {
+            SetConsoleCtrlHandler(new HandlerRoutine(ConsoleCtrlCheck), true);
             while (playAgain.ToUpper() == "Y")
             {
                 //StartGame
-                Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
+                try
+                {
+                    Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)esss (N)o");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("hi");
+                }
+                
                 var decision = Console.ReadLine().ToUpper();
 
                 if (decision == "Y")
@@ -176,5 +190,7 @@
                 }
             }
         }
+
+        
     }
 }
