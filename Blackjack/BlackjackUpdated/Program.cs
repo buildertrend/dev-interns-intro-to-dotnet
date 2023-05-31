@@ -29,7 +29,7 @@ namespace BlackjackUpdated
                 //StartGame
                 try
                 {
-                    Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)esss (N)o");
+                    Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
                 }
                 catch (Exception ex)
                 {
@@ -114,7 +114,7 @@ namespace BlackjackUpdated
         {
             Console.WriteLine("The dealers visable card is a : {0} ", dealerCards[0].Name);
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
-            Console.WriteLine("Your playerTotal is {0} ", playerTotal);
+            Console.WriteLine("Your Total is {0} ", playerTotal);
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
@@ -133,7 +133,35 @@ namespace BlackjackUpdated
             }
             else if (playerTotal > 21)
             {
-                Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
+                var temp = 0;
+                while (temp <= playerCardCount)
+                {
+                    if (playerCards[temp].Name == "Ace")
+                    {
+                        playerCards[temp].Value = 1;
+                        playerTotal -= 10;
+                    }
+                    temp += 1;
+                }
+                if(playerTotal > 21)
+                {
+                    Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
+                }
+                else
+                {
+                    Console.WriteLine("Your ace was changed to a 1. Your new total is {0}. ", playerTotal);
+                    do
+                    {
+                        Console.WriteLine("Would you like to hit or stay? h for hit s for stay");
+                        playerChoice = Console.ReadLine().ToUpper();
+                    }
+                    while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
+                    if (playerChoice.ToUpper() == "H")
+                    {
+                        Hit();
+                    }
+                }
+                
 
             }
             else if (playerTotal < 21)
@@ -194,6 +222,7 @@ namespace BlackjackUpdated
                 Console.ReadLine();
                 Console.Clear();
                 dealerTotal = 0;
+                dealerCardCount = 1;
                 playerCardCount = 1;
                 playerTotal = 0;
             }
