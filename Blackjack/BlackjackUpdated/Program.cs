@@ -131,6 +131,7 @@
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
+            //FIX playerTotal is getCardValue().Value, not just the cardRandomizer number
             playerTotal += GetCardValue(cardValue).Value;
             return GetCardValue(cardValue);
         }
