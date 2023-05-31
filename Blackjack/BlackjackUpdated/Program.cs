@@ -170,7 +170,7 @@ namespace BlackjackUpdated
             }
             else if (dealerTotal > 21)
             {
-                Console.WriteLine("Congrats! You won the game! The dealer busted!");
+                Console.WriteLine("Congrats! You won the game! The dealer busted with a total of {0}!", dealerTotal);
             }
         }
 
