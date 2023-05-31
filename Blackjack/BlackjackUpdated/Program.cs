@@ -26,11 +26,15 @@
 
                 if (decision == "Y")
                 {
-                    //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(15, 22);
+                    ////Currently, just get a value between 16-21 for the dealer
+                    //dealerTotal = cardRandomizer.Next(15, 22);
+                    dealerCards[0] = Card.DealCard();
+                    dealerCards[1] = Card.DealCard();
                     playerCards[0] = Card.DealCard();
                     playerCards[1] = Card.DealCard();
 
+                    dealerTotal += dealerCards[0].Value;
+                    dealerTotal += dealerCards[1].Value;
                     playerTotal += playerCards[0].Value;
                     playerTotal += playerCards[1].Value;
 
@@ -83,6 +87,7 @@
         {
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
+            Console.WriteLine("The dealer was dealt a(n): {0}", dealerCards[0].Name);
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
@@ -103,6 +108,12 @@
             }
             playerTotal += playerCards[playerCardCount].Value;
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
+
+            if(dealerTotal < 17)
+            {
+                dealerCards[dealerCardCount] = Card.DealCard();
+                dealerTotal += dealerCards[dealerCardCount].Value;
+            }
 
             //Is this true? I don't think it is.
             if (playerTotal.Equals(21))
