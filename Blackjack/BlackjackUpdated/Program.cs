@@ -27,7 +27,7 @@
                 if (decision == "Y")
                 {
                     //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(15, 22);
+                    dealerTotal = cardRandomizer.Next(16, 22);
                     playerCards[0] = DealCard();
                     playerCards[1] = DealCard();
 
@@ -108,7 +108,7 @@
             {
                 do
                 {
-                    Console.WriteLine("Would you like to hit or stay? h for hiit s for stay");
+                    Console.WriteLine("Would you like to hit or stay? h for hit s for stay");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
                 while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
@@ -129,7 +129,6 @@
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
             return GetCardValue(cardValue);
         }
 
