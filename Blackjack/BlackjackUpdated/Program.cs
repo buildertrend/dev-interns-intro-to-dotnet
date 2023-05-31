@@ -27,15 +27,12 @@
                 if (decision == "Y")
                 {
                     //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(16, 22);
-                    playerCards[0] = DealCard();
-                    playerCards[1] = DealCard();
+                    //dealerTotal = cardRandomizer.Next(16, 22);
+                    dealerCards[0] = DealCardDealer();
+                    dealerCards[1] = DealCardDealer(); // "face down" card
 
-                    playerTotal += playerCards[0].Value;
-                    playerTotal += playerCards[1].Value;
-
-
-                    //TODO: The dealer is dealt one card face up, one card face down.
+                    playerCards[0] = DealCardUser();
+                    playerCards[1] = DealCardUser();
                     DisplayWelcomeMessage();
                 }
                 else
@@ -43,31 +40,37 @@
                     Environment.Exit(0);
                 }
 
-                /* START GAME LOOP */
-                do
-                {
-                    Console.WriteLine("Would you like to (H)it or (S)tay?");
-                    playerChoice = Console.ReadLine().ToUpper();
+                if (playerTotal == 21) {
+                    Console.WriteLine("You got Blackjack on your first deal! You win!");
+                    //TODO: Add condition where the dealer also has a natural
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
-
-                if (playerChoice.Equals("H"))
-                {
-                    //hit will get them a card / check the total and ask for another hit
-                    Hit();
-                }
-
-                if (playerChoice.Equals("S"))
-                {
-                    if (playerTotal > dealerTotal && playerTotal <= 21)
+                else {
+                    do
                     {
-                        Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                        Console.WriteLine("Would you like to (H)it or (S)tay?");
+                        playerChoice = Console.ReadLine().ToUpper();
                     }
-                    else if (playerTotal < dealerTotal)
+                    while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
+
+                    if (playerChoice.Equals("H"))
                     {
-                        Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+                        //hit will get them a card / check the total and ask for another hit
+                        Hit();
+                    }
+
+                    if (playerChoice.Equals("S"))
+                    {
+                        if (playerTotal > dealerTotal && playerTotal <= 21)
+                        {
+                            Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                        }
+                        else if (playerTotal < dealerTotal)
+                        {
+                            Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+                        }
                     }
                 }
+                
 
                 /* END GAME LOOP */
 
@@ -83,20 +86,20 @@
         {
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
-            //TODO: Inform the player the value of the dealer's visible card.
+
+            Console.WriteLine("The dealer has the card {0} face up ", dealerCards[0].Name);
+            Console.WriteLine("The card has a value of {0} ", dealerCards[0].Value);
         }
 
         static void Hit()
         {
-            playerCardCount += 1;
-            playerCards[playerCardCount] = DealCard();
-            playerTotal += playerCards[playerCardCount].Value;
-            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
+            playerCards[playerCardCount] = DealCardUser();
+            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount-1].Name, playerTotal);
 
             //Is this true? I don't think it is.
-            if (playerTotal.Equals(21))
+            if (playerTotal == 21)
             {
-                Console.WriteLine("Yuo got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+                Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
 
             }
             else if (playerTotal > 21)
@@ -108,11 +111,11 @@
             {
                 do
                 {
-                    Console.WriteLine("Would you like to hit or stay? h for hit s for stay");
+                    Console.WriteLine("Would you like to hit or stay? H for hit S for stay");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
                 while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
-                if (playerChoice.ToUpper() == "H")
+                if (playerChoice == "H")
                 {
                     Hit();
                 }
@@ -126,11 +129,20 @@
             public string Name;
         }
 
-        static Card DealCard()
+        static Card DealCardUser()
         {
-            int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
-            return GetCardValue(cardValue);
+            playerCardCount++;
+            Card card = GetCardValue(cardRandomizer.Next(1, 14));
+            playerTotal += card.Value;
+            return card;
+        }
+
+        static Card DealCardDealer()
+        {
+            dealerCardCount++;
+            Card card = GetCardValue(cardRandomizer.Next(1, 14));
+            dealerTotal += card.Value;
+            return card;
         }
 
 
@@ -170,6 +182,7 @@
                 Console.ReadLine();
                 Console.Clear();
                 dealerTotal = 0;
+                dealerCardCount = 1;
                 playerCardCount = 1;
                 playerTotal = 0;
             }
