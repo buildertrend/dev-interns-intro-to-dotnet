@@ -39,7 +39,7 @@
         {
             playerCards[playerCardCount] = card;
             AddToPlayerCardCount();
-            AddToTotal(card.Value);
+            AddToTotal(card.GetCardValue());
         }
 
         public void ResetPlayer()

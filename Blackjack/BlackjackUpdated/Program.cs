@@ -11,6 +11,7 @@ namespace BlackjackUpdated
         static Random cardRandomizer = new Random();
 
         //Colors used f
+        static Deck deck = new Deck();
         static ConsoleColor tableColor = ConsoleColor.DarkGreen;
         static ConsoleColor textColor = ConsoleColor.White;
         static Player[] players;
@@ -54,10 +55,12 @@ namespace BlackjackUpdated
                     //this is the method that creates players
                     CreatePlayers(amountOfPLayers);
 
+                    //shuffle the deck (list of cards)
+                    deck.Shuffle();
 
                     //Dealing a dealer two cards
-                    dealer.AddCardToHand(DealCard());
-                    dealer.AddCardToHand(DealCard());
+                    dealer.AddCardToHand(deck.TakeCard());
+                    dealer.AddCardToHand(deck.TakeCard());
 
                     
                 }
@@ -69,8 +72,8 @@ namespace BlackjackUpdated
                 for(currentPLayer = 0; currentPLayer < players.Length; currentPLayer++){
 
                     //Dealing a player two cards 
-                    players[currentPLayer].AddCardToHand(DealCard());
-                    players[currentPLayer].AddCardToHand(DealCard());
+                    players[currentPLayer].AddCardToHand(deck.TakeCard());
+                    players[currentPLayer].AddCardToHand(deck.TakeCard());
 
                     DisplayWelcomeMessage();
 
@@ -101,10 +104,10 @@ namespace BlackjackUpdated
 
                 }
 
-                //here see if dealer needs more cards
+                //here see if dealer needs more cards and if the dealer wins because he already has higher cards 
                 while(dealer.getPlayerTotal() < 17 )
                 {
-                    dealer.AddCardToHand(DealCard());
+                    dealer.AddCardToHand(deck.TakeCard());
                     if(dealer.getPlayerTotal() > 21)
                     {
                         Console.WriteLine("The dealer has busted!");
@@ -155,19 +158,19 @@ namespace BlackjackUpdated
         private static void DisplayWelcomeMessage()
         {
             //Inform the player of the dealer's cards
-            Console.WriteLine("The dealer's face up card is a {0}", dealer.playerCards[0].Name);
+            Console.WriteLine("The dealer's face up card is a {0}", dealer.playerCards[0].cardNumber);
 
             //Inform the user of their cards and total
-            Console.WriteLine("Player {0}, you were dealt the cards: {1} and a {2} ", currentPLayer + 1, players[currentPLayer].playerCards[0].Name, players[currentPLayer].playerCards[1].Name);
+            Console.WriteLine("Player {0}, you were dealt the cards: {1} and a {2} ", currentPLayer + 1, players[currentPLayer].playerCards[0].cardNumber, players[currentPLayer].playerCards[1].cardNumber);
             Console.WriteLine("Your player total is {0} ", players[currentPLayer].getPlayerTotal());
             
         }
 
         static void Hit()
         {
-            Card drawCard = DealCard();
+            Card drawCard = deck.TakeCard();
             players[currentPLayer].AddCardToHand(drawCard);
-            Console.WriteLine("You card is an {0} and your new Total is {1}. ", drawCard.Name, players[currentPLayer].getPlayerTotal());
+            Console.WriteLine("You card is an {0} and your new Total is {1}. ", drawCard.cardNumber, players[currentPLayer].getPlayerTotal());
 
            
             if (players[currentPLayer].getPlayerTotal().Equals(21))
@@ -195,34 +198,6 @@ namespace BlackjackUpdated
             }
         }
 
-     
-
-        static Card DealCard()
-        {
-            int cardValue = cardRandomizer.Next(1, 14);
-            return GetCardValue(cardValue);
-        }
-
-
-        static Card GetCardValue(int cardValue)
-        {
-            return cardValue switch
-            {
-                1 => new Card() { Name = "Two", Value = 2 },
-                2 => new Card() { Name = "Three", Value = 3 },
-                3 => new Card() { Name = "Four", Value = 4 },
-                4 => new Card() { Name = "Five", Value = 5 },
-                5 => new Card() { Name = "Six", Value = 6 },
-                6 => new Card() { Name = "Seven", Value = 7 },
-                7 => new Card() { Name = "Eight", Value = 8 },
-                8 => new Card() { Name = "Nine", Value = 9 },
-                9 => new Card() { Name = "Ten", Value = 10 },
-                10 => new Card() { Name = "Jack", Value = 10 },
-                11 => new Card() { Name = "Queen", Value = 10 },
-                12 => new Card() { Name = "King", Value = 10 },
-                13 => new Card() { Name = "Ace", Value = 11 },
-            };
-        }
 
         static void PlayAgain()
         {
@@ -238,6 +213,8 @@ namespace BlackjackUpdated
                 Console.WriteLine("Press enter to restart the game!");
                 Console.ReadLine();
                 Console.Clear();
+                deck.Reset();
+
             }
             else if (playAgain.Equals("N"))
             {
