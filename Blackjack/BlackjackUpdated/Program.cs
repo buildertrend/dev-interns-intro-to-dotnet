@@ -1,11 +1,4 @@
-﻿using Blackjack;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using static Blackjack.ConsoleControlHandler;
-﻿using System;
-using System.Drawing;
-using System.Security.Cryptography.X509Certificates;
-using System.ComponentModel.DataAnnotations;
+﻿using static Blackjack.ConsoleControlHandler;
 
 namespace BlackjackUpdated
 {
@@ -38,6 +31,8 @@ namespace BlackjackUpdated
                 //StartGame
                 try
                 {
+                    //Card c = new Card(5, "Five of Hearts", "Hearts");
+                    //Console.WriteLine(c.showArt(c));
                     Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
                 }
                 catch (Exception ex)
@@ -136,9 +131,12 @@ namespace BlackjackUpdated
             {
                 Console.WriteLine("Player {2}, you were dealt the cards : {0} and {1} ", playerCards[i, 0].Name, playerCards[i, 1].Name, i+1);
                 Console.WriteLine("Player {1}, your player total is {0} ", playerTotal[i], i+1);
-            }              
+                Console.WriteLine(playerCards[i, 0].showArt(playerCards[i, 0]));
+                Console.WriteLine(playerCards[i, 1].showArt(playerCards[i, 1]));
+            }
             //Inform the player the value of the dealer's visible card.
             Console.WriteLine("The dealer's visible card is: {0} ", dealerCards[0].Name);
+            Console.WriteLine(dealerCards[0].showArt(dealerCards[0]));
         }
 
 
@@ -147,6 +145,7 @@ namespace BlackjackUpdated
             playerCardCount[playerNum] += 1;
             playerCards[playerNum, playerCardCount[playerNum]] = cards.dealCard();
             playerTotal[playerNum] += playerCards[playerNum, playerCardCount[playerNum]].Value;
+            Console.WriteLine(playerCards[playerNum, playerCardCount[playerNum]].showArt(playerCards[playerNum, playerCardCount[playerNum]]));
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerNum, playerCardCount[playerNum]].Name, playerTotal[playerNum]);
 
             //Is this true? I don't think it is.
