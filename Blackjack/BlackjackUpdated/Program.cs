@@ -1,4 +1,6 @@
-﻿namespace BlackjackUpdated
+﻿using System.Drawing;
+
+namespace BlackjackUpdated
 {
     class Program
     {
@@ -9,6 +11,8 @@
         private static readonly Card[] dealerCards = new Card[11];
         static int dealerTotal = 0;
         static int dealerCardCount = 0;
+        static ConsoleColor[] colors = (ConsoleColor[])ConsoleColor.GetValues(typeof(ConsoleColor));
+        // Save the current background and foreground colors.
 
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
@@ -17,8 +21,10 @@
 
         static void Main(string[] args)
         {
+            
             while (playAgain.ToUpper() == "Y")
             {
+                Console.BackgroundColor = colors[0];
                 //StartGame
                 cardDeck = new CardDeck();
                 cardDeck.shuffle();
@@ -63,10 +69,12 @@
                     {
                         if (playerTotal > dealerTotal && playerTotal <= 21)
                         {
+                            Console.BackgroundColor = colors[2];
                             Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
                         }
                         else if (playerTotal < dealerTotal)
                         {
+                            Console.BackgroundColor = colors[4];
                             Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
                         }
                         else if (playerTotal == dealerTotal)
@@ -94,7 +102,6 @@
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
 
             Console.WriteLine("The dealer has the card {0} of {1} face up ", dealerCards[0].Face, dealerCards[0].Suit);
-            Console.WriteLine("The card has a value of {0} ", dealerCards[0].getValue(dealerTotal));
         }
 
         static void Hit()
@@ -103,11 +110,13 @@
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount-1].Face, playerTotal);
             if (playerTotal == 21)
             {
+                Console.BackgroundColor = colors[6];
                 Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
 
             }
             else if (playerTotal > 21)
             {
+                Console.BackgroundColor = colors[4];
                 Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
 
             }
@@ -154,9 +163,10 @@
                 playAgain = Console.ReadLine().ToUpper();
             }
             while (!playAgain.Equals("Y") && !playAgain.Equals("N"));
-
+            Console.BackgroundColor = colors[0];
             if (playAgain.Equals("Y"))
             {
+
                 Console.WriteLine("Press enter to restart the game!");
                 Console.ReadLine();
                 Console.Clear();
