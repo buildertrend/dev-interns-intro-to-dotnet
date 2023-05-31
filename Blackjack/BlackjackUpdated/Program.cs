@@ -1,6 +1,6 @@
 ﻿namespace BlackjackUpdated
 {
-    class Program
+    partial class Program
     {
         static Random cardRandomizer = new Random();
 
@@ -116,13 +116,6 @@
                     Hit();
                 }
             }
-        }
-
-        //TODO: Move this class to it's own file.
-        private class Card
-        {
-            public int Value;
-            public string Name;
         }
 
         static Card DealCard()
