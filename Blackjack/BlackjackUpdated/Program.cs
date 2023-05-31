@@ -232,7 +232,7 @@ namespace BlackjackUpdated
                 }
             }
             hiLo = counting;
-            if (hiLo < 0) 
+            if (hiLo < 0 || playerTotal[playerNum] < 18) 
             {
                 Console.WriteLine("Based on the cards that have been dealt, the recommended move is to stay.");
             }
