@@ -13,7 +13,7 @@
 
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
-
+        static Boolean gameOver = false;
         static string playAgain = "Y";
 
         static void Main(string[] args)
@@ -31,9 +31,6 @@
                     playerCards[0] = DealCard();
                     playerCards[1] = DealCard();
 
-                    playerTotal += playerCards[0].Value;
-                    playerTotal += playerCards[1].Value;
-
 
                     //TODO: The dealer is dealt one card face up, one card face down.
                     DisplayWelcomeMessage();
@@ -48,26 +45,30 @@
                 {
                     Console.WriteLine("Would you like to (H)it or (S)tay?");
                     playerChoice = Console.ReadLine().ToUpper();
-                }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("H"));
-
-                if (playerChoice.Equals("H"))
-                {
-                    //hit will get them a card / check the total and ask for another hit
-                    Hit();
-                }
-
-                if (playerChoice.Equals("S"))
-                {
-                    if (playerTotal > dealerTotal && playerTotal <= 21)
+                   
+                    if (playerChoice.Equals("H"))
                     {
-                        Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                        //hit will get them a card / check the total and ask for another hit
+                        Hit();
                     }
-                    else if (playerTotal < dealerTotal)
+
+                    if (playerChoice.Equals("S"))
                     {
-                        Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+                        if (playerTotal > dealerTotal && playerTotal <= 21)
+                        {
+                            Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                            gameOver = true;
+                        }
+                        else if (playerTotal < dealerTotal)
+                        {
+                            Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+                            gameOver = true;
+                        }
                     }
                 }
+                while (!gameOver);
+
+               
 
                 /* END GAME LOOP */
 
@@ -90,33 +91,28 @@
         {
             playerCardCount += 1;
             playerCards[playerCardCount] = DealCard();
-            playerTotal += playerCards[playerCardCount].Value;
+            
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
             //Is this true? I don't think it is.
+            CheckScore();
+        }
+
+        static void CheckScore()
+        {
             if (playerTotal.Equals(21))
             {
                 Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+                gameOver = true;
 
             }
             else if (playerTotal > 21)
             {
                 Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
+                gameOver = true;
 
             }
-            else if (playerTotal < 21)
-            {
-                do
-                {
-                    Console.WriteLine("Would you like to (H)it or (S)tay?");
-                    playerChoice = Console.ReadLine().ToUpper();
-                }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
-                if (playerChoice.ToUpper() == "H")
-                {
-                    Hit();
-                }
-            }
+            
         }
 
         //TODO: Move this class to it's own file.
@@ -129,7 +125,7 @@
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
+            playerTotal += GetCardValue(cardValue).Value;
             return GetCardValue(cardValue);
         }
 
