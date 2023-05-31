@@ -90,6 +90,35 @@
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
+        // <summary>
+        // Checks if there are ny aces in the hand. These are automatically set to a value of 11 (hard ace),
+        // but can be set to a 1 to prevent the player from busting.
+        // </summary>
+        private static void AlterAces()
+        {
+            bool alteredFlag = false;
+
+            playerTotal = 0;
+            for (int i = 0; i < playerCards.Length; i++) { 
+                if (playerCards[i] == null) { continue; }
+                if (playerCards[i].Equals(new Card() { Name = "Ace", Value = 11 })) {
+                    // Switch the ace to soft.
+                    playerCards[i] = new Card() { Name = "Ace", Value = 1 };
+                    playerTotal += 1;
+                    Console.WriteLine("Your card #{0} has been changed from a hard ace to a soft ace.", i);
+                    alteredFlag = true;
+                }
+                else
+                {   
+                    playerTotal += playerCards[i].Value;
+                }
+            }
+            if (alteredFlag)
+            {
+                Console.WriteLine("Your new hand total is: {0}", playerTotal);
+            }
+        }
+
         static void Hit()
         {
             playerCardCount += 1;
@@ -105,11 +134,15 @@
             }
             else if (playerTotal > 21)
             {
+                AlterAces();
+                // Still check to see if we're over 21.
+                if (playerTotal > 21)
+                {
                 Console.WriteLine("You busted! Sorry! The dealer's total was {0}", dealerTotal);
-
             }
-            else if (playerTotal < 21)
-            {
+            }
+
+            // We're safe. Ask to hit again if desired.
                 do
                 {
                     Console.WriteLine("Would you like to hit or stay? h for hit s for stay");
@@ -121,7 +154,6 @@
                     Hit();
                 }
             }
-        }
 
         static Card DealCard()
         {
@@ -135,7 +167,7 @@
         {
             return cardValue switch
             {
-                1 => new Card() { Name = "Ace", Value = 1 },
+                1 => new Card() { Name = "Ace", Value = 11 },
                 2 => new Card() { Name = "Two", Value = 2 },
                 3 => new Card() { Name = "Three", Value = 3 },
                 4 => new Card() { Name = "Four", Value = 4 },
