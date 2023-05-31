@@ -87,7 +87,7 @@ namespace BlackjackUpdated
                 {
                     do
                     {
-                        countCards();
+                        countCards(i);
                         
                         Console.WriteLine("Player {0}, would you like to (H)it or (S)tay?", i+1);
                         playerChoice = Console.ReadLine().ToUpper();
@@ -164,7 +164,7 @@ namespace BlackjackUpdated
             {
                 do
                 {
-                    countCards();
+                    countCards(playerNum);
                     Console.WriteLine("Player {0}, would you like to hit or stay? h for hit s for stay", playerNum+1);
                     playerChoice = Console.ReadLine().ToUpper();
                 }
@@ -213,7 +213,7 @@ namespace BlackjackUpdated
             }
         }
 
-        static void countCards()
+        static void countCards(int playerNum)
         {
             int counting = 0;
             for (int i = 0; i < cards.dealtCards.Count; i++)
@@ -232,7 +232,7 @@ namespace BlackjackUpdated
                 }
             }
             hiLo = counting;
-            if (hiLo < 0)
+            if (hiLo < 0) 
             {
                 Console.WriteLine("Based on the cards that have been dealt, the recommended move is to stay.");
             }
