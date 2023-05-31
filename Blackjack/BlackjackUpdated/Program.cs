@@ -49,16 +49,17 @@
                 /* START GAME LOOP */
                 do
                 {
-                    if (playerTotal == 21)
+                    if (playerTotal.Equals(21))
                     {
                         playerChoice = "W";
-                    }else
+                    }
+                    else
                     {
                         Console.WriteLine("Would you like to (H)it or (S)tay?");
                         playerChoice = Console.ReadLine().ToUpper();
                     }
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
+                while (!playerChoice.Equals("H") && !playerChoice.Equals("S") && !playerChoice.Equals("W"));
 
                 if (playerChoice.Equals("H"))
                 {
@@ -111,6 +112,7 @@
             if (playerTotal.Equals(21))
             {
                 Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+
 
             }
             else if (playerTotal > 21)
@@ -197,16 +199,7 @@
             }
             else if (playAgain.Equals("N"))
             {
-                ConsoleKeyInfo info = Console.ReadKey();
-                if (info.Key == ConsoleKey.Enter)
-                {
                     Environment.Exit(0);
-                }
-                else
-                {
-                    Console.Read();
-                    Environment.Exit(0);
-                }
             }
         }
     }
