@@ -29,7 +29,7 @@ namespace BlackjackUpdated
                 //StartGame
                 try
                 {
-                    Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)esss (N)o");
+                    Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
                 }
                 catch (Exception ex)
                 {
@@ -40,6 +40,8 @@ namespace BlackjackUpdated
 
                 if (decision == "Y")
                 {
+                    Deck deck = new Deck();
+
                     dealerCards[0] = DealCard();
                     dealerCards[1] = DealCard();
 
