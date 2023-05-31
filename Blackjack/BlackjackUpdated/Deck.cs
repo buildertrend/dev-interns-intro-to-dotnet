@@ -1,32 +1,5 @@
 ﻿namespace BlackjackUpdated
 {
-    public class Card
-    {
-        public int Value;
-        public string Name = "";
-        public string Suit = "";
-
-        public override bool Equals(object obj)
-        {
-            // Check if the object is null or of a different type
-            if (obj == null || GetType() != obj.GetType()) {
-            return false;
-        }
-
-        // Cast the object to a Card instance
-        Card otherCard = (Card) obj;
-
-        // Compare the value and name properties for equality
-        return Value == otherCard.Value && Name == otherCard.Name;
-        }
-
-        public override int GetHashCode()
-        {
-            // Generate a hash code based on the value and name properties
-            return HashCode.Combine(Value, Name);
-        }
-    }
-
     public enum Suit
     {
         Spades,
@@ -52,13 +25,44 @@
         King = 10,
     }
 
+    public class Card
+    {
+        public int Value;
+        public string Name = "";
+        public string Suit = "";
+
+        public override bool Equals(object obj)
+        {
+            // Check if the object is null or of a different type
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            // Cast the object to a Card instance
+            Card otherCard = (Card)obj;
+
+            // Compare the value and name properties for equality
+            return Value == otherCard.Value && Name == otherCard.Name;
+        }
+
+        public override int GetHashCode()
+        {
+            // Generate a hash code based on the value and name properties
+            return HashCode.Combine(Value, Name);
+        }
+    }
+
+
     public class Deck
     {
+        private static Random rng = new Random(); // For shuffling the deck.
         public List<Card> cards = new List<Card>();
 
         public Deck()
         {
             cards = initializeDeck();
+            cards = shuffle(cards);
             // TODO:
         }
 
@@ -72,10 +76,10 @@
                 {
                     try
                     {
-                        int cardValue = (int) Enum.Parse(typeof(Value), name);
-                        deck.Add(new Card { Name = name, Suit = suit.ToString(), Value = cardValue});
-                    } 
-                    catch (ArgumentException ex)
+                        int cardValue = (int)Enum.Parse(typeof(Value), name);
+                        deck.Add(new Card { Name = name, Suit = suit.ToString(), Value = cardValue });
+                    }
+                    catch (ArgumentException)
                     {
                         Console.WriteLine("Caught a translation exception when creating the deck!");
                         continue;
@@ -86,9 +90,16 @@
             return deck;
         }
 
-        public void shuffle()
+        public static List<Card> shuffle(List<Card> cards)
         {
-            // TODO:
+            int n = cards.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                (cards[n], cards[k]) = (cards[k], cards[n]);
+            }
+            return cards;
         }
     }
 }

@@ -155,6 +155,7 @@ namespace BlackjackUpdated
                 if (playerTotal > 21)
                 {
                     Console.WriteLine("You busted! Sorry! The dealer's total was {0}", dealerTotal);
+                    return;
                 }
             }
 
