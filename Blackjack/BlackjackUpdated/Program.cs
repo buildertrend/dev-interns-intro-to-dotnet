@@ -9,7 +9,7 @@
         static int playerCardCount = 1;
         private static readonly Card[] dealerCards = new Card[11];
         static int dealerTotal = 0;
-        static int dealerCardCount = 0;
+        static int dealerCardCount = 1;
 
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
@@ -26,8 +26,25 @@
 
                 if (decision == "Y")
                 {
-                    //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(15, 22);
+                    dealerCards[0] = DealCard();
+                    dealerCards[1] = DealCard();
+
+                    dealerTotal += dealerCards[0].Value;
+                    dealerTotal += dealerCards[1].Value;
+
+                    while(dealerTotal <= 16)
+                    {
+                        dealerCardCount += 1;
+                        dealerCards[dealerCardCount] = DealCard();
+                        dealerTotal += dealerCards[dealerCardCount].Value;
+                        if (dealerTotal < 21)
+                        {
+                            Console.WriteLine("Congrats! You won the game! The dealer has busted with a total of {0} ", dealerTotal);
+                            Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
+                            PlayAgain();
+                        }
+                    }
+
                     playerCards[0] = DealCard();
                     playerCards[1] = DealCard();
 
@@ -49,7 +66,7 @@
                     Console.WriteLine("Would you like to (H)it or (S)tay?");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("H"));
+                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
 
                 if (playerChoice.Equals("H"))
                 {
@@ -83,6 +100,8 @@
         {
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your Total is {0} ", playerTotal);
+            Console.WriteLine("The dealers visable card is a : {0} ", dealerCards[0].Name);
+            Console.WriteLine("The dealers Total is {0} ", dealerTotal);
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
@@ -119,17 +138,9 @@
             }
         }
 
-        //TODO: Move this class to it's own file.
-        private class Card
-        {
-            public int Value;
-            public string Name;
-        }
-
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
             return GetCardValue(cardValue);
         }
 
@@ -144,7 +155,7 @@
                 4 => new Card() { Name = "Five", Value = 5 },
                 5 => new Card() { Name = "Six", Value = 6 },
                 6 => new Card() { Name = "Seven", Value = 7 },
-                7 => new Card() { Name = "Eihgt", Value = 8 },
+                7 => new Card() { Name = "Eight", Value = 8 },
                 8 => new Card() { Name = "Nine", Value = 9 },
                 9 => new Card() { Name = "Ten", Value = 10 },
                 10 => new Card() { Name = "Jack", Value = 10 },
