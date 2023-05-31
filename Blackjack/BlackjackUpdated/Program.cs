@@ -36,7 +36,7 @@ namespace BlackjackUpdated
                 {
                     Console.WriteLine("hi");
                 }
-                
+
                 var decision = Console.ReadLine().ToUpper();
 
                 if (decision == "Y")
@@ -63,12 +63,21 @@ namespace BlackjackUpdated
                 }
 
                 /* START GAME LOOP */
-                do
+                //do
+                //{
+                if (playerTotal == 21)
+                {
+                    Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+                    Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
+                    PlayAgain();
+                }
+                else
                 {
                     Console.WriteLine("Would you like to (H)it or (S)tay?");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("H"));
+                //}
+                //while (!playerChoice.Equals("H") && !playerChoice.Equals("H"));
 
                 if (playerChoice.Equals("H"))
                 {
@@ -78,14 +87,7 @@ namespace BlackjackUpdated
 
                 if (playerChoice.Equals("S"))
                 {
-                    if (playerTotal > dealerTotal && playerTotal <= 21)
-                    {
-                        Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
-                    }
-                    else if (playerTotal < dealerTotal)
-                    {
-                        Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
-                    }
+                    Stay();
                 }
 
                 /* END GAME LOOP */
@@ -100,9 +102,9 @@ namespace BlackjackUpdated
         /// </summary>
         private static void DisplayWelcomeMessage()
         {
-            Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
+            Console.WriteLine("You were dealt the cards : {0} of {1} and {2} of {3} ", playerCards[0].Name, playerCards[0].Suit, playerCards[1].Name, playerCards[1].Suit);
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
-            Console.WriteLine("The dealer was dealt a(n): {0}", dealerCards[0].Name);
+            Console.WriteLine("The dealer was dealt a(n): {0} of {1}", dealerCards[0].Name, dealerCards[0].Suit);
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
@@ -122,7 +124,7 @@ namespace BlackjackUpdated
                 }
             }
             playerTotal += playerCards[playerCardCount].Value;
-            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
+            Console.WriteLine("You card is a(n) {0} of {1} and your new Total is {2}. ", playerCards[playerCardCount].Name, playerCards[playerCardCount].Suit, playerTotal);
 
             if(dealerTotal < 17)
             {
@@ -153,6 +155,22 @@ namespace BlackjackUpdated
                 {
                     Hit();
                 }
+            }
+        }
+
+        static void Stay()
+        {
+            if (playerTotal > dealerTotal && playerTotal <= 21)
+            {
+                Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+            }
+            else if (playerTotal < dealerTotal && dealerTotal < 21)
+            {
+                Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+            }
+            else if (dealerTotal > 21)
+            {
+                Console.WriteLine("Congrats! You won the game! The dealer busted!");
             }
         }
 
