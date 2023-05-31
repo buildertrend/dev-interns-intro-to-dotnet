@@ -10,6 +10,7 @@
         private static readonly Card[] dealerCards = new Card[11];
         static int dealerTotal = 0;
         static int dealerCardCount = 0;
+        static bool firstDeal = true;
 
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
@@ -37,7 +38,6 @@
                     playerTotal += playerCards[1].Value;
                     */
 
-
                     //TODO: The dealer is dealt one card face up, one card face down.
                     DisplayWelcomeMessage();
                 }
@@ -49,10 +49,16 @@
                 /* START GAME LOOP */
                 do
                 {
-                    Console.WriteLine("Would you like to (H)it or (S)tay?");
-                    playerChoice = Console.ReadLine().ToUpper();
+                    if (playerTotal == 21)
+                    {
+                        playerChoice = "W";
+                    }else
+                    {
+                        Console.WriteLine("Would you like to (H)it or (S)tay?");
+                        playerChoice = Console.ReadLine().ToUpper();
+                    }
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("H"));
+                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
 
                 if (playerChoice.Equals("H"))
                 {
@@ -70,6 +76,11 @@
                     {
                         Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
                     }
+                }
+
+                if(playerChoice.Equals("W"))
+                {
+                    Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
                 }
 
                 /* END GAME LOOP */
@@ -92,7 +103,8 @@
         {
             playerCardCount += 1;
             playerCards[playerCardCount] = DealCard();
-            playerTotal += playerCards[playerCardCount].Value;
+            //FIX: playerTotal does not need to be incremented again, since it is in DealCard()
+            //playerTotal += playerCards[playerCardCount].Value;
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
             //Is this true? I don't think it is.
@@ -132,7 +144,14 @@
         {
             int cardValue = cardRandomizer.Next(1, 14);
             //FIX playerTotal is getCardValue().Value, not just the cardRandomizer number
-            playerTotal += GetCardValue(cardValue).Value;
+            if (cardValue == 13)
+            {
+                if (11 + playerTotal > 21)
+                    playerTotal += 1;
+                else
+                    playerTotal += 11;
+            } else
+                playerTotal += GetCardValue(cardValue).Value;
             return GetCardValue(cardValue);
         }
 
@@ -178,16 +197,7 @@
             }
             else if (playAgain.Equals("N"))
             {
-                ConsoleKeyInfo info = Console.ReadKey();
-                if (info.Key == ConsoleKey.Enter)
-                {
                     Environment.Exit(0);
-                }
-                else
-                {
-                    Console.Read();
-                    Environment.Exit(0);
-                }
             }
         }
     }
