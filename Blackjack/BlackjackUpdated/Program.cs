@@ -37,7 +37,7 @@
                         dealerCardCount += 1;
                         dealerCards[dealerCardCount] = DealCard();
                         dealerTotal += dealerCards[dealerCardCount].Value;
-                        if (dealerTotal < 21)
+                        if (dealerTotal > 21)
                         {
                             Console.WriteLine("Congrats! You won the game! The dealer has busted with a total of {0} ", dealerTotal);
                             Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
@@ -98,10 +98,9 @@
         /// </summary>
         private static void DisplayWelcomeMessage()
         {
+            Console.WriteLine("The dealers visable card is a : {0} ", dealerCards[0].Name);
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your Total is {0} ", playerTotal);
-            Console.WriteLine("The dealers visable card is a : {0} ", dealerCards[0].Name);
-            Console.WriteLine("The dealers Total is {0} ", dealerTotal);
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
