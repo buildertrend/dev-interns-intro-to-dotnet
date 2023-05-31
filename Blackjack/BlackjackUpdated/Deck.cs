@@ -37,6 +37,11 @@
             return card;
         }
 
+        public int CardsLeft()
+        {
+            return Cards.Count;
+        }
+
  
     }
 }

@@ -11,6 +11,9 @@ namespace BlackjackUpdated
         //Deck is a collection of cards 
         static Deck deck = new Deck();
 
+        //This will be used for card counting
+        static List<Card> pulledCards = new List<Card>();
+
         //ConsoleColors are used to style the console
         static ConsoleColor tableColor = ConsoleColor.DarkGreen;
         static ConsoleColor textColor = ConsoleColor.White;
@@ -65,10 +68,15 @@ namespace BlackjackUpdated
                     deck.Shuffle();
 
                     //Dealing a dealer two cards
-                    dealer.AddCardToHand(deck.TakeCard());
-                    dealer.AddCardToHand(deck.TakeCard());
+                    for(int i = 0; i < 2; i++)
+                    {
+                        Card card = deck.TakeCard();
+                        pulledCards.Add(card);
+                        dealer.AddCardToHand(card);
+                        resetDeckIfNeeded(deck);
+                    }
 
-                    
+                
                 }
                 else
                 {
@@ -78,8 +86,14 @@ namespace BlackjackUpdated
                 for(currentPLayer = 0; currentPLayer < players.Length; currentPLayer++){
 
                     //Dealing a player two cards 
-                    players[currentPLayer].AddCardToHand(deck.TakeCard());
-                    players[currentPLayer].AddCardToHand(deck.TakeCard());
+                    for (int i = 0; i < 2; i++)
+                    {
+                        Card card = deck.TakeCard();
+                        pulledCards.Add(card);
+                        players[currentPLayer].AddCardToHand(card);
+                        resetDeckIfNeeded(deck);
+
+                    }    
 
                     DisplayWelcomeMessage();
 
@@ -113,8 +127,11 @@ namespace BlackjackUpdated
                 //here see if dealer needs more cards and if the dealer wins because he already has higher cards 
                 while(dealer.getPlayerTotal() < 17 )
                 {
-                    dealer.AddCardToHand(deck.TakeCard());
-                    if(dealer.getPlayerTotal() > 21)
+                    Card card = deck.TakeCard();
+                    dealer.AddCardToHand(card);
+                    pulledCards.Add(card);
+                    resetDeckIfNeeded(deck);
+                    if (dealer.getPlayerTotal() > 21)
                     {
                         Console.WriteLine("The dealer has busted!");
                     }
@@ -174,9 +191,11 @@ namespace BlackjackUpdated
 
         static void Hit()
         {
-            Card drawCard = deck.TakeCard();
-            players[currentPLayer].AddCardToHand(drawCard);
-            Console.WriteLine("You card is an {0} and your new Total is {1}. ", drawCard.cardNumber, players[currentPLayer].getPlayerTotal());
+            Card card = deck.TakeCard();
+            pulledCards.Add(card);
+            players[currentPLayer].AddCardToHand(card);
+            resetDeckIfNeeded(deck);
+            Console.WriteLine("You card is an {0} and your new Total is {1}. ", card.cardNumber, players[currentPLayer].getPlayerTotal());
 
            
             if (players[currentPLayer].getPlayerTotal().Equals(21))
@@ -248,6 +267,16 @@ namespace BlackjackUpdated
             Console.WriteLine(numberOfPlayers + " players will be playing the game");
         }
 
+        static void resetDeckIfNeeded(Deck deck)
+        {
+            if (deck.CardsLeft() == 0)
+            {
+                deck.Reset();
+                deck.Shuffle();
+                pulledCards = new List<Card>();
+                Console.WriteLine("Deck Reset!!!");
+            }
+        }
         
     }
 }
