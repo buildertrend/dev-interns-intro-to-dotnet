@@ -8,6 +8,7 @@ namespace BlackjackUpdated
     partial class Program
     {
         static Random cardRandomizer = new Random();
+        static Deck deck = new Deck();
 
         static readonly Card[] playerCards = new Card[11];
         static int playerTotal = 0;
@@ -40,16 +41,14 @@ namespace BlackjackUpdated
 
                 if (decision == "Y")
                 {
-                    Deck deck = new Deck();
-
-                    dealerCards[0] = DealCard();
-                    dealerCards[1] = DealCard();
+                    dealerCards[0] = deck.draw();
+                    dealerCards[1] = deck.draw();
 
                     dealerTotal += dealerCards[0].Value;
                     dealerTotal += dealerCards[1].Value;
 
-                    playerCards[0] = DealCard();
-                    playerCards[1] = DealCard();
+                    playerCards[0] = deck.draw();
+                    playerCards[1] = deck.draw();
 
                     playerTotal += playerCards[0].Value;
                     playerTotal += playerCards[1].Value;
@@ -115,9 +114,11 @@ namespace BlackjackUpdated
             bool alteredFlag = false;
 
             playerTotal = 0;
-            for (int i = 0; i < playerCards.Length; i++) { 
+            for (int i = 0; i < playerCards.Length; i++)
+            {
                 if (playerCards[i] == null) { continue; }
-                if (playerCards[i].Equals(new Card() { Name = "Ace", Value = 11 })) {
+                if (playerCards[i].Equals(new Card() { Name = "Ace", Value = 11 }))
+                {
                     // Switch the ace to soft.
                     playerCards[i] = new Card() { Name = "Ace", Value = 1 };
                     playerTotal += 1;
@@ -138,7 +139,7 @@ namespace BlackjackUpdated
         static void Hit()
         {
             playerCardCount += 1;
-            playerCards[playerCardCount] = DealCard();
+            playerCards[playerCardCount] = deck.draw();
             playerTotal += playerCards[playerCardCount].Value;
             Console.WriteLine("Your card is a(n) {0} and your new total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 

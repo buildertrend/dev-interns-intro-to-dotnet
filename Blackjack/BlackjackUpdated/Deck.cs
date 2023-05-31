@@ -101,5 +101,16 @@
             }
             return cards;
         }
+
+        public Card draw()
+        {
+            if (cards.Count() == 0)
+            {
+                cards = shuffle(initializeDeck());
+            }
+            Card drew = cards[0];
+            cards.RemoveAt(0);
+            return drew;
+        }
     }
 }
