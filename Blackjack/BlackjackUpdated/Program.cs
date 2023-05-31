@@ -4,9 +4,14 @@
     {
         static Random cardRandomizer = new Random();
 
-        static readonly Card[] playerCards = new Card[11];
-        static int playerTotal = 0;
-        static int playerCardCount = 1;
+        //Colors used f
+        static ConsoleColor tableColor = ConsoleColor.DarkGreen;
+        static ConsoleColor textColor = ConsoleColor.White;
+
+        //static readonly Card[] playerCards = new Card[11];
+        //static int playerTotal = 0;
+        //static int playerCardCount = 1;
+        static Player player1 = new Player();
         private static readonly Card[] dealerCards = new Card[11];
         static int dealerTotal = 0;
         static int dealerCardCount = 0;
@@ -18,8 +23,8 @@
 
         static void Main(string[] args)
         {
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.BackgroundColor = ConsoleColor.DarkGreen;
+            Console.ForegroundColor = textColor;
+            Console.BackgroundColor = tableColor;
 
             while (playAgain.ToUpper() == "Y")
             {
@@ -39,15 +44,11 @@
                     dealerTotal += dealerCards[1].Value;
                     dealerCardCount += 2;
 
-                   
+
 
                     //Dealing a player two cards 
-                    playerCards[0] = DealCard();
-                    playerCards[1] = DealCard();
-
-                    //Adding dealt cards to the players total
-                    playerTotal += playerCards[0].Value;
-                    playerTotal += playerCards[1].Value;
+                    player1.AddCardToHand(DealCard());
+                    player1.AddCardToHand(DealCard());
 
                     DisplayWelcomeMessage();
                 }
@@ -72,11 +73,11 @@
 
                 if (playerChoice.Equals("S"))
                 {
-                    if (playerTotal > dealerTotal && playerTotal <= 21)
+                    if (player1.getPlayerTotal() > dealerTotal && player1.getPlayerTotal() <= 21)
                     {
                         Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
                     }
-                    else if (playerTotal < dealerTotal)
+                    else if (player1.getPlayerTotal() < dealerTotal)
                     {
                         Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
                     }
@@ -96,30 +97,28 @@
         {
             //Inform the player of the dealer's cards
             Console.WriteLine("The dealer currently face up value is {0}", dealerCards[0].Value);
-            Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
-            Console.WriteLine("Your player total is {0} ", playerTotal);
+            Console.WriteLine("You were dealt the cards : {0} and {1} ", player1.playerCards[0].Name, player1.playerCards[1].Name);
+            Console.WriteLine("Your player total is {0} ", player1.getPlayerTotal());
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
         static void Hit()
         {
-            playerCardCount += 1;
-            playerCards[playerCardCount] = DealCard();
-            playerTotal += playerCards[playerCardCount].Value;
-            Console.WriteLine("You card is an {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
+            player1.AddCardToHand(DealCard());
+            Console.WriteLine("You card is an {0} and your new Total is {1}. ", player1.GetLastCard().Name, player1.getPlayerTotal());
 
-            //Is this true? I don't think it is.
-            if (playerTotal.Equals(21))
+           
+            if (player1.getPlayerTotal().Equals(21))
             {
                 Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
 
             }
-            else if (playerTotal > 21)
+            else if (player1.getPlayerTotal() > 21)
             {
                 Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
 
             }
-            else if (playerTotal < 21)
+            else if (player1.getPlayerTotal() < 21)
             {
                 do
                 {
@@ -178,8 +177,7 @@
                 Console.ReadLine();
                 Console.Clear();
                 dealerTotal = 0;
-                playerCardCount = 1;
-                playerTotal = 0;
+                player1.ResetPlayer();
             }
             else if (playAgain.Equals("N"))
             {
