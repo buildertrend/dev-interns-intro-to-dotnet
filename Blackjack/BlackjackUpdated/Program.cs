@@ -274,8 +274,12 @@ namespace BlackjackUpdated
                 deck.Reset();
                 deck.Shuffle();
                 pulledCards = new List<Card>();
-                Console.WriteLine("Deck Reset!!!");
             }
+        }
+
+        static void informPLayer(int currentPlayer)
+        {
+            //TODO here add stuff to inform player on what to do based on cards played
         }
         
     }

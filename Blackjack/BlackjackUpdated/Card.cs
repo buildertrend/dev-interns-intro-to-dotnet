@@ -1,7 +1,4 @@
-﻿using System.Net.NetworkInformation;
-using System.Threading;
-
-namespace BlackjackUpdated
+﻿namespace BlackjackUpdated
 {
     // Card class that stores Suit and CardNumber for every card in a deck
     public class Card
