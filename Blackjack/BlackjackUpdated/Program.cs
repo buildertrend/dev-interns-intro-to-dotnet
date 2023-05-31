@@ -1,4 +1,8 @@
-﻿
+﻿using Blackjack;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using static Blackjack.ConsoleControlHandler;
+
 namespace BlackjackUpdated
 {
     class Program
@@ -19,10 +23,19 @@ namespace BlackjackUpdated
 
         static void Main(string[] args)
         {
+            SetConsoleCtrlHandler(new HandlerRoutine(ConsoleCtrlCheck), true);
             while (playAgain.ToUpper() == "Y")
             {
                 //StartGame
-                Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
+                try
+                {
+                    Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)esss (N)o");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("hi");
+                }
+                
                 var decision = Console.ReadLine().ToUpper();
 
                 if (decision == "Y")
@@ -101,7 +114,7 @@ namespace BlackjackUpdated
             //Is this true? I don't think it is.
             if (playerTotal.Equals(21))
             {
-                Console.WriteLine("Yuo got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+                Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
 
             }
             else if (playerTotal > 21)
@@ -237,5 +250,7 @@ namespace BlackjackUpdated
                 }
             }
         }
+
+        
     }
 }
