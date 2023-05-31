@@ -1,3 +1,7 @@
+﻿using Blackjack;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using static Blackjack.ConsoleControlHandler;
 ﻿using System;
 using System.Drawing;
 
@@ -25,10 +29,19 @@ namespace BlackjackUpdated
         {
             Console.BackgroundColor = colors[11];
             Console.ForegroundColor = colors[13];
+            SetConsoleCtrlHandler(new HandlerRoutine(ConsoleCtrlCheck), true);
             while (playAgain.ToUpper() == "Y")
             {
                 //StartGame
-                Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
+                try
+                {
+                    Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)esss (N)o");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("hi");
+                }
+                
                 var decision = Console.ReadLine().ToUpper();
 
                 if (decision == "Y")
@@ -95,7 +108,7 @@ namespace BlackjackUpdated
         private static void DisplayWelcomeMessage()
         {
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
-            Console.WriteLine("Your player total is {0} ", playerTotal);
+            Console.WriteLine("Your playerTotal is {0} ", playerTotal);
             //TODO: Inform the player the value of the dealer's visible card.
             Console.WriteLine("The dealer's visible card is: {0} ", dealerCards[0].Name);
         }
@@ -165,5 +178,7 @@ namespace BlackjackUpdated
                 }
             }
         }
+
+        
     }
 }
