@@ -10,7 +10,7 @@
 
     public enum Value
     {
-        Ace = 1,
+        Ace = 11,
         Two = 2,
         Three = 3,
         Four = 4,
@@ -100,6 +100,17 @@
                 (cards[n], cards[k]) = (cards[k], cards[n]);
             }
             return cards;
+        }
+
+        public Card draw()
+        {
+            if (cards.Count() == 0)
+            {
+                cards = shuffle(initializeDeck());
+            }
+            Card drew = cards[0];
+            cards.RemoveAt(0);
+            return drew;
         }
     }
 }
