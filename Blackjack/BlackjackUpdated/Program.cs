@@ -240,7 +240,7 @@ namespace BlackjackUpdated
             {
                 Console.WriteLine("Based on the cards that have been dealt, the recommended move is to stay or hit.");
             }
-            else
+            else if (hiLo > 0 || playerTotal[playerNum] < 10)
             {
                 Console.WriteLine("Based on the cards that have been dealt, the recommended move is to hit.");
             }
