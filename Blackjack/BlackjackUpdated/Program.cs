@@ -10,7 +10,7 @@ namespace BlackjackUpdated
         static int playerCardCount = 1;
         private static readonly Card[] dealerCards = new Card[11];
         static int dealerTotal = 0;
-        static int dealerCardCount = 0;
+        static int dealerCardCount = 1;
 
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
@@ -30,8 +30,11 @@ namespace BlackjackUpdated
                     playerCards[0] = DealCard();
                     playerCards[1] = DealCard();
 
-                    playerTotal += playerCards[0].Value;
-                    playerTotal += playerCards[1].Value;
+
+                    //playerTotal += playerCards[0].Value;
+                    //playerTotal += playerCards[1].Value;
+                    //playerCardCount += 1;
+                    playerTotal = CalculateTotal(true);
 
 
 
@@ -91,7 +94,8 @@ namespace BlackjackUpdated
         {
             playerCardCount += 1;
             playerCards[playerCardCount] = DealCard();
-            playerTotal += playerCards[playerCardCount].Value;
+            //playerTotal += playerCards[playerCardCount].Value;
+            playerTotal = CalculateTotal(true);
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
             //Is this true? I don't think it is.
@@ -102,7 +106,7 @@ namespace BlackjackUpdated
             }
             else if (playerTotal > 21)
             {
-                Console.WriteLine("You busted! Sorry! Teh dealer's Total was {0}", dealerTotal);
+                Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
 
             }
             else if (playerTotal < 21)
@@ -120,6 +124,42 @@ namespace BlackjackUpdated
             }
         }
 
+        //calculate the total for the cards of the person playing.
+        //player = true, use player's cards
+        //player = false, use dealer's cards
+        public static int CalculateTotal(Boolean player){
+            Card[] cardArr;
+            int numAces = 0;
+            int numCards;
+            int total = 0;
+            if (player)
+            {
+                numCards = playerCardCount;
+                cardArr = playerCards;
+            }
+            else {
+                cardArr = dealerCards;
+                numCards = dealerCardCount;
+            }
+
+
+            for (int i = 0; i <= numCards; i++)
+            {
+                if (cardArr[i].Name != "Ace")
+                {
+                    total += cardArr[i].Value;
+                }
+                else
+                {
+                    numAces++;
+                }
+            }
+            int roomLeft = (total >= 21) ? 0 :  21 - total;
+            int elevensPossible = roomLeft / 11 > numAces ? numAces  : roomLeft / 11;
+            total += elevensPossible * 11 + (numAces - elevensPossible);
+            return total;
+        }
+
 
         static Card DealCard()
         {
@@ -134,8 +174,12 @@ namespace BlackjackUpdated
             dealerCards[0] = DealCard();
             dealerCards[1] = DealCard();
 
-            dealerTotal += dealerCards[0].Value;
-            dealerTotal += dealerCards[1].Value;
+            //dealerTotal += dealerCards[0].Value;
+            //dealerTotal += dealerCards[1].Value;
+
+            dealerTotal = CalculateTotal(false);
+            //dealerCardCount += 2;
+
             return dealerCards[0];
         }
 
