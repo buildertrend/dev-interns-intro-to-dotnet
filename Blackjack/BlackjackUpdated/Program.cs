@@ -7,7 +7,6 @@ namespace BlackjackUpdated
 {
     partial class Program
     {
-        static Random cardRandomizer = new Random();
         static Deck deck = new Deck();
 
         static readonly Card[] playerCards = new Card[11];
@@ -15,7 +14,6 @@ namespace BlackjackUpdated
         static int playerCardCount = 1;
         private static readonly Card[] dealerCards = new Card[11];
         static int dealerTotal = 0;
-        static int dealerCardCount = 0;
 
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
@@ -32,11 +30,11 @@ namespace BlackjackUpdated
                 {
                     Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     Console.WriteLine("hi");
                 }
-                
+
                 var decision = Console.ReadLine().ToUpper();
 
                 if (decision == "Y")
@@ -126,7 +124,7 @@ namespace BlackjackUpdated
                     alteredFlag = true;
                 }
                 else
-                {   
+                {
                     playerTotal += playerCards[i].Value;
                 }
             }
@@ -173,36 +171,6 @@ namespace BlackjackUpdated
             }
         }
 
-        static Card DealCard()
-        {
-            int cardValue = cardRandomizer.Next(1, 14);
-            // playerTotal += cardValue;
-            return GetCardValue(cardValue);
-        }
-
-
-        static Card GetCardValue(int cardValue)
-        {
-            return cardValue switch
-            {
-                1 => new Card() { Name = "Ace", Value = 11 },
-                2 => new Card() { Name = "Two", Value = 2 },
-                3 => new Card() { Name = "Three", Value = 3 },
-                4 => new Card() { Name = "Four", Value = 4 },
-                5 => new Card() { Name = "Five", Value = 5 },
-                6 => new Card() { Name = "Six", Value = 6 },
-                7 => new Card() { Name = "Seven", Value = 7 },
-                8 => new Card() { Name = "Eight", Value = 8 },
-                9 => new Card() { Name = "Nine", Value = 9 },
-                10 => new Card() { Name = "Ten", Value = 10 },
-                11 => new Card() { Name = "Jack", Value = 10 },
-                12 => new Card() { Name = "Queen", Value = 10 },
-                13 => new Card() { Name = "King", Value = 10 },
-                14 => new Card() { Name = "Ace", Value = 11 },
-                _ => new Card() { Name = "Two", Value = 2 },
-            };
-        }
-
         static void PlayAgain()
         {
             //Loop until they make a valid choice
@@ -236,7 +204,5 @@ namespace BlackjackUpdated
                 }
             }
         }
-
-        
     }
 }
