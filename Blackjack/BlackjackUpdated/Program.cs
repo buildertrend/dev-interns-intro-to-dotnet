@@ -8,9 +8,6 @@
         static ConsoleColor tableColor = ConsoleColor.DarkGreen;
         static ConsoleColor textColor = ConsoleColor.White;
 
-        //static readonly Card[] playerCards = new Card[11];
-        //static int playerTotal = 0;
-        //static int playerCardCount = 1;
         static Player player1 = new Player();
         private static readonly Card[] dealerCards = new Card[11];
         static int dealerTotal = 0;
@@ -177,7 +174,7 @@
                 Console.ReadLine();
                 Console.Clear();
                 dealerTotal = 0;
-                player1.ResetPlayer();
+                player1 = new Player();
             }
             else if (playAgain.Equals("N"))
             {
