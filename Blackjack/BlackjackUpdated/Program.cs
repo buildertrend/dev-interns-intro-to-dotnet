@@ -197,7 +197,16 @@
             }
             else if (playAgain.Equals("N"))
             {
+                ConsoleKeyInfo info = Console.ReadKey();
+                if (info.Key == ConsoleKey.Enter)
+                {
                     Environment.Exit(0);
+                }
+                else
+                {
+                    Console.Read();
+                    Environment.Exit(0);
+                }
             }
         }
     }
