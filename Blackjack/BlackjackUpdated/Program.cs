@@ -18,6 +18,9 @@
 
         static void Main(string[] args)
         {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.DarkGreen;
+
             while (playAgain.ToUpper() == "Y")
             {
                 //StartGame
@@ -26,16 +29,26 @@
 
                 if (decision == "Y")
                 {
-                    //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(16, 22);
+              
+                    //Dealing a dealer two cards
+                    dealerCards[0] = DealCard();
+                    dealerCards[1] = DealCard();
+
+                    //Adding dealt value to dealer's total
+                    dealerTotal += dealerCards[0].Value;
+                    dealerTotal += dealerCards[1].Value;
+                    dealerCardCount += 2;
+
+                   
+
+                    //Dealing a player two cards 
                     playerCards[0] = DealCard();
                     playerCards[1] = DealCard();
 
+                    //Adding dealt cards to the players total
                     playerTotal += playerCards[0].Value;
                     playerTotal += playerCards[1].Value;
 
-
-                    //TODO: The dealer is dealt one card face up, one card face down.
                     DisplayWelcomeMessage();
                 }
                 else
@@ -49,7 +62,7 @@
                     Console.WriteLine("Would you like to (H)it or (S)tay?");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("H"));
+                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
 
                 if (playerChoice.Equals("H"))
                 {
@@ -81,6 +94,8 @@
         /// </summary>
         private static void DisplayWelcomeMessage()
         {
+            //Inform the player of the dealer's cards
+            Console.WriteLine("The dealer currently face up value is {0}", dealerCards[0].Value);
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your player total is {0} ", playerTotal);
             //TODO: Inform the player the value of the dealer's visible card.
