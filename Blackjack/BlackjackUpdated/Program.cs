@@ -129,7 +129,7 @@
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
+            //playerTotal += cardValue;
             return GetCardValue(cardValue);
         }
 
