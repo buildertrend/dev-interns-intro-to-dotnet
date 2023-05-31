@@ -150,7 +150,6 @@
                 11 => new Card() { Name = "Queen", Value = 10 },
                 12 => new Card() { Name = "King", Value = 10 },
                 13 => new Card() { Name = "Ace", Value = 11 },
-                _ => new Card() { Name = "Two", Value = 2 },
             };
         }
 
