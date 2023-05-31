@@ -103,7 +103,7 @@
             }
             else if (playerTotal > 21)
             {
-                Console.WriteLine("You busted! Sorry! Teh dealer's Total was {0}", dealerTotal);
+                Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
 
             }
             else if (playerTotal < 21)
@@ -146,7 +146,7 @@
                 4 => new Card() { Name = "Five", Value = 5 },
                 5 => new Card() { Name = "Six", Value = 6 },
                 6 => new Card() { Name = "Seven", Value = 7 },
-                7 => new Card() { Name = "Eihgt", Value = 8 },
+                7 => new Card() { Name = "Eight", Value = 8 },
                 8 => new Card() { Name = "Nine", Value = 9 },
                 9 => new Card() { Name = "Ten", Value = 10 },
                 10 => new Card() { Name = "Jack", Value = 10 },
