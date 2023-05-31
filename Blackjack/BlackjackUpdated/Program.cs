@@ -4,10 +4,10 @@
     {
         static Random cardRandomizer = new Random();
 
-        static readonly Card[] playerCards = new Card[11];
+        static readonly List<Card> playerCards = new List<Card>();
         static int playerTotal = 0;
         static int playerCardCount = 1;
-        private static readonly Card[] dealerCards = new Card[11];
+        private static readonly List<Card> dealerCards = new List<Card>();
         static int dealerTotal = 0;
         static int dealerCardCount = 0;
 
@@ -26,15 +26,12 @@
 
                 if (decision == "Y")
                 {
-                    //Currently, just get a value between 16-21 for the dealer
-                    dealerCards[0] = DealersCard();
-                    dealerCards[1] = DealersCard();
+                    dealerCards.Add(DealersCard());
+                    dealerCards.Add(DealersCard());
 
-                    playerCards[0] = DealCard();
-                    playerCards[1] = DealCard();
+                    playerCards.Add(DealCard());
+                    playerCards.Add(DealCard());
 
-
-                    //TODO: The dealer is dealt one card face up, one card face down.
                     DisplayWelcomeMessage();
                 }
                 else
@@ -92,7 +89,7 @@
         static void Hit()
         {
             playerCardCount += 1;
-            playerCards[playerCardCount] = DealCard();
+            playerCards.Add(DealCard());
             
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
