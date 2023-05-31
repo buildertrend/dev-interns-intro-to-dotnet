@@ -27,7 +27,7 @@
                 if (decision == "Y")
                 {
                     //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(15, 22);
+                    dealerTotal = cardRandomizer.Next(16, 22);
                     playerCards[0] = DealCard();
                     playerCards[1] = DealCard();
 
@@ -82,7 +82,7 @@
         private static void DisplayWelcomeMessage()
         {
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
-            Console.WriteLine("Your playerTotall is {0} ", playerTotal);
+            Console.WriteLine("Your playerTotal is {0} ", playerTotal);
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
@@ -144,7 +144,7 @@
                 4 => new Card() { Name = "Five", Value = 5 },
                 5 => new Card() { Name = "Six", Value = 6 },
                 6 => new Card() { Name = "Seven", Value = 7 },
-                7 => new Card() { Name = "Eihgt", Value = 8 },
+                7 => new Card() { Name = "Eight", Value = 8 },
                 8 => new Card() { Name = "Nine", Value = 9 },
                 9 => new Card() { Name = "Ten", Value = 10 },
                 10 => new Card() { Name = "Jack", Value = 10 },
