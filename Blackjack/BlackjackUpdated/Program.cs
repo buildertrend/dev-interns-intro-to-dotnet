@@ -2,7 +2,6 @@
 {
     class Program
     {
-        static Random cardRandomizer = new Random();
         static CardDeck cardDeck = new CardDeck();
         static readonly Card[] playerCards = new Card[11];
         static int playerTotal = 0;
@@ -95,7 +94,7 @@
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
 
             Console.WriteLine("The dealer has the card {0} of {1} face up ", dealerCards[0].Face, dealerCards[0].Suit);
-            Console.WriteLine("The card has a value of {0} ", dealerCards[0].getValue());
+            Console.WriteLine("The card has a value of {0} ", dealerCards[0].getValue(dealerTotal));
         }
 
         static void Hit()
@@ -134,7 +133,7 @@
         {
             playerCardCount++;
             Card card = cardDeck.drawCard();
-            playerTotal += card.getValue();
+            playerTotal += card.getValue(playerTotal);
             return card;
         }
 
@@ -142,7 +141,7 @@
         {
             dealerCardCount++;
             Card card = cardDeck.drawCard();
-            dealerTotal += card.getValue();
+            dealerTotal += card.getValue(dealerTotal);
             return card;
         }
 

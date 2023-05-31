@@ -13,7 +13,7 @@ namespace BlackjackUpdated
         public Suit Suit;
         public Face Face;
         
-        public int getValue()
+        public int getValue(int currentTotal)
         {
             int x = (int)this.Face switch{
                 0 => 11,
@@ -31,6 +31,10 @@ namespace BlackjackUpdated
                 12 => 10,
                 _ => 1
             };
+            if (currentTotal > 10 && x == 11)
+            {
+                return 1;
+            }
             return x;
         }
     }
