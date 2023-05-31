@@ -1,9 +1,13 @@
-﻿namespace BlackjackUpdated
+﻿using System;
+using System.Drawing;
+
+namespace BlackjackUpdated
 {
     class Program
     {
         static Card c = new Card();
         public static Random cardRandomizer = new Random();
+        static ConsoleColor[] colors = (ConsoleColor[])ConsoleColor.GetValues(typeof(ConsoleColor));
 
         static readonly Card[] playerCards = new Card[11];
         static int playerTotal = 0;
@@ -19,6 +23,8 @@
 
         static void Main(string[] args)
         {
+            Console.BackgroundColor = colors[11];
+            Console.ForegroundColor = colors[13];
             while (playAgain.ToUpper() == "Y")
             {
                 //StartGame
@@ -27,8 +33,14 @@
 
                 if (decision == "Y")
                 {
-                    //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(15, 22);
+                    //Deal the dealer two cards before dealing the player their cards
+                    dealerCards[0] = c.DealCard();
+                    dealerCards[1] = c.DealCard();
+
+                    dealerTotal += dealerCards[0].Value;
+                    dealerTotal += dealerCards[1].Value;
+
+
                     playerCards[0] = c.DealCard();
                     playerCards[1] = c.DealCard();
 
@@ -50,7 +62,7 @@
                     Console.WriteLine("Would you like to (H)it or (S)tay?");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("H"));
+                while (playerChoice.Equals("H") && !playerChoice.Equals("H"));
 
                 if (playerChoice.Equals("H"))
                 {
@@ -85,6 +97,7 @@
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your player total is {0} ", playerTotal);
             //TODO: Inform the player the value of the dealer's visible card.
+            Console.WriteLine("The dealer's visible card is: {0} ", dealerCards[0].Name);
         }
 
         static void Hit()
