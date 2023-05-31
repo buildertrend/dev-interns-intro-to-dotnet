@@ -1,4 +1,9 @@
-﻿namespace BlackjackUpdated
+﻿using Blackjack;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using static Blackjack.ConsoleControlHandler;
+
+namespace BlackjackUpdated
 {
     class Program
     {
@@ -23,10 +28,19 @@
             Console.ForegroundColor = textColor;
             Console.BackgroundColor = tableColor;
 
+            SetConsoleCtrlHandler(new HandlerRoutine(ConsoleCtrlCheck), true);
             while (playAgain.ToUpper() == "Y")
             {
                 //StartGame
-                Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
+                try
+                {
+                    Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)esss (N)o");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("hi");
+                }
+                
                 var decision = Console.ReadLine().ToUpper();
 
                 if (decision == "Y")
@@ -82,7 +96,7 @@
 
                 /* END GAME LOOP */
 
-                Console.WriteLine("Wuold you like to play again? (Y)es or (N)o?");
+                Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
                 PlayAgain();
             }
         }
@@ -190,5 +204,7 @@
                 }
             }
         }
+
+        
     }
 }
