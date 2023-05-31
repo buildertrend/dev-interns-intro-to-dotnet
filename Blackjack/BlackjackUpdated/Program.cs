@@ -103,7 +103,7 @@
             }
             else if (playerTotal > 21)
             {
-                Console.WriteLine("You busted! Sorry! Teh dealer's Total was {0}", dealerTotal);
+                Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
 
             }
             else if (playerTotal < 21)
@@ -131,7 +131,7 @@
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
+            playerTotal += GetCardValue(cardValue).Value;
             return GetCardValue(cardValue);
         }
 
