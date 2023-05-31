@@ -95,8 +95,6 @@
         {
             playerCards[playerCardCount] = DealCardUser();
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount-1].Name, playerTotal);
-
-            //Is this true? I don't think it is.
             if (playerTotal == 21)
             {
                 Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
@@ -123,11 +121,7 @@
         }
 
         //TODO: Move this class to it's own file.
-        private class Card
-        {
-            public int Value;
-            public string Name;
-        }
+        
 
         static Card DealCardUser()
         {
