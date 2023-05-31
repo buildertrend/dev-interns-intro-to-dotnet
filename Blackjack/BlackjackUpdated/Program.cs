@@ -49,7 +49,7 @@
                     Console.WriteLine("Would you like to (H)it or (S)tay?");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("H"));
+                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
 
                 if (playerChoice.Equals("H"))
                 {
@@ -71,7 +71,7 @@
 
                 /* END GAME LOOP */
 
-                Console.WriteLine("Wuold you like to play again? (Y)es or (N)o?");
+                Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
                 PlayAgain();
             }
         }
@@ -101,14 +101,14 @@
             }
             else if (playerTotal > 21)
             {
-                Console.WriteLine("You busted! Sorry! Teh dealer's Total was {0}", dealerTotal);
+                Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
 
             }
             else if (playerTotal < 21)
             {
                 do
                 {
-                    Console.WriteLine("Would you like to hit or stay? h for hiit s for stay");
+                    Console.WriteLine("Would you like to hit or stay? h for hit s for stay");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
                 while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
