@@ -3,7 +3,7 @@
     class Program
     {
         static Random cardRandomizer = new Random();
-
+        static CardDeck cardDeck = new CardDeck();
         static readonly Card[] playerCards = new Card[11];
         static int playerTotal = 0;
         static int playerCardCount = 1;
@@ -21,6 +21,8 @@
             while (playAgain.ToUpper() == "Y")
             {
                 //StartGame
+                cardDeck = new CardDeck();
+                cardDeck.shuffle();
                 Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
                 var decision = Console.ReadLine().ToUpper();
 
@@ -68,6 +70,11 @@
                         {
                             Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
                         }
+                        else if (playerTotal == dealerTotal)
+                        {
+                            Console.WriteLine("Its a tie!");
+                        }
+                       
                     }
                 }
                 
@@ -84,17 +91,17 @@
         /// </summary>
         private static void DisplayWelcomeMessage()
         {
-            Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
+            Console.WriteLine("You were dealt the cards : {0} of {1} and {2} of {3} ", playerCards[0].Face, playerCards[0].Suit, playerCards[1].Face, playerCards[1].Suit);
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
 
-            Console.WriteLine("The dealer has the card {0} face up ", dealerCards[0].Name);
-            Console.WriteLine("The card has a value of {0} ", dealerCards[0].Value);
+            Console.WriteLine("The dealer has the card {0} of {1} face up ", dealerCards[0].Face, dealerCards[0].Suit);
+            Console.WriteLine("The card has a value of {0} ", dealerCards[0].getValue());
         }
 
         static void Hit()
         {
             playerCards[playerCardCount] = DealCardUser();
-            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount-1].Name, playerTotal);
+            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount-1].Face, playerTotal);
             if (playerTotal == 21)
             {
                 Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
@@ -126,40 +133,19 @@
         static Card DealCardUser()
         {
             playerCardCount++;
-            Card card = GetCardValue(cardRandomizer.Next(1, 14));
-            playerTotal += card.Value;
+            Card card = cardDeck.drawCard();
+            playerTotal += card.getValue();
             return card;
         }
 
         static Card DealCardDealer()
         {
             dealerCardCount++;
-            Card card = GetCardValue(cardRandomizer.Next(1, 14));
-            dealerTotal += card.Value;
+            Card card = cardDeck.drawCard();
+            dealerTotal += card.getValue();
             return card;
         }
 
-
-        static Card GetCardValue(int cardValue)
-        {
-            return cardValue switch
-            {
-                1 => new Card() { Name = "Two", Value = 2 },
-                2 => new Card() { Name = "Three", Value = 3 },
-                3 => new Card() { Name = "Four", Value = 4 },
-                4 => new Card() { Name = "Five", Value = 5 },
-                5 => new Card() { Name = "Six", Value = 6 },
-                6 => new Card() { Name = "Seven", Value = 7 },
-                7 => new Card() { Name = "Eight", Value = 8 },
-                8 => new Card() { Name = "Nine", Value = 9 },
-                9 => new Card() { Name = "Ten", Value = 10 },
-                10 => new Card() { Name = "Jack", Value = 10 },
-                11 => new Card() { Name = "Queen", Value = 10 },
-                12 => new Card() { Name = "King", Value = 10 },
-                13 => new Card() { Name = "Ace", Value = 11 },
-                _ => new Card() { Name = "Two", Value = 2 },
-            };
-        }
 
         static void PlayAgain()
         {
