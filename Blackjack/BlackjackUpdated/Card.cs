@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace BlackjackUpdated
 {
-    // Card class that stores value and name for a card 
+    // Card class that stores Suit and CardNumber for every card in a deck
     public class Card
     {
        // public int Value;
@@ -12,8 +12,13 @@ namespace BlackjackUpdated
         public Suit suit { get; set; }
         public CardNumber cardNumber { get; set; }
 
-        public int GetCardValue()
+        public int GetCardValue(int currentPlayerTotal)
         {
+
+            if(currentPlayerTotal + 11 > 21 && this.cardNumber == CardNumber.Ace)
+            {
+                return 1;
+            }
             return (this.cardNumber) switch
             {
                 CardNumber.Ace => 11,

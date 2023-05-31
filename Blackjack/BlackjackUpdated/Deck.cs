@@ -1,5 +1,6 @@
 ﻿namespace BlackjackUpdated
 {
+    //Deck is a list of cards that contains methods necceary to play a card game
     public class Deck
     {
         public Deck()

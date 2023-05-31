@@ -8,14 +8,20 @@ namespace BlackjackUpdated
 {
     class Program
     {
-        static Random cardRandomizer = new Random();
-
-        //Colors used f
+        //Deck is a collection of cards 
         static Deck deck = new Deck();
+
+        //ConsoleColors are used to style the console
         static ConsoleColor tableColor = ConsoleColor.DarkGreen;
         static ConsoleColor textColor = ConsoleColor.White;
+
+        //Players are a list of players objects stored in an array
         static Player[] players;
+
+        //Current player is an int used to determine, which player's turn it is 
         static int currentPLayer = 0;
+
+        //Dealer is a player object that the players are trying to beat
         static Player dealer; 
      
 
