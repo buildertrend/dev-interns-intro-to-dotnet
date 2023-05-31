@@ -138,27 +138,27 @@
                 // Still check to see if we're over 21.
                 if (playerTotal > 21)
                 {
-                Console.WriteLine("You busted! Sorry! The dealer's total was {0}", dealerTotal);
-            }
+                    Console.WriteLine("You busted! Sorry! The dealer's total was {0}", dealerTotal);
+                }
             }
 
             // We're safe. Ask to hit again if desired.
-                do
-                {
-                    Console.WriteLine("Would you like to hit or stay? h for hit s for stay");
-                    playerChoice = Console.ReadLine().ToUpper();
-                }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
-                if (playerChoice.ToUpper() == "H")
-                {
-                    Hit();
-                }
+            do
+            {
+                Console.WriteLine("Would you like to hit or stay? h for hit s for stay");
+                playerChoice = Console.ReadLine().ToUpper();
             }
+            while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
+            if (playerChoice.ToUpper() == "H")
+            {
+                Hit();
+            }
+        }
 
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
+            // playerTotal += cardValue;
             return GetCardValue(cardValue);
         }
 
@@ -190,6 +190,7 @@
             //Loop until they make a valid choice
             do
             {
+                Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
                 playAgain = Console.ReadLine().ToUpper();
             }
             while (!playAgain.Equals("Y") && !playAgain.Equals("N"));
