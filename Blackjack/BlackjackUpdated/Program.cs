@@ -31,8 +31,11 @@
                     playerCards[0] = DealCard();
                     playerCards[1] = DealCard();
 
+                    //FIX - playerTotal is being changed in DealCard, we don't need it here
+                    /*
                     playerTotal += playerCards[0].Value;
                     playerTotal += playerCards[1].Value;
+                    */
 
 
                     //TODO: The dealer is dealt one card face up, one card face down.
@@ -70,8 +73,7 @@
                 }
 
                 /* END GAME LOOP */
-
-                Console.WriteLine("Wuold you like to play again? (Y)es or (N)o?");
+                Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
                 PlayAgain();
             }
         }
@@ -82,7 +84,7 @@
         private static void DisplayWelcomeMessage()
         {
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
-            Console.WriteLine("Your playerTotall is {0} ", playerTotal);
+            Console.WriteLine("Your playerTotal is {0} ", playerTotal);
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
@@ -96,7 +98,7 @@
             //Is this true? I don't think it is.
             if (playerTotal.Equals(21))
             {
-                Console.WriteLine("Yuo got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+                Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
 
             }
             else if (playerTotal > 21)
@@ -108,7 +110,7 @@
             {
                 do
                 {
-                    Console.WriteLine("Would you like to hit or stay? h for hiit s for stay");
+                    Console.WriteLine("Would you like to hit or stay? h for hit s for stay");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
                 while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
@@ -151,7 +153,7 @@
                 11 => new Card() { Name = "Queen", Value = 10 },
                 12 => new Card() { Name = "King", Value = 10 },
                 13 => new Card() { Name = "Ace", Value = 11 },
-                _ => new Card() { Name = "Two", Value = 2 },
+                14 => new Card() { Name = "Two", Value = 2 },
             };
         }
 
