@@ -1,4 +1,9 @@
-﻿namespace BlackjackUpdated
+﻿using Blackjack;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using static Blackjack.ConsoleControlHandler;
+
+namespace BlackjackUpdated
 {
     class Program
     {
@@ -18,10 +23,19 @@
 
         static void Main(string[] args)
         {
+            SetConsoleCtrlHandler(new HandlerRoutine(ConsoleCtrlCheck), true);
             while (playAgain.ToUpper() == "Y")
             {
                 //StartGame
-                Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
+                try
+                {
+                    Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)esss (N)o");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("hi");
+                }
+                
                 var decision = Console.ReadLine().ToUpper();
 
                 if (decision == "Y")
@@ -100,7 +114,7 @@
         {
             Console.WriteLine("The dealers visable card is a : {0} ", dealerCards[0].Name);
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
-            Console.WriteLine("Your Total is {0} ", playerTotal);
+            Console.WriteLine("Your playerTotal is {0} ", playerTotal);
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
@@ -197,5 +211,7 @@
                 }
             }
         }
+
+        
     }
 }
