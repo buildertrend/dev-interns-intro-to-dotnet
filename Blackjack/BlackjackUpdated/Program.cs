@@ -90,6 +90,17 @@
         {
             playerCardCount += 1;
             playerCards[playerCardCount] = DealCard();
+            if (playerCards[playerCardCount].Name == "Ace")
+            {
+                if(21 - playerTotal < 11)
+                {
+                    playerCards[playerCardCount].Value = 1;
+                }
+                else
+                {
+                    playerCards[playerCardCount].Value = 11;
+                }
+            }
             playerTotal += playerCards[playerCardCount].Value;
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
@@ -129,7 +140,7 @@
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
+            //playerTotal += cardValue;
             return GetCardValue(cardValue);
         }
 
@@ -144,7 +155,7 @@
                 4 => new Card() { Name = "Five", Value = 5 },
                 5 => new Card() { Name = "Six", Value = 6 },
                 6 => new Card() { Name = "Seven", Value = 7 },
-                7 => new Card() { Name = "Eihgt", Value = 8 },
+                7 => new Card() { Name = "Eight", Value = 8 },
                 8 => new Card() { Name = "Nine", Value = 9 },
                 9 => new Card() { Name = "Ten", Value = 10 },
                 10 => new Card() { Name = "Jack", Value = 10 },
