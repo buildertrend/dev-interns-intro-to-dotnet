@@ -1,4 +1,5 @@
 ﻿using Blackjack;
+using Microsoft.VisualBasic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using static Blackjack.ConsoleControlHandler;
@@ -15,11 +16,32 @@ namespace BlackjackUpdated
         private static readonly Card[] dealerCards = new Card[11];
         static int dealerTotal = 0;
         static int dealerCardCount = 1;
+        private static Card[] deck;
+        private static Card[] shuffledDeck;
+        static int dealDeck = 0;
+
+        enum CardValues
+        {
+            Ace = 1,
+            Two,
+            Three,
+            Four,
+            Five,
+            Six,
+            Seven,
+            Eight,
+            Nine,
+            Ten,
+            Jack,
+            Queen,
+            King
+        }
 
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
 
         static string playAgain = "Y";
+        
 
         static void Main(string[] args)
         {
@@ -35,11 +57,14 @@ namespace BlackjackUpdated
                 {
                     Console.WriteLine("hi");
                 }
-                
                 var decision = Console.ReadLine().ToUpper();
 
                 if (decision == "Y")
                 {
+                    deck = generateDeck();
+
+                    shuffledDeck = deck.OrderBy(e => cardRandomizer.NextDouble()).ToArray();
+
                     dealerCards[0] = DealCard();
                     dealerCards[1] = DealCard();
 
@@ -181,31 +206,32 @@ namespace BlackjackUpdated
 
         static Card DealCard()
         {
-            int cardValue = cardRandomizer.Next(1, 14);
-            return GetCardValue(cardValue);
-        }
-
-
-        static Card GetCardValue(int cardValue)
-        {
-            return cardValue switch
+            var card = shuffledDeck[dealDeck];
+            ++dealDeck;
+            if(dealDeck > 51)
             {
-                1 => new Card() { Name = "Two", Value = 2 },
-                2 => new Card() { Name = "Three", Value = 3 },
-                3 => new Card() { Name = "Four", Value = 4 },
-                4 => new Card() { Name = "Five", Value = 5 },
-                5 => new Card() { Name = "Six", Value = 6 },
-                6 => new Card() { Name = "Seven", Value = 7 },
-                7 => new Card() { Name = "Eight", Value = 8 },
-                8 => new Card() { Name = "Nine", Value = 9 },
-                9 => new Card() { Name = "Ten", Value = 10 },
-                10 => new Card() { Name = "Jack", Value = 10 },
-                11 => new Card() { Name = "Queen", Value = 10 },
-                12 => new Card() { Name = "King", Value = 10 },
-                13 => new Card() { Name = "Ace", Value = 11 },
-                _ => new Card() { Name = "Two", Value = 2 },
-            };
+                shuffledDeck = deck.OrderBy(e => cardRandomizer.NextDouble()).ToArray();
+                dealDeck = 0;
+            }
+            return card;
         }
+
+        static Card[] generateDeck()
+        {
+            Card[] deck = new Card[52];
+            int i = 0;
+            for(int suit = 1; suit < 5; suit++)
+            {
+                for (int name = 1; name < 14; name++)
+                {
+                    string nameString = Enum.GetName(typeof(CardValues), name);
+                    deck[i] = new Card(suit, nameString);
+                    i++;
+                }
+            }
+            return deck;
+        }
+        
 
         static void PlayAgain()
         {
@@ -225,6 +251,7 @@ namespace BlackjackUpdated
                 dealerCardCount = 1;
                 playerCardCount = 1;
                 playerTotal = 0;
+                dealDeck = 0;
             }
             else if (playAgain.Equals("N"))
             {
