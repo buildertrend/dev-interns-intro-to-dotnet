@@ -10,15 +10,15 @@ namespace Blackjack
 
     public class Card
     {
-        public int Value;
-        public string Name = "";
-        public string Suit;
+        public int Value { get; set; }
+        public string Name { get; set; }
+        public string Suit { get; set; }
 
         public static Card GetCardValue(int cardValue)
         {
             return cardValue switch
             {
-                1 => new Card() { Name = "Two", Value = 2 },
+                1 => new Card() { Name = "Two", Value = 2},
                 2 => new Card() { Name = "Three", Value = 3 },
                 3 => new Card() { Name = "Four", Value = 4 },
                 4 => new Card() { Name = "Five", Value = 5 },

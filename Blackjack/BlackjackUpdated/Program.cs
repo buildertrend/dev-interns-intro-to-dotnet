@@ -1,4 +1,6 @@
 ﻿using Blackjack;
+using System.ComponentModel.Design;
+using System.Net.Security;
 using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
@@ -9,7 +11,7 @@ namespace BlackjackUpdated
     class Program
     {
         static Random cardRandomizer = new Random();
-        static Deck cardDeck = new Deck();
+        static Deck cardDeck;
 
         static readonly Card[] playerCards = new Card[11];
         static int playerTotal = 0;
@@ -100,7 +102,7 @@ namespace BlackjackUpdated
                         Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
                         GameOver(playerID);
                     } else if (dealerTotal > 21) {
-                            Console.WriteLine("Dealer has busted with a total of {0}! You Win!", dealerTotal);
+                            Console.WriteLine("Dealer has busted with a total of {0}!", dealerTotal);
                             GameOver(playerID);
                     }
                     else if (playerTotal < dealerTotal)
@@ -130,6 +132,7 @@ namespace BlackjackUpdated
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
             Console.WriteLine("The first visible card of the dealer is : {0} ", dealerCards[0].Name);
+            PrintCards(dealerCards[0]);
         }
 
         //TODO: Create switch case for multiple players
@@ -239,6 +242,32 @@ namespace BlackjackUpdated
             }
         }
 
-        
+        static void PrintCards(Card c)
+        {
+            int val = c.Value;
+            string name = c.Name;
+            string suit = c.Suit;
+
+            if (suit.Equals("Diamond"))
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+            }
+            else if (c.Suit.Equals("Hearts"))
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+            }
+            else if (c.Suit.Equals("Clubs"))
+            {
+                Console.ForegroundColor = ConsoleColor.Black;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Black;
+            }
+
+            Console.WriteLine("__________");
+            string line = String.Format("[{0, 10}]", $"|{name.Substring(0)}|");
+            Console.WriteLine(line);
+        }
     }
 }

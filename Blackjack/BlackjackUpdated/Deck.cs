@@ -32,7 +32,10 @@ namespace Blackjack
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    Cards.Add(Card.GetCardValue(i));
+                    Card c = Card.GetCardValue(i);
+                    String s = suits[j];
+                    Cards.Add(new Card() { Name = c.Name, Value = c.Value, Suit = suits[j] });
+                    //Cards.Add(Card.GetCardValue(i));
                 }
             }
         }
