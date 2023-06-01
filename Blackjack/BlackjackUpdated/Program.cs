@@ -11,8 +11,7 @@ namespace BlackjackUpdated
         //Deck is a collection of cards 
         static Deck deck = new Deck();
 
-        //This will be used for card counting
-        static List<Card> pulledCards = new List<Card>();
+        
 
         //ConsoleColors are used to style the console
         static ConsoleColor tableColor = ConsoleColor.DarkGreen;
@@ -60,6 +59,7 @@ namespace BlackjackUpdated
 
                     int amountOfPLayers = Convert.ToInt32(Console.ReadLine());
 
+
               
                     //this is the method that creates players
                     CreatePlayers(amountOfPLayers);
@@ -71,7 +71,6 @@ namespace BlackjackUpdated
                     for(int i = 0; i < 2; i++)
                     {
                         Card card = deck.TakeCard();
-                        pulledCards.Add(card);
                         dealer.AddCardToHand(card);
                         resetDeckIfNeeded(deck);
                     }
@@ -89,7 +88,6 @@ namespace BlackjackUpdated
                     for (int i = 0; i < 2; i++)
                     {
                         Card card = deck.TakeCard();
-                        pulledCards.Add(card);
                         players[currentPLayer].AddCardToHand(card);
                         resetDeckIfNeeded(deck);
 
@@ -129,7 +127,6 @@ namespace BlackjackUpdated
                 {
                     Card card = deck.TakeCard();
                     dealer.AddCardToHand(card);
-                    pulledCards.Add(card);
                     resetDeckIfNeeded(deck);
                     if (dealer.getPlayerTotal() > 21)
                     {
@@ -192,7 +189,6 @@ namespace BlackjackUpdated
         static void Hit()
         {
             Card card = deck.TakeCard();
-            pulledCards.Add(card);
             players[currentPLayer].AddCardToHand(card);
             resetDeckIfNeeded(deck);
             Console.WriteLine("You card is an {0} and your new Total is {1}. ", card.cardNumber, players[currentPLayer].getPlayerTotal());
@@ -273,7 +269,6 @@ namespace BlackjackUpdated
             {
                 deck.Reset();
                 deck.Shuffle();
-                pulledCards = new List<Card>();
             }
         }
 
@@ -281,6 +276,8 @@ namespace BlackjackUpdated
         {
             //TODO here add stuff to inform player on what to do based on cards played
         }
+
+       
         
     }
 }

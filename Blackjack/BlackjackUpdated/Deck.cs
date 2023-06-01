@@ -10,6 +10,9 @@
 
         public List<Card> Cards { get; set; }
 
+        //This will be used for card counting
+        Dictionary<CardNumber, int> pulledCards; 
+
         public void Reset()
         {
             Cards = Enumerable.Range(1, 4)
@@ -22,6 +25,8 @@
                                            )
                            )
                   .ToList();
+
+            pulledCards = new Dictionary<CardNumber, int>();
         }
 
         public void Shuffle()
@@ -33,15 +38,29 @@
         public Card TakeCard()
         {
             var card = Cards.FirstOrDefault();
-            Cards.Remove(card); 
+            Cards.Remove(card);
+            AddCardsToPulled(card.cardNumber);
             return card;
         }
 
-        public int CardsLeft()
-        {
+        public int CardsLeft() { 
             return Cards.Count;
         }
 
- 
+        public void AddCardsToPulled(CardNumber cardnumber)
+        {
+
+            if (pulledCards.TryGetValue(cardnumber, out var pulled))
+            {
+                pulledCards.Add(cardnumber, pulled + 1);
+            }
+            else
+            {
+                pulledCards.Add(cardnumber, 1);
+            }
+
+        }
+
+
     }
 }
