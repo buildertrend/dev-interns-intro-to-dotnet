@@ -58,8 +58,6 @@ namespace BlackjackUpdated
                     Console.Write("How many players will be playing: ");
 
                     int amountOfPLayers = Convert.ToInt32(Console.ReadLine());
-
-
               
                     //this is the method that creates players
                     CreatePlayers(amountOfPLayers);
@@ -100,6 +98,8 @@ namespace BlackjackUpdated
                     do
                 {
                     Console.WriteLine("Would you like to (H)it or (S)tay?");
+                        //TODO
+                        informPLayer();
                     playerChoice = Console.ReadLine().ToUpper();
                 }
                 while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
@@ -272,9 +272,18 @@ namespace BlackjackUpdated
             }
         }
 
-        static void informPLayer(int currentPlayer)
+        static void informPLayer()
         {
             //TODO here add stuff to inform player on what to do based on cards played
+            Dictionary<CardNumber, int> pulledCards = deck.getPulledCards();
+            int outValue;
+            for(int i = 1; i <= 14; i++)
+            {
+                pulledCards.TryGetValue((CardNumber) i, out outValue);
+                Console.WriteLine($"Card {i}, has been pulled {outValue} times");
+            }
+
+          
         }
 
        

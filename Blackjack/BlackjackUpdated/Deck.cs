@@ -11,7 +11,7 @@
         public List<Card> Cards { get; set; }
 
         //This will be used for card counting
-        Dictionary<CardNumber, int> pulledCards; 
+        Dictionary<CardNumber, int> pulledCards { get; set; }
 
         public void Reset()
         {
@@ -60,6 +60,12 @@
             }
 
         }
+
+        public Dictionary<CardNumber , int> getPulledCards()
+        {
+            return pulledCards;
+        }
+
 
 
     }
