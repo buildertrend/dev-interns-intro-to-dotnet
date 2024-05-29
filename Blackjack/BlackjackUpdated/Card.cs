@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Blackjack
+﻿namespace Blackjack
 {
     public class Card
     {
