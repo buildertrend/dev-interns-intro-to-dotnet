@@ -1,14 +1,16 @@
 ﻿using Blackjack;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using static Blackjack.ConsoleControlHandler;
 
 namespace BlackjackUpdated
 {
     class Program
     {
-        static Random cardRandomizer = new Random();
+        
         private List<Card> cards = new List<Card>();
         //static readonly List<Card> playerCards = new List<Card>();
         static Dictionary<List<Card>, int> playersCardsDictionary = new Dictionary<List<Card>, int>();
@@ -44,10 +46,12 @@ namespace BlackjackUpdated
 
                 if (decision == "Y")
                 {
+                    
                     Console.WriteLine("How many players are at the table?");
                     var playersAsString = Console.ReadLine().ToUpper();
                     numberOfPlayers = int.Parse(playersAsString);
                     //Currently, just get a value between 16-21 for the dealer
+                    ShuffleCards();
                     for (int i = 0; i < numberOfPlayers; i++)
                     {
                         List<Card> playerCards = new List<Card>();
@@ -147,15 +151,23 @@ namespace BlackjackUpdated
             //TODO: Inform the player the value of the dealer's visible card.
         }*/
 
+        static void ShuffleCards() {
+            Random cardRandomizer = new Random();
+            DeckOfCards.OrderBy(x => cardRandomizer.Next());
+        }
+
         static Stack<Card> CreateDeckOfCards() {
             Stack<Card> deckOfCards = new Stack<Card>();
             string[] suits = { "Spades", "Clubs", "Hearts", "Diamonds"};
             foreach (var suit in suits) {
                 for (int i = 1; i <= 13; i++) {
-                    /*deckOfCards.Push(item: new Card() {
-                        name = GetCardName();
-                        value = GetCardValue();
-                    });*/
+                    var card = GetCardValue(i);
+                    deckOfCards.Push(item: new Card()
+                    {
+                        Name = card.Name,
+                        Value = card.Value,
+                        Suit = suit
+                    });
                 }
             }
             return deckOfCards;
@@ -193,9 +205,14 @@ namespace BlackjackUpdated
 
         static Card DealCard()
         {
-            int cardValue = cardRandomizer.Next(1, 14);
+            if (DeckOfCards.Count < 1)
+            {
+                DeckOfCards = CreateDeckOfCards();
+                ShuffleCards();
+            }
+            Card card = DeckOfCards.Pop();
             /*playerTotal += cardValue;*/
-            return GetCardValue(cardValue);
+            return GetCardValue(card.Value);
         }
 
 
