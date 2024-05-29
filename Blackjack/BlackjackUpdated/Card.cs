@@ -11,7 +11,7 @@ namespace Blackjack
         public int Value;
         public string Name;
         public string suit;
-        static Random cardRandomizer = new Random();
+        //static Random cardRandomizer = new Random();
         
         public static Card GetCardValue(int cardValue)
         {
@@ -35,8 +35,5 @@ namespace Blackjack
         }
         
     }
-    
-
-
 
 }
