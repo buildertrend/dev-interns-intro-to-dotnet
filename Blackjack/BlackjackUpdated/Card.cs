@@ -4,5 +4,6 @@
     {
         public int Value;
         public string Name;
+        public string Suit;
     }
 }
