@@ -1,6 +1,7 @@
 ﻿using Blackjack;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Xml.Linq;
 using static Blackjack.ConsoleControlHandler;
 
 namespace BlackjackUpdated
@@ -16,6 +17,7 @@ namespace BlackjackUpdated
         static int dealerTotal = 0;
         static int dealerCardCount = 0;
         static List<Card> deckOfCards;
+        static List<Player> playersList;
 
 
         //users to store the player choice (hit or stay)
@@ -29,58 +31,61 @@ namespace BlackjackUpdated
 
 
             deckOfCards = new List<Card>{
-                new Card() { Name = "Two", Value = 2, Suit = "Diamonds" },
-                new Card() { Name = "Two", Value = 2, Suit = "Clubs"    },
-                new Card() { Name = "Two", Value = 2, Suit = "Spades"   },
-                new Card() { Name = "Two", Value = 2, Suit = "Hearts"   },
-                new Card() { Name = "Three", Value = 3, Suit = "Diamonds" },
-                new Card() { Name = "Three", Value = 3, Suit = "Clubs"    },
-                new Card() { Name = "Three", Value = 3, Suit = "Spades"   },
-                new Card() { Name = "Three", Value = 3, Suit = "Hearts"    },
-                new Card() { Name = "Four", Value = 4 , Suit = "Diamonds"},
-                new Card() { Name = "Four", Value = 4 , Suit = "Clubs"   },
-                new Card() { Name = "Four", Value = 4 , Suit = "Spades"  },
-                new Card() { Name = "Four", Value = 4 , Suit = "Hearts"  },
-                new Card() { Name = "Five", Value = 5 , Suit = "Diamonds"},
-                new Card() { Name = "Five", Value = 5 , Suit = "Clubs"   },
-                new Card() { Name = "Five", Value = 5 , Suit = "Spades"  },
-                new Card() { Name = "Five", Value = 5 , Suit = "Hearts"  },
-                new Card() { Name = "Six", Value = 6 , Suit = "Diamonds"},
-                new Card() { Name = "Six", Value = 6 , Suit = "Clubs"   },
-                new Card() { Name = "Six", Value = 6 , Suit = "Spades"  },
-                new Card() { Name = "Six", Value = 6 , Suit = "Hearts"  },
-                new Card() { Name = "Seven", Value = 7 , Suit = "Diamonds"},
-                new Card() { Name = "Seven", Value = 7 , Suit = "Clubs"   },
-                new Card() { Name = "Seven", Value = 7 , Suit = "Spades"  },
-                new Card() { Name = "Seven", Value = 7 , Suit = "Hearts"  },
-                new Card() { Name = "Eight", Value = 8 , Suit = "Diamonds"},
-                new Card() { Name = "Eight", Value = 8 , Suit = "Clubs"   },
-                new Card() { Name = "Eight", Value = 8 , Suit = "Spades"  },
-                new Card() { Name = "Eight", Value = 8 , Suit = "Hearts"  },
-                new Card() { Name = "Nine", Value = 9 , Suit = "Diamonds"},
-                new Card() { Name = "Nine", Value = 9 , Suit = "Clubs"   },
-                new Card() { Name = "Nine", Value = 9 , Suit = "Spades"  },
-                new Card() { Name = "Nine", Value = 9 , Suit = "Hearts"  },
-                new Card() { Name = "Ten", Value = 10 , Suit = "Diamonds"},
-                new Card() { Name = "Ten", Value = 10 , Suit = "Clubs"   },
-                new Card() { Name = "Ten", Value = 10 , Suit = "Spades"  },
-                new Card() { Name = "Ten", Value = 10 , Suit = "Hearts"  },
-                new Card() { Name = "Jack", Value = 10, Suit = "Diamonds" },
-                new Card() { Name = "Jack", Value = 10, Suit = "Clubs"    },
-                new Card() { Name = "Jack", Value = 10, Suit = "Spades"   },
-                new Card() { Name = "Jack", Value = 10, Suit = "Hearts"   },
-                new Card() { Name = "Queen", Value = 10 , Suit ="Diamonds"},
-                new Card() { Name = "Queen", Value = 10 , Suit ="Clubs"   },
-                new Card() { Name = "Queen", Value = 10 , Suit ="Spades"  },
-                new Card() { Name = "Queen", Value = 10 , Suit ="Hearts"  },
-                new Card() { Name = "Ace", Value = 11 , Suit = "Diamonds"},
-                new Card() { Name = "Ace", Value = 11 , Suit = "Clubs"   },
-                new Card() { Name = "Ace", Value = 11 , Suit = "Spades"  },
-                new Card() { Name = "Ace", Value = 11 , Suit = "Hearts"  },
-                new Card() { Name = "King", Value = 10, Suit = "Diamonds" },
-                new Card() { Name = "King", Value = 10, Suit = "Clubs"    },
-                new Card() { Name = "King", Value = 10, Suit = "Spades"   },
-                new Card() { Name = "King", Value = 10, Suit = "Hearts"   },
+                //new Card( "Two",  2, "Diamonds"),
+                //new Card() { Name = "Two", Value = 2, Suit = "Diamonds" },
+                //new Card() { Name = "Two", Value = 2, Suit = "Clubs"    },
+                new Card( "Two",  2,  "Diamonds" ),
+                new Card( "Two",  2,  "Clubs"    ),
+                new Card( "Two",  2,  "Spades"   ),
+                new Card( "Two",  2,  "Hearts"   ),
+                new Card( "Three",  3, "Diamonds"),
+                new Card( "Three",  3, "Clubs"   ),
+                new Card( "Three",  3, "Spades"  ),
+                new Card( "Three",  3, "Hearts"  ),
+                new Card( "Four",  4 , "Diamonds"),
+                new Card( "Four",  4 , "Clubs"   ),
+                new Card( "Four",  4 , "Spades"  ),
+                new Card( "Four",  4 , "Hearts"  ),
+                new Card( "Five",  5 , "Diamonds"),
+                new Card( "Five",  5 , "Clubs"   ),
+                new Card( "Five",  5 , "Spades"  ),
+                new Card( "Five",  5 , "Hearts"  ),
+                new Card( "Six", 6 ,  "Diamonds" ),
+                new Card( "Six", 6 ,  "Clubs"    ),
+                new Card( "Six", 6 ,  "Spades"   ),
+                new Card( "Six", 6 ,  "Hearts"   ),
+                new Card( "Seven", 7 , "Diamonds"),
+                new Card( "Seven", 7 , "Clubs"   ),
+                new Card( "Seven", 7 , "Spades"  ),
+                new Card( "Seven", 7 , "Hearts"  ),
+                new Card( "Eight", 8 , "Diamonds"),
+                new Card( "Eight", 8 , "Clubs"   ),
+                new Card( "Eight", 8 , "Spades"  ),
+                new Card( "Eight", 8 , "Hearts"  ),
+                new Card( "Nine", 9 ,  "Diamonds"),
+                new Card( "Nine", 9 ,  "Clubs"   ),
+                new Card( "Nine", 9 ,  "Spades"  ),
+                new Card( "Nine", 9 ,  "Hearts"  ),
+                new Card( "Ten",  10 , "Diamonds"),
+                new Card( "Ten",  10 , "Clubs"   ),
+                new Card( "Ten",  10 , "Spades"  ),
+                new Card( "Ten",  10 , "Hearts"  ),
+                new Card( "Jack", 10, "Diamonds" ),
+                new Card( "Jack", 10, "Clubs"    ),
+                new Card( "Jack", 10, "Spades"   ),
+                new Card( "Jack", 10, "Hearts"   ),
+                new Card( "Queen", 10 ,"Diamonds"),
+                new Card( "Queen", 10 ,"Clubs"   ),
+                new Card( "Queen", 10 ,"Spades"  ),
+                new Card( "Queen", 10 ,"Hearts"  ),
+                new Card( "Ace", 11 ,  "Diamonds"),
+                new Card( "Ace", 11 ,  "Clubs"   ),
+                new Card( "Ace", 11 ,  "Spades"  ),
+                new Card( "Ace", 11 ,  "Hearts"  ),
+                new Card( "King", 10, "Diamonds" ),
+                new Card( "King", 10, "Clubs"    ),
+                new Card( "King", 10, "Spades"   ),
+                new Card( "King", 10, "Hearts"   ),
             };
 
 
@@ -110,7 +115,22 @@ namespace BlackjackUpdated
                 if (decision == "Y")
                 {
                     //Currently, just get a value between 16-21 for the dealer
-                   // dealerTotal = cardRandomizer.Next(15, 22);
+                    // dealerTotal = cardRandomizer.Next(15, 22);
+
+
+                    //get number of players
+                    try
+                    {
+                        Console.WriteLine("How many players?");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("hi");
+                    }
+
+                    int totalPlayers = Convert.ToInt32(Console.ReadLine());
+
+
 
                     //Deal first card to dealer
                     dealerTotal = DealCard().Value;
@@ -128,6 +148,12 @@ namespace BlackjackUpdated
                     //playerCards.Add(DealCard()); // when a list
                     //playerCards.First(); // Exception if empty
                     //FirstorDefault()
+
+                    for (int i = 0; i < totalPlayers; i++) {
+                        Card card1 = DealCard();
+                        Card card2 = DealCard();
+                        playersList.Add(new Player(card1, card2));
+                    }
 
 
                     playerCards[0] = DealCard();
@@ -191,10 +217,28 @@ namespace BlackjackUpdated
 
         static void Hit()
         {
+
             playerCardCount += 1;
             playerCards[playerCardCount] = DealCard();
             playerTotal += playerCards[playerCardCount].Value;
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
+
+
+            playersList[0].incrementPlayerCardCount();
+            //get current player's # of cards
+            int playerCardCounter = playersList[0].GetPlayerCardCount();
+            //Get current player's hand
+            Card[] playerHandList = playersList[0].GetPlayerCardsList();
+            //add new card to player's hand
+            playersList[0].GetPlayerCardsList()[playerCardCounter] = DealCard();
+            //Save new card to print its value and suit to terminal
+            Card currentPlayerCard = playersList[0].GetPlayerCardsList()[playerCardCounter];
+            //Update player's hand value
+            playersList[0].SetPlayerTotal(currentPlayerCard.Value);
+            //playerHandList[playerCardCounter] = DealCard();
+            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", currentPlayerCard.Name, playersList[0].GetPlayerTotal());
+
+
 
             //Is this true? I don't think it is.
             if (playerTotal.Equals(21) && playerCardCount == 2)
@@ -228,12 +272,12 @@ namespace BlackjackUpdated
         }
 
         //TODO: Move this class to it's own file.
-        private class Card
-        {
-            public int Value;
-            public string Name;
-            public string Suit;
-        }
+        //private class Card
+        //{
+        //    public int Value;
+        //    public string Name;
+        //    public string Suit;
+        //}
 
         
         
