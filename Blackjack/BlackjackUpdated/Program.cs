@@ -20,10 +20,10 @@ namespace BlackjackUpdated
 
         static Stack<Card> DeckOfCards = CreateDeckOfCards();
 
-
         static void Main(string[] args)
         {
             SetConsoleCtrlHandler(new HandlerRoutine(ConsoleCtrlCheck), true);
+            ShuffleDeck();
             while (playAgain.ToUpper() == "Y")
             {
                 //StartGame
@@ -153,8 +153,9 @@ namespace BlackjackUpdated
             while (dealerTotal < 17)
             {
                 dealerCardCount += 1;
-                dealerCards[dealerCardCount] = DealCard();
-                dealerTotal += dealerCards[dealerCardCount].Value;
+                var dealerCard = DealCard();
+                dealerCards.Add(dealerCard);
+                dealerTotal += dealerCard.Value;
             }
         }
 
@@ -171,6 +172,11 @@ namespace BlackjackUpdated
             return DeckOfCards.Pop();
         }
 
+        static void ShuffleDeck()
+        {
+            cardRandomizer = new Random();
+            DeckOfCards = new Stack<Card>(DeckOfCards.OrderBy(x => cardRandomizer.Next()));
+        }
 
         static Card GetCardValue(int cardValue)
         {
