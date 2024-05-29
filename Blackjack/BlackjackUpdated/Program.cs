@@ -124,10 +124,9 @@ namespace BlackjackUpdated
             playerTotal += playerCards[playerCardCount].Value;
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
-            //Is this true? I don't think it is.
             if (playerTotal.Equals(21))
             {
-                Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+                Console.WriteLine("You won! The dealer's Total was {0}. ", dealerTotal);
 
             }
             else if (playerTotal > 21)
@@ -150,13 +149,11 @@ namespace BlackjackUpdated
             }
         }
 
-        //TODO: Move this class to it's own file.
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
             return GetCardValue(cardValue);
         }
-
 
         static Card GetCardValue(int cardValue)
         {
