@@ -191,8 +191,9 @@ namespace BlackjackUpdated
                 Console.ReadLine();
                 Console.Clear();
                 dealerTotal = 0;
-                playerCardCount = 1;
+                playerCardCount = 0;
                 playerTotal = 0;
+                dealerCardCount = 0;
             }
             else if (playAgain.Equals("N"))
             {
