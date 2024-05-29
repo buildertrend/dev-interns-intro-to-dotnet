@@ -5,30 +5,34 @@ using static Blackjack.ConsoleControlHandler;
 using static Blackjack.Card;
 using System.Linq;
 using System.Text;
+using System;
+using System.Drawing;
+
 
 namespace BlackjackUpdated
 {
     class Program
     {
-        static readonly List<Card> gameDeck = BuildDeck();
-        static readonly List<Card> playerCards = new List<Card>();
-        static int playerTotal = 0;
-        static int playerCardCount = 1;
-        private static readonly List<Card> dealerCards = new List<Card>();
-        static int dealerTotal = 0;
-        static int dealerCardCount = 1;
+
+        static Random cardRandomizer = new Random();
+        static public  List<Card> playerCards = new List<Card>();
+        static public int playerTotal = 0;
+        static public int playerCardCount = 1;
+        static private  List<Card> dealerCards = new List<Card>();
+        static public int dealerTotal = 0;
+        static public int dealerCardCount = 1;
 
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
 
         static string playAgain = "Y";
-
         static void Main(string[] args)
         {
             SetConsoleCtrlHandler(new HandlerRoutine(ConsoleCtrlCheck), true);
             while (playAgain.ToUpper() == "Y")
             {
                 //StartGame
+                List<Card> gameDeck = BuildDeck();
                 try
                 {
                     Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
@@ -48,12 +52,12 @@ namespace BlackjackUpdated
                 if (decision == "Y")
                 {
                     //Currently, just get a value between 16-21 for the dealer
-                    dealerCards.Add(DealCard());
-                    dealerCards.Add(DealCard());
+                    dealerCards.Add(DealCard(gameDeck));
+                    dealerCards.Add(DealCard(gameDeck));
 
                     //dealerTotal = cardRandomizer.Next(15, 22);
-                    playerCards.Add(DealCard());
-                    playerCards.Add(DealCard());
+                    playerCards.Add(DealCard(gameDeck));
+                    playerCards.Add(DealCard(gameDeck));
 
                     playerTotal += playerCards[0].Value;
                     playerTotal += playerCards[1].Value;
@@ -86,7 +90,7 @@ namespace BlackjackUpdated
                 if (playerChoice.Equals("H"))
                 {
                     //hit will get them a card / check the total and ask for another hit
-                    Hit();
+                    Hit(gameDeck);
                 }
 
                 if (playerChoice.Equals("S"))
@@ -95,7 +99,7 @@ namespace BlackjackUpdated
                     {
                         dealerCardCount += 1;
                         //dealerCards[dealerCardCount] = DealCard();
-                        dealerCards.Add(DealCard());
+                        dealerCards.Add(DealCard(gameDeck));
                         dealerTotal += dealerCards[dealerCardCount].Value;
                         //Console.WriteLine("Dealer drew a(n) {0} ", dealerCards[dealerCardCount].Name);
                     } while (dealerTotal <= 17);
@@ -116,7 +120,7 @@ namespace BlackjackUpdated
                 }
 
                 /* END GAME LOOP */
-
+                gameDeck.Clear();
                 Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
                 PlayAgain();
             }
@@ -132,11 +136,11 @@ namespace BlackjackUpdated
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
-        static void Hit()
+        static void Hit(List<Card> gameDeck)
         {
             playerCardCount += 1;
             //playerCards[playerCardCount] = DealCard();
-            playerCards.Add(DealCard());
+            playerCards.Add(DealCard(gameDeck));
             playerTotal += playerCards[playerCardCount].Value;
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
@@ -161,7 +165,7 @@ namespace BlackjackUpdated
                 while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
                 if (playerChoice.ToUpper() == "H")
                 {
-                    Hit();
+                    Hit(gameDeck);
                 }
             }
         }
@@ -186,6 +190,8 @@ namespace BlackjackUpdated
                 dealerTotal = 0;
                 playerCardCount = 1;
                 playerTotal = 0;
+                playerCards.Clear();
+                dealerCards.Clear();
             }
             else if (playAgain.Equals("N"))
             {
@@ -286,12 +292,14 @@ namespace BlackjackUpdated
             }
             return spades;
         }
-        public static Card DealCard()
+        public static Card DealCard(List<Card> gameDeck)
         {
+            int cardCount = gameDeck.Count;
             Random cardRandomizer = new Random();
-            int cardValue = cardRandomizer.Next(1, gameDeck.Count);
+            int cardValue = cardRandomizer.Next(1, cardCount);
             Card newCard = gameDeck.ElementAt(cardValue);
             gameDeck.RemoveAt(cardValue);
+            //cardCount--;
             //playerTotal += cardValue;
             return newCard;
         }
