@@ -18,7 +18,18 @@ namespace BlackjackUpdated
         public void Display()
         {
             string pixelArt = GetPixelArt();
+            if (Suit == "Hearts" || Suit == "Diamonds")
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+
             Console.WriteLine(pixelArt);
+
+            Console.ResetColor();
         }
 
         private string GetPixelArt()

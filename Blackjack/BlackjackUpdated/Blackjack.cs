@@ -1,5 +1,4 @@
-﻿// Blackjack.cs
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace BlackjackUpdated
@@ -61,7 +60,8 @@ namespace BlackjackUpdated
         {
             for (int i = 0; i < numberOfPlayers; i++)
             {
-                players.Add(new Player($"Player {i + 1}"));
+                Console.WriteLine($"What is Player {i + 1}'s name?");
+                players.Add(new Player(Console.ReadLine()));
             }
         }
 
@@ -71,6 +71,9 @@ namespace BlackjackUpdated
             dealerCards.Add(DealCard());
             dealerTotal = AddPoints(dealerTotal, dealerCards[0].Value);
             dealerTotal = AddPoints(dealerTotal, dealerCards[1].Value);
+
+            Console.WriteLine("The Dealer's First Card is:");
+            dealerCards[0].Display();
 
             foreach (var player in players)
             {
