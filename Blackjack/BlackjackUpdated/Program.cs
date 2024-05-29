@@ -1,6 +1,8 @@
 ﻿using Blackjack;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -13,10 +15,10 @@ namespace BlackjackUpdated
         
         private List<Card> cards = new List<Card>();
         //static readonly List<Card> playerCards = new List<Card>();
-        static Dictionary<List<Card>, int> playersCardsDictionary = new Dictionary<List<Card>, int>();
+        static Dictionary<int, Player> playersDictionary = new Dictionary<int, Player>();
         //static int playerTotal = 0;
         static int playerCardCount = 1;
-        static Stack<Card> DeckOfCards = CreateDeckOfCards();
+        static CardDeck DeckOfCards = new CardDeck();
         private static List<Card> dealerCards = new List<Card>();
         static int dealerTotal = 0;
         static int dealerCardCount = 0;
@@ -50,16 +52,17 @@ namespace BlackjackUpdated
                     Console.WriteLine("How many players are at the table?");
                     var playersAsString = Console.ReadLine().ToUpper();
                     numberOfPlayers = int.Parse(playersAsString);
-                    //Currently, just get a value between 16-21 for the dealer
-                    ShuffleCards();
+                    DeckOfCards.ShuffleCards();
+
                     for (int i = 0; i < numberOfPlayers; i++)
                     {
                         List<Card> playerCards = new List<Card>();
-                        playerCards.Add(DealCard());
-                        playerCards.Add(DealCard());
+                        playerCards.Add(DeckOfCards.DealCard());
+                        playerCards.Add(DeckOfCards.DealCard());
                         int playerTotal = playerCards[0].Value;
                         playerTotal += playerCards[1].Value;
-                        playersCardsDictionary.Add(playerCards, playerTotal);
+                        var player = new Player(i + 1, playerCards, playerTotal);
+                        playersDictionary.Add(i + 1, player);
                     }
                
                     //dealerTotal = cardRandomizer.Next(15, 22);
@@ -81,19 +84,19 @@ namespace BlackjackUpdated
 
                 /* START GAME LOOP */
                 var playerNumber = 1;
-                foreach (var playerKey in playersCardsDictionary.Keys)
+                foreach (var playerKey in playersDictionary.Keys)
                 {
-                    dealerCards.Add(DealCard());
-                    dealerCards.Add(DealCard());
+                    dealerCards.Add(DeckOfCards.DealCard());
+                    dealerCards.Add(DeckOfCards.DealCard());
                     dealerCardCount = 2;
 
                     dealerTotal += dealerCards[0].Value;
                     dealerTotal += dealerCards[1].Value;
                     Console.WriteLine("The dealer's first card is : {0}", dealerCards[0].Name);
-                    var player = playersCardsDictionary.FirstOrDefault(player => player.Key == playerKey);
-                    Console.WriteLine("You were dealt the cards : {0} and {1} ", player.Key[0].Name, player.Key[1].Name);
-                    Console.WriteLine("Your player total is {0} ", player.Value);
-                    Console.WriteLine("Player {0}", playerNumber);
+                    var player = playersDictionary[playerKey];
+                    Console.WriteLine("You were dealt the cards : {0} and {1} ", player.PlayerCards[0].Name, player.PlayerCards[1].Name);
+                    Console.WriteLine("Your player total is {0} ", player.PlayerTotal);
+                    Console.WriteLine("Player {0}", player.PlayerID);
                     AskForHitOrStay(player);
                     playerNumber += 1;
                     dealerCards = new List<Card>();
@@ -107,9 +110,9 @@ namespace BlackjackUpdated
             }
         }
 
-        private static void AskForHitOrStay(KeyValuePair<List<Card>, int> player)
+        private static void AskForHitOrStay(Player player)
         {
-            var playerTotal = player.Value;
+            var playerTotal = player.PlayerTotal;
             do
             {
                 Console.WriteLine("Would you like to (H)it or (S)tay?");
@@ -117,7 +120,7 @@ namespace BlackjackUpdated
                 if (playerChoice.Equals("H"))
                 {
                     //hit will get them a card / check the total and ask for another hit
-                    Hit(player.Key);
+                    Hit(player.PlayerID);
                 }
             }
             while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
@@ -126,7 +129,7 @@ namespace BlackjackUpdated
             {
                 while (dealerTotal < 17 && dealerTotal != playerTotal)
                 {
-                    dealerCards.Add(DealCard());
+                    dealerCards.Add(DeckOfCards.DealCard());
                     dealerTotal += dealerCards[dealerCardCount].Value;
                     dealerCardCount += 1;
                 }
@@ -151,38 +154,17 @@ namespace BlackjackUpdated
             //TODO: Inform the player the value of the dealer's visible card.
         }*/
 
-        static void ShuffleCards() {
-            Random cardRandomizer = new Random();
-            DeckOfCards.OrderBy(x => cardRandomizer.Next());
-        }
-
-        static Stack<Card> CreateDeckOfCards() {
-            Stack<Card> deckOfCards = new Stack<Card>();
-            string[] suits = { "Spades", "Clubs", "Hearts", "Diamonds"};
-            foreach (var suit in suits) {
-                for (int i = 1; i <= 13; i++) {
-                    var card = GetCardValue(i);
-                    deckOfCards.Push(item: new Card()
-                    {
-                        Name = card.Name,
-                        Value = card.Value,
-                        Suit = suit
-                    });
-                }
-            }
-            return deckOfCards;
-        }
-
-        static void Hit(List<Card> playerKey)
+        static void Hit(int playerKey)
         {
-            var player = playersCardsDictionary.FirstOrDefault(player => player.Key == playerKey);
-            var playerCardCount = player.Key.Count;
-            player.Key.Add(DealCard());
+            var player = playersDictionary[playerKey];
+            var playerCardCount = player.PlayerCards.Count;
+            var newCard = DeckOfCards.DealCard();
+            player.PlayerCards.Add(newCard);
 
-            playersCardsDictionary[playerKey] += player.Key[playerCardCount].Value;
-            Console.WriteLine("Your card is a(n) {0} and your new Total is {1}. ", player.Key[playerCardCount].Name, playersCardsDictionary[playerKey]);
+            playersDictionary[playerKey].PlayerTotal += newCard.Value;
+            Console.WriteLine("Your card is a(n) {0} and your new Total is {1}. ", newCard.Name, playersDictionary[playerKey].PlayerTotal);
 
-            var playerTotal = playersCardsDictionary[playerKey];
+            var playerTotal = playersDictionary[playerKey].PlayerTotal;
             if (playerTotal > 21)
             {
                 Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
@@ -203,39 +185,6 @@ namespace BlackjackUpdated
             }
         }
 
-        static Card DealCard()
-        {
-            if (DeckOfCards.Count < 1)
-            {
-                DeckOfCards = CreateDeckOfCards();
-                ShuffleCards();
-            }
-            Card card = DeckOfCards.Pop();
-            /*playerTotal += cardValue;*/
-            return GetCardValue(card.Value);
-        }
-
-
-        static Card GetCardValue(int cardValue)
-        {
-            return cardValue switch
-            {
-                1 => new Card() { Name = "Two", Value = 2 },
-                2 => new Card() { Name = "Three", Value = 3 },
-                3 => new Card() { Name = "Four", Value = 4 },
-                4 => new Card() { Name = "Five", Value = 5 },
-                5 => new Card() { Name = "Six", Value = 6 },
-                6 => new Card() { Name = "Seven", Value = 7 },
-                7 => new Card() { Name = "Eight", Value = 8 },
-                8 => new Card() { Name = "Nine", Value = 9 },
-                9 => new Card() { Name = "Ten", Value = 10 },
-                10 => new Card() { Name = "Jack", Value = 10 },
-                11 => new Card() { Name = "Queen", Value = 10 },
-                12 => new Card() { Name = "King", Value = 10 },
-                13 => new Card() { Name = "Ace", Value = 11 },
-                _ => new Card() { Name = "Two", Value = 2 },
-            };
-        }
 
         static void PlayAgain()
         {
@@ -253,7 +202,7 @@ namespace BlackjackUpdated
                 Console.Clear();
                 dealerTotal = 0;
                 playerCardCount = 1;
-                playersCardsDictionary = new Dictionary<List<Card>, int>();
+                playersDictionary = new Dictionary<int, Player>();
             }
             else if (playAgain.Equals("N"))
             {
