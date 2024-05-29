@@ -139,6 +139,16 @@ namespace BlackjackUpdated
                 }
                 else if (playerTotal <= dealerTotal)
                 {
+                    Console.WriteLine(@"
+                         __     __             _                       
+                         \ \   / /            | |                      
+                          \ \_/ /___   _   _  | |      ___   ___   ___ 
+                           \   // _ \ | | | | | |     / _ \ / __| / _ \
+                            | || (_) || |_| | | |____| (_) |\__ \|  __/
+                            |_| \___/  \__,_| |______|\___/ |___/ \___|
+                                               
+                                               
+                        ");
                     Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
                 }
             }
@@ -147,12 +157,6 @@ namespace BlackjackUpdated
         /// <summary>
         /// Displays a friendly message to the user and shows their current hand.
         /// </summary>
-        /*private static void DisplayWelcomeMessage()
-        {
-            Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
-            Console.WriteLine("Your player total is {0} ", playerTotal);
-            //TODO: Inform the player the value of the dealer's visible card.
-        }*/
 
         static void Hit(int playerKey)
         {
@@ -167,6 +171,16 @@ namespace BlackjackUpdated
             var playerTotal = playersDictionary[playerKey].PlayerTotal;
             if (playerTotal > 21)
             {
+                Console.WriteLine(@"
+                         __     __             _                       
+                         \ \   / /            | |                      
+                          \ \_/ /___   _   _  | |      ___   ___   ___ 
+                           \   // _ \ | | | | | |     / _ \ / __| / _ \
+                            | || (_) || |_| | | |____| (_) |\__ \|  __/
+                            |_| \___/  \__,_| |______|\___/ |___/ \___|
+                                               
+                                               
+                        ");
                 Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
 
             }
