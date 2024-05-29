@@ -11,7 +11,7 @@ namespace BlackjackUpdated
 
         static readonly Card[] playerCards = new Card[11];
         static int playerTotal = 0;
-        static int playerCardCount = 1;
+        static int playerCardCount = 0;
         private static readonly Card[] dealerCards = new Card[11];
         static int dealerTotal = 0;
         static int dealerCardCount = 0;
@@ -143,7 +143,6 @@ namespace BlackjackUpdated
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
             return GetCardValue(cardValue);
         }
 
