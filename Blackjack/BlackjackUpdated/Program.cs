@@ -5,7 +5,6 @@ namespace BlackjackUpdated
 {
     class Program
     {
-        static Random cardRandomizer = new Random();
         static readonly List<Card> deck = new List<Card>();
         static readonly List<Card> playerCards = new List<Card>();
         static int playerTotal = 0;
@@ -156,6 +155,7 @@ namespace BlackjackUpdated
 
         static Card DealCard()
         {
+            Random cardRandomizer = new Random();
             int cardValue = cardRandomizer.Next(deck.Count);
             Card dealtCard = deck[cardValue];
             deck.RemoveAt(cardValue);
