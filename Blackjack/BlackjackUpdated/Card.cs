@@ -6,5 +6,6 @@ namespace Blackjack {
     {
         public string Name;
         public string Suit;
+        public bool Removed;
     }
 }

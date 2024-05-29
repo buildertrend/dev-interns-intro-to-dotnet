@@ -12,14 +12,13 @@ namespace BlackjackUpdated
 
         static readonly List<Card> playerCards = new List<Card>();
         static int playerTotal = 0;
-        static int playerCardCount = 1;
         private static readonly List<Card> dealerCards = new List<Card>();
         static int dealerTotal = 0;
         static int dealerCardCount = 0;
 
         static List<string> suits = new List<string> { "Diamond", "Spade", "Heart", "Club" };
         static List<string> cardNames = new List<string> { "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King", "Ace" };
-        List<Card> deck = new List<Card>();
+        static List<Card> deck = new List<Card>();
 
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
@@ -29,6 +28,8 @@ namespace BlackjackUpdated
         static void Main(string[] args)
         {
             SetConsoleCtrlHandler(new HandlerRoutine(ConsoleCtrlCheck), true);
+            CreateDeck();
+
             while (playAgain.ToUpper() == "Y")
             {
                 //StartGame
@@ -55,8 +56,10 @@ namespace BlackjackUpdated
                     // playerCards[0] = DealCard();
                     // playerCards[1] = DealCard();
 
-                    playerTotal += playerCards[0].Value;
-                    playerTotal += playerCards[1].Value;
+                    int pCard1Num = NameToCardNum(playerCards[0].Name);
+                    playerTotal += GetCardValue(pCard1Num);
+                    int pCard2Num = NameToCardNum(playerCards[1].Name);
+                    playerTotal += GetCardValue(pCard2Num);
 
 
                     dealerCardCount = 2;
@@ -67,8 +70,10 @@ namespace BlackjackUpdated
                     dealerCards.Add(DealCard());
                     dealerCards.Add(DealCard());
 
-                    dealerTotal += dealerCards[0].Value;
-                    dealerTotal += dealerCards[1].Value;
+                    int dCard1Num = NameToCardNum(dealerCards[0].Name);
+                    dealerTotal += GetCardValue(dCard1Num);
+                    int dCard2Num = NameToCardNum(dealerCards[0].Name);
+                    dealerTotal += GetCardValue(dCard2Num);
 
                     DisplayWelcomeMessage();
                 }
@@ -123,16 +128,20 @@ namespace BlackjackUpdated
 
         static void Hit()
         {
-            playerCardCount += 1;
-            playerCards[playerCardCount] = DealCard();
-            playerTotal += playerCards[playerCardCount].Value;
-            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
+            Card newCard = DealCard();
+            int dealedCardNum = NameToCardNum(newCard.Name);
+            playerTotal += GetCardValue(dealedCardNum);
+            playerCards.Add(newCard);
+
 
             while (dealerTotal < 17)
             {
                 dealerCardCount += 1;
-                dealerCards[dealerCardCount] = DealCard();
-                dealerTotal += dealerCards[dealerCardCount].Value;
+
+                newCard = DealCard();
+                int newCardNum = NameToCardNum(newCard.Name);
+                dealerTotal += GetCardValue(newCardNum);
+                dealerCards.Add(newCard);
             }
 
             //Is this true? I don't think it is.
@@ -180,7 +189,7 @@ namespace BlackjackUpdated
             {
                 for (int j = 0; j < 13; j++)
                 {
-                    deck.Add(new Card { Name = cardNames[j], Suit = suits[i] });
+                    deck.Add(new Card() { Name = cardNames[j], Suit = suits[i], Removed = false });
                 }
             }
 
@@ -192,28 +201,50 @@ namespace BlackjackUpdated
         {
             int cardNum = cardRandomizer.Next(1, 53);
             // playerTotal += cardValue;
-            return GetCardValue(cardValue);
+            deck[cardNum].Removed = true;
+            return deck[cardNum];
         }
 
 
-        static int GetCardValue(int cardValue)
+        static int GetCardValue(int cardNum)
         {
-            return cardValue switch
+            return cardNum switch
             {
-                1 => 2,
-                2 => 3,
-                3 => 4,
-                4 => 5,
-                5 => 6,
-                6 => 7,
-                7 => 8,
-                8 => 9,
-                9 => 10,
+                1 => 11,
+                2 => 2,
+                3 => 3,
+                4 => 4,
+                5 => 5,
+                6 => 6,
+                7 => 7,
+                8 => 8,
+                9 => 9,
                 10 => 10,
                 11 => 10,
                 12 => 10,
-                13 => 11,
+                13 => 10,
                 _ => 2,
+            };
+        }
+
+        static int NameToCardNum(string name)
+        {
+            return name switch
+            {
+                "Two" => 2,
+                "Three" => 3,
+                "Four" => 4,
+                "Five" => 5,
+                "Six" => 6,
+                "Seven" => 7,
+                "Eight" => 8,
+                "Nine" => 9,
+                "Ten" => 10,
+                "Jack" => 11,
+                "Queen" => 12,
+                "King" => 13,
+                "Ace" => 1,
+                _ => 0
             };
         }
 
@@ -232,7 +263,6 @@ namespace BlackjackUpdated
                 Console.ReadLine();
                 Console.Clear();
                 dealerTotal = 0;
-                playerCardCount = 1;
                 playerTotal = 0;
             }
             else if (playAgain.Equals("N"))
