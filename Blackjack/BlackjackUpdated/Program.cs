@@ -29,7 +29,7 @@ namespace BlackjackUpdated
                 //StartGame
                 try
                 {
-                    Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)esss (N)o");
+                    Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
                 }
                 catch (Exception ex)
                 {
@@ -45,8 +45,8 @@ namespace BlackjackUpdated
                     playerCards[0] = DealCard();
                     playerCards[1] = DealCard();
 
-                    playerTotal += playerCards[0].Value;
-                    playerTotal += playerCards[1].Value;
+                    // playerTotal += playerCards[0].Value;
+                    // playerTotal += playerCards[1].Value;
 
 
                     //TODO: The dealer is dealt one card face up, one card face down.
@@ -54,6 +54,7 @@ namespace BlackjackUpdated
                 }
                 else
                 {
+                    Console.WriteLine("Exiting due to invaid keypress...");
                     Environment.Exit(0);
                 }
 
