@@ -14,10 +14,11 @@ namespace BlackjackUpdated
 
         static readonly List<Card> playerCards = new List<Card>();
         static int playerTotal = 0;
-        static int playerCardCount = 1;
         private static readonly Card[] dealerCards = new Card[11];
         static int dealerTotal = 0;
         static int dealerCardCount = 0;
+
+        static int playerCount = 0;
         
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
@@ -32,6 +33,7 @@ namespace BlackjackUpdated
                 //StartGame
                 try
                 {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)esss (N)o");
                 }
                 catch (Exception ex)
@@ -43,27 +45,45 @@ namespace BlackjackUpdated
 
                 if (decision == "Y")
                 {
-                    deck = buildDeck();
-                    //dealer picks 2 cards
-                    dealerCards[0] = DealCard();
-                    dealerCards[1] = DealCard();
-
-                    dealerTotal += dealerCards[0].Value;
-                    dealerTotal += dealerCards[1].Value;
-
-                    dealerCardCount += 1;
-                    dealerCardCount += 1;
-
-                    //player picks 2 cards
-                    playerCards.Add(DealCard());
-                    playerTotal += playerCards[playerCards.Count - 1].Value;
-                    playerCards.Add(DealCard());
-                    playerTotal += playerCards[playerCards.Count - 1].Value;
+                    try
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("How many players?");
+                        playerCount =  int.Parse( Console.ReadLine()) ;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("hi");
+                    }
+     
 
 
+                    if (playerCount != 0)
+                    {
+                        
 
-                    //TODO: The dealer is dealt one card face up, one card face down.
-                    DisplayWelcomeMessage();
+                        deck = buildDeck();
+                        //dealer picks 2 cards
+                        dealerCards[0] = DealCard();
+                        dealerCards[1] = DealCard();
+
+                        dealerTotal += dealerCards[0].Value;
+                        dealerTotal += dealerCards[1].Value;
+
+                        dealerCardCount += 1;
+                        dealerCardCount += 1;
+
+                        //player picks 2 cards
+                        playerCards.Add(DealCard());
+                        playerTotal += playerCards[playerCards.Count - 1].Value;
+                        playerCards.Add(DealCard());
+                        playerTotal += playerCards[playerCards.Count - 1].Value;
+
+
+
+                        //TODO: The dealer is dealt one card face up, one card face down.
+                        DisplayWelcomeMessage();
+                    }
                 }
                 else
                 {
@@ -86,6 +106,10 @@ namespace BlackjackUpdated
 
                 if (playerChoice.Equals("S"))
                 {
+                    while (dealerTotal < 16)
+                    {
+                        addDealerCard();
+                    }
                     if (playerTotal > dealerTotal && playerTotal <= 21)
                     {
                         Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
@@ -94,6 +118,7 @@ namespace BlackjackUpdated
                     {
                         Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
                     }
+
                 }
 
                 /* END GAME LOOP */
@@ -117,11 +142,16 @@ namespace BlackjackUpdated
 
         static void addDealerCard()
         {
+            
             dealerCards[dealerCardCount] = DealCard();
             dealerTotal += dealerCards[dealerCardCount].Value;
             dealerCardCount += 1;
 
-
+            if(dealerTotal >= 21)
+            {
+                dealerTotal = dealerTotal - dealerCards[dealerCardCount - 1].Value;
+                dealerCards[dealerCardCount] = null;
+            }
         }
 
         static void Hit()
@@ -130,7 +160,7 @@ namespace BlackjackUpdated
             playerTotal += playerCards[playerCards.Count - 1].Value;
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCards.Count - 1].Name, playerTotal);
 
-            if(dealerTotal < 16)
+            while(dealerTotal < 16)
             {
                 addDealerCard();
             }
@@ -244,7 +274,6 @@ namespace BlackjackUpdated
                 Console.ReadLine();
                 Console.Clear();
                 dealerTotal = 0;
-                playerCardCount = 1;
                 playerTotal = 0;
             }
             else if (playAgain.Equals("N"))
