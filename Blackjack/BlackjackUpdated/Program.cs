@@ -20,6 +20,8 @@ namespace BlackjackUpdated
         static string playerChoice = "";
 
         static string playAgain = "Y";
+        // variable keeping track if they got a black jack
+        static bool blackJack = false;
 
         static void Main(string[] args)
         {
@@ -56,6 +58,10 @@ namespace BlackjackUpdated
                     dealerTotal += dealerCards[0].Value;
                     dealerTotal += dealerCards[1].Value;
                     DisplayWelcomeMessage();
+                    if (playerTotal.Equals(21))
+                    {
+                        blackJack = true;
+                    }
                 }
                 else
                 {
@@ -63,43 +69,49 @@ namespace BlackjackUpdated
                 }
 
                 /* START GAME LOOP */
-                do
+                if (blackJack)
                 {
-                    Console.WriteLine("Would you like to (H)it or (S)tay?");
-                    playerChoice = Console.ReadLine().ToUpper();
-                }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
-
-                if (playerChoice.Equals("H"))
-                {
-                    //hit will get them a card / check the total and ask for another hit
-                    Hit();
-                }
-
-                if (playerChoice.Equals("S"))
-                {
-                    if (playerTotal > dealerTotal && playerTotal <= 21)
+                    Console.WriteLine("Congrats you got a BlackJack! You won the game!");
+                } else {
+                    do
                     {
-                        do
+                        Console.WriteLine("Would you like to (H)it or (S)tay?");
+                        playerChoice = Console.ReadLine().ToUpper();
+                    }
+                    while (!playerChoice.Equals("H") && !playerChoice.Equals("S") && !blackJack);
+
+                    if (playerChoice.Equals("H"))
+                    {
+                        //hit will get them a card / check the total and ask for another hit
+                        Hit();
+                    }
+
+                    if (playerChoice.Equals("S"))
+                    {
+                        if (playerTotal > dealerTotal && playerTotal <= 21)
                         {
-                            dealerCards[dealerCardCount] = DealCard();
-                            dealerTotal += dealerCards[dealerCardCount].Value;
-                            dealerCardCount++;
+                            do
+                            {
+                                dealerCards[dealerCardCount] = DealCard();
+                                dealerTotal += dealerCards[dealerCardCount].Value;
+                                dealerCardCount++;
+                            }
+                            while (dealerTotal < playerTotal);
+                            if (dealerTotal.Equals(playerTotal))
+                            {
+                                Console.WriteLine("Sorry, you lost because the dealer tied with you! The dealer's total was {0}", dealerTotal);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                            }
                         }
-                        while (dealerTotal < playerTotal);
-                        if (dealerTotal.Equals(playerTotal)) {
-                           Console.WriteLine("Sorry, you lost because the dealer tied with you! The dealer's total was {0}", dealerTotal);
-                        } else
+                        else if (playerTotal < dealerTotal)
                         {
-                            Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                            Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
                         }
                     }
-                    else if (playerTotal < dealerTotal)
-                    {
-                        Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
-                    }
                 }
-
                 /* END GAME LOOP */
                 Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
                 PlayAgain();
@@ -123,18 +135,12 @@ namespace BlackjackUpdated
             playerCards[playerCardCount] = DealCard();
             playerTotal += playerCards[playerCardCount].Value;
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
-
-            if (playerTotal.Equals(21))
-            {
-                Console.WriteLine("You won! The dealer's Total was {0}. ", dealerTotal);
-
-            }
-            else if (playerTotal > 21)
+            if (playerTotal > 21)
             {
                 Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
 
             }
-            else if (playerTotal < 21)
+            else if (playerTotal <= 21)
             {
                 do
                 {
@@ -194,6 +200,7 @@ namespace BlackjackUpdated
                 playerCardCount = 0;
                 playerTotal = 0;
                 dealerCardCount = 0;
+                blackJack = false;
             }
             else if (playAgain.Equals("N"))
             {
