@@ -1,6 +1,7 @@
 ﻿using Blackjack;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 using static Blackjack.ConsoleControlHandler;
 
 namespace BlackjackUpdated
@@ -9,12 +10,16 @@ namespace BlackjackUpdated
     {
         static Random cardRandomizer = new Random();
 
-        static readonly Card[] playerCards = new Card[11];
+        static readonly List<Card> playerCards = new List<Card>();
         static int playerTotal = 0;
         static int playerCardCount = 1;
-        private static readonly Card[] dealerCards = new Card[11];
+        private static readonly List<Card> dealerCards = new List<Card>();
         static int dealerTotal = 0;
         static int dealerCardCount = 0;
+
+        static List<string> suits = new List<string> { "Diamond", "Spade", "Heart", "Club" };
+        static List<string> cardNames = new List<string> { "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King", "Ace" };
+        List<Card> deck = new List<Card>();
 
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
@@ -35,21 +40,36 @@ namespace BlackjackUpdated
                 {
                     Console.WriteLine("hi");
                 }
-                
+
                 var decision = Console.ReadLine().ToUpper();
 
                 if (decision == "Y")
                 {
-                    //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(15, 22);
-                    playerCards[0] = DealCard();
-                    playerCards[1] = DealCard();
+                    // With line below, just get a value between 16-21 for the dealer
+                    // dealerTotal = cardRandomizer.Next(15, 22);
+                    playerCards.Add(DealCard());
+                    playerCards.Add(DealCard());
+
+                    playerCards.FirstOrDefault();
+
+                    // playerCards[0] = DealCard();
+                    // playerCards[1] = DealCard();
 
                     playerTotal += playerCards[0].Value;
                     playerTotal += playerCards[1].Value;
 
 
-                    //TODO: The dealer is dealt one card face up, one card face down.
+                    dealerCardCount = 2;
+
+                    // The dealer is dealt one card face up, one card face down.
+                    // dealerCards[0] = DealCard();
+                    // dealerCards[1] = DealCard();
+                    dealerCards.Add(DealCard());
+                    dealerCards.Add(DealCard());
+
+                    dealerTotal += dealerCards[0].Value;
+                    dealerTotal += dealerCards[1].Value;
+
                     DisplayWelcomeMessage();
                 }
                 else
@@ -63,7 +83,7 @@ namespace BlackjackUpdated
                     Console.WriteLine("Would you like to (H)it or (S)tay?");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("H"));
+                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
 
                 if (playerChoice.Equals("H"))
                 {
@@ -97,7 +117,8 @@ namespace BlackjackUpdated
         {
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
-            //TODO: Inform the player the value of the dealer's visible card.
+            // Inform the player the value of the dealer's visible card.
+            Console.WriteLine("Dealer was dealt two cards, one of them being : {0} ", dealerCards[1].Name);
         }
 
         static void Hit()
@@ -106,6 +127,13 @@ namespace BlackjackUpdated
             playerCards[playerCardCount] = DealCard();
             playerTotal += playerCards[playerCardCount].Value;
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
+
+            while (dealerTotal < 17)
+            {
+                dealerCardCount += 1;
+                dealerCards[dealerCardCount] = DealCard();
+                dealerTotal += dealerCards[dealerCardCount].Value;
+            }
 
             //Is this true? I don't think it is.
             if (playerTotal.Equals(21))
@@ -133,39 +161,59 @@ namespace BlackjackUpdated
             }
         }
 
-        //TODO: Move this class to it's own file.
-        private class Card
+        /*         private List<Cards> cards = new List<Cards>()
+                {
+                    public string Name;
+                    public int Value;
+                } */
+
+        //Move this class to its own file.
+        /*         private class Card
+                {
+                    public int Value;
+                    public string Name;
+                } */
+
+        static void CreateDeck()
         {
-            public int Value;
-            public string Name;
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 13; j++)
+                {
+                    deck.Add(new Card { Name = cardNames[j], Suit = suits[i] });
+                }
+            }
+
+
+
         }
 
         static Card DealCard()
         {
-            int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
+            int cardNum = cardRandomizer.Next(1, 53);
+            // playerTotal += cardValue;
             return GetCardValue(cardValue);
         }
 
 
-        static Card GetCardValue(int cardValue)
+        static int GetCardValue(int cardValue)
         {
             return cardValue switch
             {
-                1 => new Card() { Name = "Two", Value = 2 },
-                2 => new Card() { Name = "Three", Value = 3 },
-                3 => new Card() { Name = "Four", Value = 4 },
-                4 => new Card() { Name = "Five", Value = 5 },
-                5 => new Card() { Name = "Six", Value = 6 },
-                6 => new Card() { Name = "Seven", Value = 7 },
-                7 => new Card() { Name = "Eight", Value = 8 },
-                8 => new Card() { Name = "Nine", Value = 9 },
-                9 => new Card() { Name = "Ten", Value = 10 },
-                10 => new Card() { Name = "Jack", Value = 10 },
-                11 => new Card() { Name = "Queen", Value = 10 },
-                12 => new Card() { Name = "King", Value = 10 },
-                13 => new Card() { Name = "Ace", Value = 11 },
-                _ => new Card() { Name = "Two", Value = 2 },
+                1 => 2,
+                2 => 3,
+                3 => 4,
+                4 => 5,
+                5 => 6,
+                6 => 7,
+                7 => 8,
+                8 => 9,
+                9 => 10,
+                10 => 10,
+                11 => 10,
+                12 => 10,
+                13 => 11,
+                _ => 2,
             };
         }
 
