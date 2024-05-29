@@ -9,12 +9,10 @@ namespace BlackjackUpdated
     {
         static Random cardRandomizer = new Random();
 
-        static readonly Card[] playerCards = new Card[11];
+        static readonly List<Card> playerCards = new List<Card>();
         static int playerTotal = 0;
-        static int playerCardCount = 0;
-        private static readonly Card[] dealerCards = new Card[11];
+        private static List<Card> dealerCards = new List<Card>();
         static int dealerTotal = 0;
-        static int dealerCardCount = 0;
 
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
@@ -44,19 +42,13 @@ namespace BlackjackUpdated
                 if (decision == "Y")
                 {
                     //Currently, just get a value between 16-21 for the dealer
-                    dealerCards[dealerCardCount] = DealCard();
-                    dealerCardCount++;
-                    dealerCards[dealerCardCount] = DealCard();
-                    dealerCardCount++;
-                    playerCards[playerCardCount] = DealCard();
-                    playerCardCount++;
-                    playerCards[playerCardCount] = DealCard();
-                    playerCardCount++;
+                    dealerCards.Add(DealCard());
+                    dealerCards.Add(DealCard());
+                    playerCards.Add(DealCard());
+                    playerCards.Add(DealCard());
 
-                    playerTotal += playerCards[0].Value;
-                    playerTotal += playerCards[1].Value;
-                    dealerTotal += dealerCards[0].Value;
-                    dealerTotal += dealerCards[1].Value;
+                    playerTotal = playerCards.Sum(x => x.Value);
+                    dealerTotal = dealerCards.Sum(x => x.Value);
                     DisplayWelcomeMessage();
                     if (playerTotal.Equals(21))
                     {
@@ -92,9 +84,9 @@ namespace BlackjackUpdated
                         {
                             do
                             {
-                                dealerCards[dealerCardCount] = DealCard();
-                                dealerTotal += dealerCards[dealerCardCount].Value;
-                                dealerCardCount++;
+                                var newCard = DealCard();
+                                dealerCards.Add(newCard);
+                                dealerTotal += newCard.Value;
                             }
                             while (dealerTotal < playerTotal);
                             if (dealerTotal.Equals(playerTotal))
@@ -131,10 +123,10 @@ namespace BlackjackUpdated
 
         static void Hit()
         {
-            playerCardCount += 1;
-            playerCards[playerCardCount] = DealCard();
-            playerTotal += playerCards[playerCardCount].Value;
-            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
+            var newCard = DealCard();
+            playerCards.Add(newCard);
+            playerTotal += newCard.Value;
+            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", newCard.Name, playerTotal);
             if (playerTotal > 21)
             {
                 Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
@@ -197,9 +189,9 @@ namespace BlackjackUpdated
                 Console.ReadLine();
                 Console.Clear();
                 dealerTotal = 0;
-                playerCardCount = 0;
+                playerCards.Clear();
+                dealerCards.Clear();
                 playerTotal = 0;
-                dealerCardCount = 0;
                 blackJack = false;
             }
             else if (playAgain.Equals("N"))
