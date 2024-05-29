@@ -16,7 +16,7 @@ namespace BlackjackUpdated
         static int playerCardCount = 1;
         private static readonly Card[] dealerCards = new Card[11];
         static int dealerTotal = 0;
-        static int dealerCardCount = 0;
+        static int dealerCardCount = 1;
 
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
@@ -29,6 +29,7 @@ namespace BlackjackUpdated
             while (playAgain.ToUpper() == "Y")
             {
                 //StartGame
+                playing = true;
                 try
                 {
                     Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
@@ -62,7 +63,7 @@ namespace BlackjackUpdated
                     if (playerTotal.Equals(21))
                     {
                         Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
-
+                        playing = false;
                     }
                 }
                 else
@@ -72,7 +73,6 @@ namespace BlackjackUpdated
                 }
 
                 /* START GAME LOOP */
-
                 while (playing)
                 {
                     do
@@ -84,22 +84,39 @@ namespace BlackjackUpdated
 
                     if (playerChoice.Equals("H"))
                     {
-                        //hit will get them a card / check the total and ask for another hit
                         Hit();
                     }
 
-                    // TODO: If hit then stay, doesn't show ending message.
                     if (playerChoice.Equals("S"))
                     {
                         if (playerTotal > dealerTotal && playerTotal <= 21)
                         {
                             Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
                         }
-                        else if (playerTotal < dealerTotal)
+                        else if (playerTotal <= dealerTotal)
                         {
                             Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
                         }
                         playing = false;
+                    }
+
+                    if (playing)
+                    {
+                        if (dealerTotal < 16)
+                        {
+                            // Dealer hits
+                            Console.WriteLine("Dealer's score is < 16 - Hitting...");
+                            dealerCardCount++;
+                            dealerCards[dealerCardCount] = Card.DealCard();
+                            dealerTotal += dealerCards[dealerCardCount].Value;
+                            Console.WriteLine("Dealer received a(n): {0}", dealerCards[dealerCardCount].Name);
+                            // Remove the hidden card from the known value.
+                            Console.WriteLine("Dealer's current (known) score: {0}", dealerTotal - dealerCards[1].Value);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Dealer has 16 or more points. Staying...");
+                        }
                     }
                     /* END GAME LOOP */
                 }
@@ -116,10 +133,9 @@ namespace BlackjackUpdated
         {
             Console.WriteLine("The dealer shows their first card, a(n) {0}", dealerCards[0].Name);
             Console.WriteLine("Their current known total is {0}", dealerCards[0].Value);
-
+            Console.WriteLine();
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
-            //TODO: Inform the player the value of the dealer's visible card.
         }
 
         static void Hit()
@@ -132,21 +148,8 @@ namespace BlackjackUpdated
             if (playerTotal > 21)
             {
                 Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
-
+                playing = false;
             }
-            // else if (playerTotal < 21)
-            // {
-                // do
-                // {
-                //     Console.WriteLine("Would you like to hit or stay? h for hit s for stay");
-                //     playerChoice = Console.ReadLine().ToUpper();
-                // }
-                // while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
-                // if (playerChoice.ToUpper() == "H")
-                // {
-                //     Hit();
-                // }
-            // }
         }
 
         static void PlayAgain()

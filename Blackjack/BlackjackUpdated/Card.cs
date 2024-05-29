@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace BlackjackUpdated
 {
-
-    //TODO: Move this class to it's own file.
     internal class Card
     {
         static Random cardRandomizer = new Random();
