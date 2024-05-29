@@ -20,6 +20,8 @@ namespace BlackjackUpdated
         static string playerChoice = "";
 
         static string playAgain = "Y";
+
+        private static readonly List<Card> deck = Card.CreateDeck();
         
 
         static void Main(string[] args)
@@ -31,8 +33,6 @@ namespace BlackjackUpdated
                 try
                 {
                     Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)esss (N)o");
-                    Console.WriteLine("How many players are playing?");
-                    playerChoice = Console.ReadLine().ToUpper();
 
                 }
                 catch (Exception ex)
@@ -46,16 +46,16 @@ namespace BlackjackUpdated
                 {
                     //Currently, just get a value between 16-21 for the dealer
                     //dealerTotal = cardRandomizer.Next(15, 22);
-                    playerCards[0] = DealCard();
-                    playerCards[1] = DealCard();
+                    playerCards[0] = Card.DealCard(deck);
+                    playerCards[1] = Card.DealCard(deck);
 
                     playerTotal += playerCards[0].Value;
                     playerTotal += playerCards[1].Value;
 
 
                     //TODO: The dealer is dealt one card face up, one card face down.
-                    dealerCards[0] = DealCard();
-                    dealerCards[1] = DealCard();
+                    dealerCards[0] = Card.DealCard(deck);
+                    dealerCards[1] = Card.DealCard(deck);
 
                     dealerTotal += dealerCards[0].Value;
                     dealerTotal += dealerCards[1].Value;
@@ -95,7 +95,7 @@ namespace BlackjackUpdated
                     else if (dealerTotal < 17)
                     {
                         dealerCardCount += 1;
-                        dealerCards[dealerCardCount] = DealCard();
+                        dealerCards[dealerCardCount] = Card.DealCard(deck);
                         dealerTotal += dealerCards[dealerCardCount].Value;
                         Console.WriteLine("This is the Dealer's total {0}", dealerTotal);
 
@@ -123,7 +123,7 @@ namespace BlackjackUpdated
         static void Hit()
         {
             playerCardCount += 1;
-            playerCards[playerCardCount] = DealCard();
+            playerCards[playerCardCount] = Card.DealCard(deck);
             playerTotal += playerCards[playerCardCount].Value;
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
