@@ -9,13 +9,16 @@ namespace BlackjackUpdated
     {
         static Random cardRandomizer = new Random();
 
-        static readonly Card[] playerCards = new Card[11];
+
+        static List<Card> deck;
+
+        static readonly List<Card> playerCards = new List<Card>();
         static int playerTotal = 0;
         static int playerCardCount = 1;
         private static readonly Card[] dealerCards = new Card[11];
         static int dealerTotal = 0;
         static int dealerCardCount = 0;
-
+        
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
 
@@ -40,13 +43,23 @@ namespace BlackjackUpdated
 
                 if (decision == "Y")
                 {
-                    //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(15, 22);
-                    playerCards[0] = DealCard();
-                    playerCards[1] = DealCard();
+                    deck = buildDeck();
+                    //dealer picks 2 cards
+                    dealerCards[0] = DealCard();
+                    dealerCards[1] = DealCard();
 
-                    playerTotal += playerCards[0].Value;
-                    playerTotal += playerCards[1].Value;
+                    dealerTotal += dealerCards[0].Value;
+                    dealerTotal += dealerCards[1].Value;
+
+                    dealerCardCount += 1;
+                    dealerCardCount += 1;
+
+                    //player picks 2 cards
+                    playerCards.Add(DealCard());
+                    playerTotal += playerCards[playerCards.Count - 1].Value;
+                    playerCards.Add(DealCard());
+                    playerTotal += playerCards[playerCards.Count - 1].Value;
+
 
 
                     //TODO: The dealer is dealt one card face up, one card face down.
@@ -63,7 +76,7 @@ namespace BlackjackUpdated
                     Console.WriteLine("Would you like to (H)it or (S)tay?");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("H"));
+                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
 
                 if (playerChoice.Equals("H"))
                 {
@@ -98,22 +111,31 @@ namespace BlackjackUpdated
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
             //TODO: Inform the player the value of the dealer's visible card.
+            Console.WriteLine("Dealer was dealt: {0} ", dealerCards[0].Name);
+
+        }
+
+        static void addDealerCard()
+        {
+            dealerCards[dealerCardCount] = DealCard();
+            dealerTotal += dealerCards[dealerCardCount].Value;
+            dealerCardCount += 1;
+
+
         }
 
         static void Hit()
         {
-            playerCardCount += 1;
-            playerCards[playerCardCount] = DealCard();
-            playerTotal += playerCards[playerCardCount].Value;
-            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
+            playerCards.Add(DealCard());
+            playerTotal += playerCards[playerCards.Count - 1].Value;
+            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCards.Count - 1].Name, playerTotal);
 
-            //Is this true? I don't think it is.
-            if (playerTotal.Equals(21))
+            if(dealerTotal < 16)
             {
-                Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
-
+                addDealerCard();
             }
-            else if (playerTotal > 21)
+
+            if (playerTotal > 21)
             {
                 Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
 
@@ -133,41 +155,79 @@ namespace BlackjackUpdated
             }
         }
 
-        //TODO: Move this class to it's own file.
-        private class Card
-        {
-            public int Value;
-            public string Name;
-        }
+
 
         static Card DealCard()
         {
-            int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
-            return GetCardValue(cardValue);
+            int cardValue = cardRandomizer.Next(0,deck.Count);
+            Card c = deck[cardValue];
+            deck.RemoveAt(cardValue);
+            return c;
         }
 
-
-        static Card GetCardValue(int cardValue)
+        static List<Card> buildDeck()
         {
-            return cardValue switch
-            {
-                1 => new Card() { Name = "Two", Value = 2 },
-                2 => new Card() { Name = "Three", Value = 3 },
-                3 => new Card() { Name = "Four", Value = 4 },
-                4 => new Card() { Name = "Five", Value = 5 },
-                5 => new Card() { Name = "Six", Value = 6 },
-                6 => new Card() { Name = "Seven", Value = 7 },
-                7 => new Card() { Name = "Eight", Value = 8 },
-                8 => new Card() { Name = "Nine", Value = 9 },
-                9 => new Card() { Name = "Ten", Value = 10 },
-                10 => new Card() { Name = "Jack", Value = 10 },
-                11 => new Card() { Name = "Queen", Value = 10 },
-                12 => new Card() { Name = "King", Value = 10 },
-                13 => new Card() { Name = "Ace", Value = 11 },
-                _ => new Card() { Name = "Two", Value = 2 },
-            };
+            List<Card> d = new List<Card>();
+            d.Add(new Card() { Name = "Two", Value = 2, Suit = "Club" });
+            d.Add(new Card() { Name = "Three", Value = 3, Suit = "Club"});
+            d.Add(new Card() { Name = "Four", Value = 4, Suit = "Club" });
+            d.Add(new Card() { Name = "Five", Value = 5, Suit = "Club" });
+            d.Add(new Card() { Name = "Six", Value = 6,  Suit = "Club" });
+            d.Add(new Card() { Name = "Seven", Value = 7, Suit = "Club" });
+            d.Add(new Card() { Name = "Eight", Value = 8, Suit = "Club" });
+            d.Add(new Card() { Name = "Nine", Value = 9, Suit = "Club" });
+            d.Add(new Card() { Name = "Ten", Value = 10, Suit = "Club" });
+            d.Add(new Card() { Name = "Jack", Value = 10, Suit = "Club" });
+            d.Add(new Card() { Name = "Queen", Value = 10,  Suit = "Club" });
+            d.Add(new Card() { Name = "King", Value = 10, Suit = "Club" });
+            d.Add(new Card() { Name = "Ace", Value = 11, Suit = "Club" });
+
+            d.Add(new Card() { Name = "Two", Value = 2, Suit = "Diamond" });
+            d.Add(new Card() { Name = "Three", Value = 3, Suit = "Diamond" });
+            d.Add(new Card() { Name = "Four", Value = 4, Suit = "Diamond" });
+            d.Add(new Card() { Name = "Five", Value = 5, Suit = "Diamond" });
+            d.Add(new Card() { Name = "Six", Value = 6, Suit = "Diamond" });
+            d.Add(new Card() { Name = "Seven", Value = 7, Suit = "Diamond" });
+            d.Add(new Card() { Name = "Eight", Value = 8, Suit = "Diamond" });
+            d.Add(new Card() { Name = "Nine", Value = 9, Suit = "Diamond" });
+            d.Add(new Card() { Name = "Ten", Value = 10, Suit = "Diamond" });
+            d.Add(new Card() { Name = "Jack", Value = 10, Suit = "Diamond" });
+            d.Add(new Card() { Name = "Queen", Value = 10, Suit = "Diamond" });
+            d.Add(new Card() { Name = "King", Value = 10, Suit = "Diamond" });
+            d.Add(new Card() { Name = "Ace", Value = 11, Suit = "Diamond" });
+
+            d.Add(new Card() { Name = "Two", Value = 2, Suit = "Heart" });
+            d.Add(new Card() { Name = "Three", Value = 3, Suit = "Heart" });
+            d.Add(new Card() { Name = "Four", Value = 4, Suit = "Heart" });
+            d.Add(new Card() { Name = "Five", Value = 5, Suit = "Heart" });
+            d.Add(new Card() { Name = "Six", Value = 6, Suit = "Heart" });
+            d.Add(new Card() { Name = "Seven", Value = 7, Suit = "Heart" });
+            d.Add(new Card() { Name = "Eight", Value = 8, Suit = "Heart" });
+            d.Add(new Card() { Name = "Nine", Value = 9, Suit = "Heart" });
+            d.Add(new Card() { Name = "Ten", Value = 10, Suit = "Heart" });
+            d.Add(new Card() { Name = "Jack", Value = 10, Suit = "Heart" });
+            d.Add(new Card() { Name = "Queen", Value = 10, Suit = "Heart" });
+            d.Add(new Card() { Name = "King", Value = 10, Suit = "Heart" });
+            d.Add(new Card() { Name = "Ace", Value = 11, Suit = "Heart" });
+
+            d.Add(new Card() { Name = "Two", Value = 2, Suit = "Spade" });
+            d.Add(new Card() { Name = "Three", Value = 3, Suit = "Spade" });
+            d.Add(new Card() { Name = "Four", Value = 4, Suit = "Spade" });
+            d.Add(new Card() { Name = "Five", Value = 5, Suit = "Spade" });
+            d.Add(new Card() { Name = "Six", Value = 6, Suit = "Spade" });
+            d.Add(new Card() { Name = "Seven", Value = 7, Suit = "Spade" });
+            d.Add(new Card() { Name = "Eight", Value = 8, Suit = "Spade" });
+            d.Add(new Card() { Name = "Nine", Value = 9, Suit = "Spade" });
+            d.Add(new Card() { Name = "Ten", Value = 10, Suit = "Spade" });
+            d.Add(new Card() { Name = "Jack", Value = 10, Suit = "Spade" });
+            d.Add(new Card() { Name = "Queen", Value = 10, Suit = "Spade" });
+            d.Add(new Card() { Name = "King", Value = 10, Suit = "Spade" });
+            d.Add(new Card() { Name = "Ace", Value = 11, Suit = "Spade" });
+
+
+            return d;
         }
+
 
         static void PlayAgain()
         {
