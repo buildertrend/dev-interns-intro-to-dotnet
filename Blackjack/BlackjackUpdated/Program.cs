@@ -33,7 +33,8 @@ namespace BlackjackUpdated
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("hi");
+                    Console.WriteLine("An exception occured during runtime: ", ex);
+
                 }
                 
                 var decision = Console.ReadLine().ToUpper();
@@ -82,8 +83,8 @@ namespace BlackjackUpdated
                         do
                         {
                             dealerCards[dealerCardCount] = DealCard();
+                            dealerTotal += dealerCards[dealerCardCount].Value;
                             dealerCardCount++;
-                            dealerTotal = dealerCards[dealerCardCount].Value;
                         }
                         while (dealerTotal < playerTotal);
                         if (dealerTotal.Equals(playerTotal)) {
@@ -100,7 +101,6 @@ namespace BlackjackUpdated
                 }
 
                 /* END GAME LOOP */
-                Console.WriteLine("The dealer other card was: {1}", dealerCards[1].Value);
                 Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
                 PlayAgain();
             }
@@ -151,12 +151,6 @@ namespace BlackjackUpdated
         }
 
         //TODO: Move this class to it's own file.
-        private class Card
-        {
-            public int Value;
-            public string Name;
-        }
-
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
