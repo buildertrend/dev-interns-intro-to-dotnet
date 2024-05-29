@@ -73,6 +73,16 @@ namespace BlackjackUpdated
                     //Create Deck of Cards
                     CreateDeckOfCards();
 
+                    //The dealer is dealt one card face up, one card face down.
+                    dealerCards.Add(DealCard());
+                    dealerCards.Add(DealCard());
+
+                    dealerTotal += dealerCards[0].Value;
+                    dealerTotal += dealerCards[1].Value;
+
+
+                    Console.WriteLine("The dealer's visible card is {0} ", dealerCards[1].Name);
+
                     //Deal all players out
                     for (int i = 0; i < playerNum; i++)
                     {
@@ -102,17 +112,6 @@ namespace BlackjackUpdated
                         playerTotal = 0;
                         playerCards.Clear();
                     }
-
-
-                    //The dealer is dealt one card face up, one card face down.
-                    dealerCards.Add(DealCard());
-                    dealerCards.Add(DealCard());
-
-                    dealerTotal += dealerCards[0].Value;
-                    dealerTotal += dealerCards[1].Value;
-
-
-                    Console.WriteLine("The dealer's visible card is {0} ", dealerCards[1].Name);
 
                 }
                 else
@@ -168,8 +167,6 @@ namespace BlackjackUpdated
                             }
 
                         }
-
-                       
 
                     }
                     //find the highest amount among all of the players
@@ -271,6 +268,7 @@ namespace BlackjackUpdated
 
         static void Hit(int playerNum)
         {
+            //try to avoid direct references and instead create a reference here 
             playerCardCount++;
             playerCards.Add(DealCard());
             playerStats[playerNum].Total += playerCards[playerCardCount].Value;
