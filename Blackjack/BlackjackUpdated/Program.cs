@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using static Blackjack.ConsoleControlHandler;
-
+using static Blackjack.Card;
 namespace BlackjackUpdated
 {
     class Program
@@ -69,7 +69,11 @@ namespace BlackjackUpdated
 
                 if (playerChoice.Equals("S"))
                 {
-                    if (playerTotal > dealerTotal && playerTotal <= 21)
+                    if(playerTotal == dealerTotal)
+                    {
+                        Console.WriteLine("Sorry, you lost! The dealer's total was also {0}", dealerTotal);
+                    }
+                    else if (playerTotal > dealerTotal && playerTotal <= 21)
                     {
                         Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
                     }
@@ -125,25 +129,14 @@ namespace BlackjackUpdated
                 {
                     Hit();
                 }
-                if (playerChoice.Equals("S"))
+                else if (playerChoice.Equals("S"))
                 {
                     if (playerTotal > dealerTotal && playerTotal <= 21)
                     {
                         Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
                     }
-                    else if (playerTotal < dealerTotal)
-                    {
-                        Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
-                    }
                 }
             }
-        }
-
-        //TODO: Move this class to it's own file.
-        private class Card
-        {
-            public int Value;
-            public string Name;
         }
 
         static Card DealCard()
