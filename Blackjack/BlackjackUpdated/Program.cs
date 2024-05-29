@@ -1,7 +1,4 @@
-﻿using Blackjack;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using static Blackjack.ConsoleControlHandler;
+﻿using static Blackjack.ConsoleControlHandler;
 
 namespace BlackjackUpdated
 {
@@ -9,10 +6,10 @@ namespace BlackjackUpdated
     {
         static Random cardRandomizer = new Random();
 
-        static readonly Card[] playerCards = new Card[11];
+        static readonly List<Card> playerCards = new List<Card>();
         static int playerTotal = 0;
         static int playerCardCount = 1;
-        private static readonly Card[] dealerCards = new Card[11];
+        private static readonly List<Card> dealerCards = new List<Card>();
         static int dealerTotal = 0;
         static int dealerCardCount = 0;
 
@@ -20,6 +17,9 @@ namespace BlackjackUpdated
         static string playerChoice = "";
 
         static string playAgain = "Y";
+
+        static Stack<Card> DeckOfCards = CreateDeckOfCards();
+
 
         static void Main(string[] args)
         {
@@ -29,25 +29,37 @@ namespace BlackjackUpdated
                 //StartGame
                 try
                 {
-                    Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)esss (N)o");
+                    foreach (var card in DeckOfCards!)
+                    {
+                        Console.WriteLine("Card: {0} of {1} with a value of {2}", card.Name, card.Suit, card.Value);
+                    }
+
+                    Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("hi");
                 }
-                
+
                 var decision = Console.ReadLine().ToUpper();
 
                 if (decision == "Y")
                 {
                     //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(15, 22);
-                    playerCards[0] = DealCard();
-                    playerCards[1] = DealCard();
+                    playerCards.Add(DealCard());
+                    playerCards.Add(DealCard());
+
+
+                    dealerCards.Add(DealCard());
+                    dealerCards.Add(DealCard());
+
+                    dealerTotal += dealerCards[0].Value;
+                    dealerTotal += dealerCards[1].Value;
+
+                    dealerCardCount = 2;
 
                     playerTotal += playerCards[0].Value;
                     playerTotal += playerCards[1].Value;
-
 
                     //TODO: The dealer is dealt one card face up, one card face down.
                     DisplayWelcomeMessage();
@@ -63,7 +75,7 @@ namespace BlackjackUpdated
                     Console.WriteLine("Would you like to (H)it or (S)tay?");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("H"));
+                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
 
                 if (playerChoice.Equals("H"))
                 {
@@ -97,18 +109,21 @@ namespace BlackjackUpdated
         {
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
+            Console.WriteLine("The dealer was dealt the cards : {0} and a hidden card", dealerCards[0].Name);
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
         static void Hit()
         {
             playerCardCount += 1;
-            playerCards[playerCardCount] = DealCard();
+            playerCards.Add(DealCard());
             playerTotal += playerCards[playerCardCount].Value;
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
+            DealOutDealersCards();
+
             //Is this true? I don't think it is.
-            if (playerTotal.Equals(21))
+            if (playerTotal.Equals(21) && playerCardCount == 1)
             {
                 Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
 
@@ -118,7 +133,7 @@ namespace BlackjackUpdated
                 Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
 
             }
-            else if (playerTotal < 21)
+            else if (playerTotal <= 21)
             {
                 do
                 {
@@ -133,18 +148,27 @@ namespace BlackjackUpdated
             }
         }
 
-        //TODO: Move this class to it's own file.
+        private static void DealOutDealersCards()
+        {
+            while (dealerTotal < 17)
+            {
+                dealerCardCount += 1;
+                dealerCards[dealerCardCount] = DealCard();
+                dealerTotal += dealerCards[dealerCardCount].Value;
+            }
+        }
+
+
         private class Card
         {
             public int Value;
             public string Name;
+            public string Suit;
         }
 
         static Card DealCard()
         {
-            int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
-            return GetCardValue(cardValue);
+            return DeckOfCards.Pop();
         }
 
 
@@ -167,6 +191,51 @@ namespace BlackjackUpdated
                 13 => new Card() { Name = "Ace", Value = 11 },
                 _ => new Card() { Name = "Two", Value = 2 },
             };
+        }
+
+        static string GetCardName(int cardValue)
+        {
+            return cardValue switch
+            {
+                1 => "Two",
+                2 => "Three",
+                3 => "Four",
+                4 => "Five",
+                5 => "Six",
+                6 => "Seven",
+                7 => "Eight",
+                8 => "Nine",
+                9 => "Ten",
+                10 => "Jack",
+                11 => "Queen",
+                12 => "King",
+                13 => "Ace",
+                _ => "Two",
+            };
+
+        }
+
+        //method that creatres a card for each card in the deck and each suit
+        static Stack<Card> CreateDeckOfCards()
+        {
+            //create a list of cards 4 suits * 13 cards spades, hearts, diamonds, clubs
+            Stack<Card> deckOfCards = new Stack<Card>();
+            string[] suits = { "Spades", "Hearts", "Diamonds", "Clubs" };
+            foreach (var suit in suits)
+            {
+                for (int i = 1; i <= 13; i++)
+                {
+                    deckOfCards.Push(item: new Card()
+                    {
+                        Name = GetCardName(i),
+                        Value = GetCardValue(i).Value,
+                        Suit = suit
+                    });
+                }
+            }
+
+            return deckOfCards;
+
         }
 
         static void PlayAgain()
@@ -202,6 +271,6 @@ namespace BlackjackUpdated
             }
         }
 
-        
+
     }
 }
