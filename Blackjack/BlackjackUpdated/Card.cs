@@ -7,17 +7,22 @@ using System.Threading.Tasks;
 
 namespace Blackjack
 {
-    
+
     public class Card
     {
         public int Value;
         public string Name;
         public string Suit;
 
+    }
+    public class Deck
+    {
+        private List<Card> _deck { get; set; } = new List<Card>();
+        public List<Card> deck => _deck;
 
-        public static List<Card> BuildDeck()
+        public List<Card> BuildDeck()
         {
-            List<Card> deck = new List<Card>();
+            //List<Card> deck = new List<Card>();
 
             List<string> suits = new List<string> {"Hearts", "Diamonds", "Clubs", "Spades" };
             
@@ -29,7 +34,7 @@ namespace Blackjack
                 "Three",
                 "Four",
                 "Five",
-                "Sixe",
+                "Six",
                 "Seven",
                 "Eight",
                 "Nine",
@@ -47,7 +52,7 @@ namespace Blackjack
                     temp.Name = name;
                     temp.Suit = suit;
                     temp.Value = GetCardValue(name);
-                    deck.Add(temp);
+                    _deck.Add(temp);
                 }
             }
 
@@ -63,7 +68,7 @@ namespace Blackjack
                 "Three" => 3,
                 "Four" => 4,
                 "Five" => 5,
-                "Sixe" => 6,
+                "Six" => 6,
                 "Seven" => 7,
                 "Eight" => 8,
                 "Nine" => 9,
@@ -74,8 +79,23 @@ namespace Blackjack
             };
            
         }
+        public void shuffleDeck()
+        {
+            List<Card> newDeck = new List<Card>();
+            Random cardPicker = new Random();
 
-        
+            while (_deck.Count() > 0)
+            {
+                int card = cardPicker.Next(0, _deck.Count());
+                newDeck.Add(_deck[card]);
+                _deck.Remove(_deck[card]);
+
+            }
+
+            _deck = newDeck;
+        }
+
+
     }
 
     

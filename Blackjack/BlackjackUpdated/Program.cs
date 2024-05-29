@@ -1,5 +1,6 @@
 ﻿using Blackjack;
 using System.Runtime.CompilerServices;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using static Blackjack.ConsoleControlHandler;
 
@@ -11,13 +12,14 @@ namespace BlackjackUpdated
         
 
         //static readonly Card[] playerCards = new Card[11];
-        static readonly List<Card> playerCards = new List<Card>(); 
+        static List<Card> playerCards = new List<Card>(); 
         static int playerTotal = 0;
         static int playerCardCount = 1;
-        private static readonly List<Card> dealerCards = new List<Card>();
+        static List<Card> dealerCards = new List<Card>();
         static int dealerTotal = 0;
         static int dealerCardCount = 1;
         static int dealerMinTotal = 0;
+        
         
 
         //users to store the player choice (hit or stay)
@@ -26,12 +28,15 @@ namespace BlackjackUpdated
         static string playAgain = "Y";
 
         static void Main(string[] args)
-        {   Random cardPicker = new Random();
+        {
+            //List<Card> deck = new List<Card>();
+            Deck gameDeck = new Deck();
+            
 
-            List<Card> deck = new List<Card>();
             SetConsoleCtrlHandler(new HandlerRoutine(ConsoleCtrlCheck), true);
             while (playAgain.ToUpper() == "Y")
             {
+                Card tempCard = new Card();
                 //StartGame
                 try
                 {
@@ -47,14 +52,18 @@ namespace BlackjackUpdated
 
                 if (decision == "Y")
                 {
-                    deck = Card.BuildDeck();
-                    deck = shuffleDeck(deck);
-                    deck = shuffleDeck(deck);
+                    //deck = new List<Card>();
+                    //deck = tempCard.BuildDeck();
+                    //deck = tempCard.shuffleDeck(deck);
+                    //deck = tempCard.shuffleDeck(deck);
+                    gameDeck = new Deck();
+                    gameDeck.BuildDeck();
+                    gameDeck.shuffleDeck();
                     
                     //Currently, just get a value between 16-21 for the dealer
                     //dealerTotal = cardRandomizer.Next(15, 22);
-                    playerCards.Add(DealCard(deck));
-                    playerCards.Add(DealCard(deck));
+                    playerCards.Add(DealCard(gameDeck.deck));
+                    playerCards.Add(DealCard(gameDeck.deck));
 
                     playerTotal += playerCards[0].Value;
                     playerTotal += playerCards[1].Value;
@@ -62,8 +71,8 @@ namespace BlackjackUpdated
 
                     //TODO: The dealer is dealt one card face up, one card face down.
                     DisplayWelcomeMessage();
-                    dealerCards.Add(DealCard(deck));
-                    dealerCards.Add(DealCard(deck));
+                    dealerCards.Add(DealCard(gameDeck.deck));
+                    dealerCards.Add(DealCard(gameDeck.deck));
 
                     dealerTotal += dealerCards[0].Value;
                     dealerTotal += dealerCards[1].Value;
@@ -96,7 +105,7 @@ namespace BlackjackUpdated
                 if (playerChoice.Equals("H"))
                 {
                     //hit will get them a card / check the total and ask for another hit
-                    Hit(deck);
+                    Hit(gameDeck.deck);
 
                 }
 
@@ -105,7 +114,7 @@ namespace BlackjackUpdated
                     while(dealerTotal < playerTotal && dealerTotal < 21)
                     {
                         dealerCardCount += 1;
-                        dealerCards.Add(DealCard(deck));
+                        dealerCards.Add(DealCard(gameDeck.deck));
                         dealerTotal += dealerCards[dealerCardCount].Value;
                         dealerMinTotal += dealerCards[dealerCardCount].Value;
                         Console.WriteLine($"dealer minimum total is {dealerMinTotal}.");
@@ -153,8 +162,6 @@ namespace BlackjackUpdated
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
             
-
-            
             if (playerTotal > 21)
             {
                 Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
@@ -189,21 +196,11 @@ namespace BlackjackUpdated
             //int cardValue = cardRandomizer.Next(1, 14);
             //return GetCardValue(cardValue);
         }
-        public static List<Card> shuffleDeck(List<Card> original)
-        {
-            List<Card> newDeck = new List<Card>();
-            Random cardPicker = new Random();
 
-            while (original.Count() > 0)
-            {
-                int card = cardPicker.Next(0, original.Count());
-                newDeck.Add(original[card]);
-                original.Remove(original[card]);
+        
 
-            }
 
-            return newDeck;
-        }
+        
 
 
         //static Card GetCardValue(int cardValue)
@@ -246,7 +243,9 @@ namespace BlackjackUpdated
                 playerTotal = 0;
                 dealerCardCount = 1;
                 dealerMinTotal = 0;
-                
+                playerCards = new List<Card>();
+                dealerCards = new List<Card>();
+
             }
             else if (playAgain.Equals("N"))
             {
