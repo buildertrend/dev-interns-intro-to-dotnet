@@ -10,70 +10,19 @@ namespace BlackjackUpdated
     class Program
     {
 
-        private static readonly Card[] dealerCards = new Card[11];
+        private static List<Card> dealerCards = new();
         static int dealerTotal = 0;
 
-        private static List<Card> cards = new List<Card> {
-
-            new() { Name = "Two", Value = 2, Suit = "Hearts" },
-            new() { Name = "Two", Value = 2, Suit = "Diamonds" },
-            new() { Name = "Two", Value = 2, Suit = "Clubs" },
-            new() { Name = "Two", Value = 2, Suit = "Spades" },
-            new() { Name = "Three", Value = 3, Suit = "Hearts" },
-            new() { Name = "Three", Value = 3, Suit = "Diamonds" },
-            new() { Name = "Three", Value = 3, Suit = "Clubs" },
-            new() { Name = "Three", Value = 3, Suit = "Spades" },
-            new() { Name = "Four", Value = 4, Suit = "Hearts" },
-            new() { Name = "Four", Value = 4, Suit = "Diamonds" },
-            new() { Name = "Four", Value = 4, Suit = "Clubs" },
-            new() { Name = "Four", Value = 4, Suit = "Spades" },
-            new() { Name = "Five", Value = 5, Suit = "Hearts" },
-            new() { Name = "Five", Value = 5, Suit = "Diamonds" },
-            new() { Name = "Five", Value = 5, Suit = "Clubs" },
-            new() { Name = "Five", Value = 5, Suit = "Spades" },
-            new() { Name = "Six", Value = 6, Suit = "Hearts" },
-            new() { Name = "Six", Value = 6, Suit = "Diamonds" },
-            new() { Name = "Six", Value = 6, Suit = "Clubs" },
-            new() { Name = "Six", Value = 6, Suit = "Spades" },
-            new() { Name = "Seven", Value = 7, Suit = "Hearts" },
-            new() { Name = "Seven", Value = 7, Suit = "Diamonds" },
-            new() { Name = "Seven", Value = 7, Suit = "Clubs" },
-            new() { Name = "Seven", Value = 7, Suit = "Spades" },
-            new() { Name = "Eight", Value = 8, Suit = "Hearts" },
-            new() { Name = "Eight", Value = 8, Suit = "Diamonds" },
-            new() { Name = "Eight", Value = 8, Suit = "Clubs" },
-            new() { Name = "Eight", Value = 8, Suit = "Spades" },
-            new() { Name = "Nine", Value = 9, Suit = "Hearts" },
-            new() { Name = "Nine", Value = 9, Suit = "Diamonds" },
-            new() { Name = "Nine", Value = 9, Suit = "Clubs" },
-            new() { Name = "Nine", Value = 9, Suit = "Spades" },
-            new() { Name = "Ten", Value = 10, Suit = "Hearts" },
-            new() { Name = "Ten", Value = 10, Suit = "Diamonds" },
-            new() { Name = "Ten", Value = 10, Suit = "Clubs" },
-            new() { Name = "Ten", Value = 10, Suit = "Spades" },
-            new() { Name = "Jack", Value = 10, Suit = "Hearts" },
-            new() { Name = "Jack", Value = 10, Suit = "Diamonds" },
-            new() { Name = "Jack", Value = 10, Suit = "Clubs" },
-            new() { Name = "Jack", Value = 10, Suit = "Spades" },
-            new() { Name = "Queen", Value = 10, Suit = "Hearts" },
-            new() { Name = "Queen", Value = 10, Suit = "Diamonds" },
-            new() { Name = "Queen", Value = 10, Suit = "Clubs" },
-            new() { Name = "Queen", Value = 10, Suit = "Spades" },
-            new() { Name = "King", Value = 10, Suit = "Hearts" },
-            new() { Name = "King", Value = 10, Suit = "Diamonds" },
-            new() { Name = "King", Value = 10, Suit = "Clubs" },
-            new() { Name = "King", Value = 10, Suit = "Spades" },
-            new() { Name = "Ace", Value = 10, Suit = "Hearts" },
-            new() { Name = "Ace", Value = 10, Suit = "Diamonds" },
-            new() { Name = "Ace", Value = 10, Suit = "Clubs" },
-            new() { Name = "Ace", Value = 10, Suit = "Spades" },
-            };
+        private static List<Card> cards = new();
 
         static int numberOfPlayers = 0;
-        private static Dictionary<int, List<int>> playerDict = new();
+        private static readonly Dictionary<int, List<int>> playerDict = new();
 
         static string playerChoice = "";
         static string playAgain = "Y";
+
+        static int cardCount = 0;
+        static bool showCardCount = false;
 
         static void Main(string[] args)
         {
@@ -81,6 +30,7 @@ namespace BlackjackUpdated
             while (playAgain.ToUpper() == "Y")
             {
                 //Build deck of cards here and shuffle
+                
                 try
                 {
                     Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
@@ -95,10 +45,18 @@ namespace BlackjackUpdated
                 if (decision == "Y")
                 {
                     Console.WriteLine("How many players are playing? (1-5)");
-                    numberOfPlayers = int.Parse(Console.ReadLine().ToUpper());
+                    numberOfPlayers = int.Parse(Console.ReadLine());
+                    Console.WriteLine("Do you want to count cards? (Y)es or (N)o?");
+                    string CountCardsInput = Console.ReadLine().ToUpper();
+                    if (CountCardsInput == "Y")
+                    {
+                        showCardCount = true;
+                    }
 
-                    dealerCards[0] = DealCard();
-                    dealerCards[1] = DealCard();
+                    cards = GenerateDeck();
+
+                    dealerCards.Add(DealCard());
+                    dealerCards.Add(DealCard());
                     dealerTotal = dealerCards[0].Value + dealerCards[1].Value;
                     Console.WriteLine("The dealer's first card is " + dealerCards[0].Value);
 
@@ -203,12 +161,7 @@ namespace BlackjackUpdated
             playerDict[player].Add(card.Value);
             Console.WriteLine("Player " + player + "'s card is a(n) {0} and your new Total is {1}. ", card.Name, playerDict[player].Sum());
 
-            if (playerDict[player].Sum().Equals(21) && playerDict[player].Count == 2)
-            {
-                Console.WriteLine("You got Blackjack!");
-
-            }
-            else if (playerDict[player].Sum() > 21)
+            if (playerDict[player].Sum() > 21)
             {
                 Console.WriteLine("You busted! Sorry!");
 
@@ -234,8 +187,85 @@ namespace BlackjackUpdated
             int index = rnd.Next(cards.Count);
             Card card = cards[index];
             cards.RemoveAt(index);
+            if (showCardCount)
+            {
+                CalculateCardCount(card.Value);
+            }
+            
             return card;
         }
+
+        static void CalculateCardCount(int cardValue)
+        {
+            if (cardValue >= 2 && cardValue <= 6)
+            {
+                cardCount++;
+            } else if (cardValue >= 10)
+            {
+                cardCount--;
+            }
+            Console.WriteLine("The count is " + cardCount);
+
+        }
+
+        static List<Card> GenerateDeck()
+        {
+
+            return new List<Card>() {
+                new() { Name = "Two", Value = 2, Suit = "Hearts" },
+                new() { Name = "Two", Value = 2, Suit = "Diamonds" },
+                new() { Name = "Two", Value = 2, Suit = "Clubs" },
+                new() { Name = "Two", Value = 2, Suit = "Spades" },
+                new() { Name = "Three", Value = 3, Suit = "Hearts" },
+                new() { Name = "Three", Value = 3, Suit = "Diamonds" },
+                new() { Name = "Three", Value = 3, Suit = "Clubs" },
+                new() { Name = "Three", Value = 3, Suit = "Spades" },
+                new() { Name = "Four", Value = 4, Suit = "Hearts" },
+                new() { Name = "Four", Value = 4, Suit = "Diamonds" },
+                new() { Name = "Four", Value = 4, Suit = "Clubs" },
+                new() { Name = "Four", Value = 4, Suit = "Spades" },
+                new() { Name = "Five", Value = 5, Suit = "Hearts" },
+                new() { Name = "Five", Value = 5, Suit = "Diamonds" },
+                new() { Name = "Five", Value = 5, Suit = "Clubs" },
+                new() { Name = "Five", Value = 5, Suit = "Spades" },
+                new() { Name = "Six", Value = 6, Suit = "Hearts" },
+                new() { Name = "Six", Value = 6, Suit = "Diamonds" },
+                new() { Name = "Six", Value = 6, Suit = "Clubs" },
+                new() { Name = "Six", Value = 6, Suit = "Spades" },
+                new() { Name = "Seven", Value = 7, Suit = "Hearts" },
+                new() { Name = "Seven", Value = 7, Suit = "Diamonds" },
+                new() { Name = "Seven", Value = 7, Suit = "Clubs" },
+                new() { Name = "Seven", Value = 7, Suit = "Spades" },
+                new() { Name = "Eight", Value = 8, Suit = "Hearts" },
+                new() { Name = "Eight", Value = 8, Suit = "Diamonds" },
+                new() { Name = "Eight", Value = 8, Suit = "Clubs" },
+                new() { Name = "Eight", Value = 8, Suit = "Spades" },
+                new() { Name = "Nine", Value = 9, Suit = "Hearts" },
+                new() { Name = "Nine", Value = 9, Suit = "Diamonds" },
+                new() { Name = "Nine", Value = 9, Suit = "Clubs" },
+                new() { Name = "Nine", Value = 9, Suit = "Spades" },
+                new() { Name = "Ten", Value = 10, Suit = "Hearts" },
+                new() { Name = "Ten", Value = 10, Suit = "Diamonds" },
+                new() { Name = "Ten", Value = 10, Suit = "Clubs" },
+                new() { Name = "Ten", Value = 10, Suit = "Spades" },
+                new() { Name = "Jack", Value = 10, Suit = "Hearts" },
+                new() { Name = "Jack", Value = 10, Suit = "Diamonds" },
+                new() { Name = "Jack", Value = 10, Suit = "Clubs" },
+                new() { Name = "Jack", Value = 10, Suit = "Spades" },
+                new() { Name = "Queen", Value = 10, Suit = "Hearts" },
+                new() { Name = "Queen", Value = 10, Suit = "Diamonds" },
+                new() { Name = "Queen", Value = 10, Suit = "Clubs" },
+                new() { Name = "Queen", Value = 10, Suit = "Spades" },
+                new() { Name = "King", Value = 10, Suit = "Hearts" },
+                new() { Name = "King", Value = 10, Suit = "Diamonds" },
+                new() { Name = "King", Value = 10, Suit = "Clubs" },
+                new() { Name = "King", Value = 10, Suit = "Spades" },
+                new() { Name = "Ace", Value = 11, Suit = "Hearts" },
+                new() { Name = "Ace", Value = 11, Suit = "Diamonds" },
+                new() { Name = "Ace", Value = 11, Suit = "Clubs" },
+                new() { Name = "Ace", Value = 11, Suit = "Spades" },
+            };
+    }
 
         static void PlayAgain()
         {
