@@ -52,7 +52,7 @@ namespace BlackjackUpdated
 
         public override string ToString()
         {
-            return this.Name + " of " + this.Suit.ToString();
+            return this.Name + " of " + this.Suit.ToString().ToLower().FirstCharToUpper() + "s";
         }
     }
 }
