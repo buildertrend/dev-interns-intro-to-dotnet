@@ -84,7 +84,8 @@ namespace BlackjackUpdated
                         Console.WriteLine("The dealer's second card is {0} of {1}", dealerCards[1].Name, dealerCards[1].Suit);
                         if (playerTotal > dealerTotal && playerTotal <= 21)
                         {
-                            while (dealerTotal < playerTotal && dealerTotal < 16)
+                            var initialDealerTotal = dealerTotal;
+                            while (dealerTotal < playerTotal && initialDealerTotal < 16)
                             {
                                 var newCard = DealCard();
                                 dealerCards.Add(newCard);
