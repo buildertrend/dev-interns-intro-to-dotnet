@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using static Blackjack.ConsoleControlHandler;
+using static BlackjackUpdated.Card;
 
 namespace BlackjackUpdated
 {
@@ -9,6 +10,7 @@ namespace BlackjackUpdated
     {
         static Random cardRandomizer = new Random();
 
+        static bool playing = true;
         static readonly Card[] playerCards = new Card[11];
         static int playerTotal = 0;
         static int playerCardCount = 1;
@@ -41,16 +43,27 @@ namespace BlackjackUpdated
                 if (decision == "Y")
                 {
                     //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(15, 22);
-                    playerCards[0] = DealCard();
-                    playerCards[1] = DealCard();
+                    // dealerTotal = cardRandomizer.Next(15, 22);
+                    dealerCards[0] = Card.DealCard();
+                    dealerCards[1] = Card.DealCard();
 
-                    // playerTotal += playerCards[0].Value;
-                    // playerTotal += playerCards[1].Value;
+                    dealerTotal += dealerCards[0].Value;
+                    dealerTotal += dealerCards[1].Value;
 
+                    playerCards[0] = Card.DealCard();
+                    playerCards[1] = Card.DealCard();
+
+                    playerTotal += playerCards[0].Value;
+                    playerTotal += playerCards[1].Value;
 
                     //TODO: The dealer is dealt one card face up, one card face down.
                     DisplayWelcomeMessage();
+
+                    if (playerTotal.Equals(21))
+                    {
+                        Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+
+                    }
                 }
                 else
                 {
@@ -59,32 +72,37 @@ namespace BlackjackUpdated
                 }
 
                 /* START GAME LOOP */
-                do
-                {
-                    Console.WriteLine("Would you like to (H)it or (S)tay?");
-                    playerChoice = Console.ReadLine().ToUpper();
-                }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
 
-                if (playerChoice.Equals("H"))
+                while (playing)
                 {
-                    //hit will get them a card / check the total and ask for another hit
-                    Hit();
-                }
-
-                if (playerChoice.Equals("S"))
-                {
-                    if (playerTotal > dealerTotal && playerTotal <= 21)
+                    do
                     {
-                        Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                        Console.WriteLine("Would you like to (H)it or (S)tay?");
+                        playerChoice = Console.ReadLine().ToUpper();
                     }
-                    else if (playerTotal < dealerTotal)
-                    {
-                        Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
-                    }
-                }
+                    while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
 
-                /* END GAME LOOP */
+                    if (playerChoice.Equals("H"))
+                    {
+                        //hit will get them a card / check the total and ask for another hit
+                        Hit();
+                    }
+
+                    // TODO: If hit then stay, doesn't show ending message.
+                    if (playerChoice.Equals("S"))
+                    {
+                        if (playerTotal > dealerTotal && playerTotal <= 21)
+                        {
+                            Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                        }
+                        else if (playerTotal < dealerTotal)
+                        {
+                            Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+                        }
+                        playing = false;
+                    }
+                    /* END GAME LOOP */
+                }
 
                 Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
                 PlayAgain();
@@ -96,6 +114,9 @@ namespace BlackjackUpdated
         /// </summary>
         private static void DisplayWelcomeMessage()
         {
+            Console.WriteLine("The dealer shows their first card, a(n) {0}", dealerCards[0].Name);
+            Console.WriteLine("Their current known total is {0}", dealerCards[0].Value);
+
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
             //TODO: Inform the player the value of the dealer's visible card.
@@ -105,69 +126,27 @@ namespace BlackjackUpdated
         {
             playerCardCount += 1;
             playerCards[playerCardCount] = DealCard();
+            playerTotal += playerCards[playerCardCount].Value;
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
-            //Is this true? I don't think it is.
-            if (playerTotal.Equals(21))
-            {
-                Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
-
-            }
-            else if (playerTotal > 21)
+            if (playerTotal > 21)
             {
                 Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
 
             }
-            else if (playerTotal < 21)
-            {
-                do
-                {
-                    Console.WriteLine("Would you like to hit or stay? h for hit s for stay");
-                    playerChoice = Console.ReadLine().ToUpper();
-                }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
-                if (playerChoice.ToUpper() == "H")
-                {
-                    Hit();
-                }
-            }
-        }
-
-        //TODO: Move this class to it's own file.
-        private class Card
-        {
-            public int Value;
-            public string Name;
-        }
-
-        static Card DealCard()
-        {
-            int cardValue = cardRandomizer.Next(1, 14);
-            Card card = GetCardValue(cardValue);
-            playerTotal += card.Value;
-            return card;
-        }
-
-
-        static Card GetCardValue(int cardValue)
-        {
-            return cardValue switch
-            {
-                1 => new Card() { Name = "Two", Value = 2 },
-                2 => new Card() { Name = "Three", Value = 3 },
-                3 => new Card() { Name = "Four", Value = 4 },
-                4 => new Card() { Name = "Five", Value = 5 },
-                5 => new Card() { Name = "Six", Value = 6 },
-                6 => new Card() { Name = "Seven", Value = 7 },
-                7 => new Card() { Name = "Eight", Value = 8 },
-                8 => new Card() { Name = "Nine", Value = 9 },
-                9 => new Card() { Name = "Ten", Value = 10 },
-                10 => new Card() { Name = "Jack", Value = 10 },
-                11 => new Card() { Name = "Queen", Value = 10 },
-                12 => new Card() { Name = "King", Value = 10 },
-                13 => new Card() { Name = "Ace", Value = 11 },
-                _ => new Card() { Name = "Two", Value = 2 },
-            };
+            // else if (playerTotal < 21)
+            // {
+                // do
+                // {
+                //     Console.WriteLine("Would you like to hit or stay? h for hit s for stay");
+                //     playerChoice = Console.ReadLine().ToUpper();
+                // }
+                // while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
+                // if (playerChoice.ToUpper() == "H")
+                // {
+                //     Hit();
+                // }
+            // }
         }
 
         static void PlayAgain()
