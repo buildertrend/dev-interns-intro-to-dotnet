@@ -11,7 +11,7 @@ namespace BlackjackUpdated
         static int playerTotal = 0;
         private static List<Card> dealerCards = new List<Card>();
         static int dealerTotal = 0;
-        private static readonly List<string> suits = new List<string>();
+        private static readonly List<string> suits = new List<string> { "Hearts", "Clubs", "Diamonds", "Spades"};
 
 
         //users to store the player choice (hit or stay)
@@ -23,10 +23,6 @@ namespace BlackjackUpdated
 
         static void Main(string[] args)
         {
-            suits.Add("Hearts");
-            suits.Add("Clubs");
-            suits.Add("Diamonds");
-            suits.Add("Spades");
             SetConsoleCtrlHandler(new HandlerRoutine(ConsoleCtrlCheck), true);
             while (playAgain.ToUpper() == "Y")
             {
