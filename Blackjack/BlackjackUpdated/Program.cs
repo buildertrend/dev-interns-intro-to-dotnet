@@ -124,6 +124,7 @@ namespace BlackjackUpdated
 
 
                 /* START GAME LOOP */
+                
                 for (int j = 0; j < playerAmount; j++)      // players take turns when deciding to hit or stay
                 {
                     Console.ForegroundColor = colors[j];
@@ -144,79 +145,58 @@ namespace BlackjackUpdated
                             //hit will get them a card / check the total and ask for another hit
                             Hit(playerList[j], deck);
                         }
-
-
-                        if (playerChoice.Equals("S") && !firstBlackjack)
+                        if (playerChoice.Equals("S"))
                         {
+                            playerList[j].state = State.DONE;
 
                             if (playerTotal > 21)
                             {
-                                Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                                Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
-                                Console.ResetColor();
+                                Console.WriteLine("You busted! Sorry!");
+                                playerList[j].state = State.BUST;
                             }
-                            else
-                            {
 
-                                int i = 2;
-                                //while (playerTotal > dealerTotal && playerTotal <= 21 && i < 11)
-                                while (dealerTotal < 17 && i < 11)
-                                {
-                                    dealerCards[i - 1] = DealCard(deck);
-                                    dealerTotal += dealerCards[i - 1].Value;
-                                    dealerCardCount++;
-                                    //Console.WriteLine(dealerTotal);
-                                }
+                            //else
+                            //{
 
-                                if (playerTotal > dealerTotal && playerTotal <= 21)
-                                {
-                                    Console.ForegroundColor = ConsoleColor.Yellow;
-                                    Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
-                                    Console.ResetColor();
+                            //    int i = 2;
+                            //    //while (playerTotal > dealerTotal && playerTotal <= 21 && i < 11)
+                            //    while (dealerTotal < 17 && i < 11)
+                            //    {
+                            //        dealerCards[i - 1] = DealCard(deck);
+                            //        dealerTotal += dealerCards[i - 1].Value;
+                            //        dealerCardCount++;
+                            //        //Console.WriteLine(dealerTotal);
+                            //    }
 
-                                }
-                                else if (playerTotal < dealerTotal && dealerTotal <= 21)
-                                {
-                                    Console.ForegroundColor = ConsoleColor.Magenta;
-                                    Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
-                                    Console.ResetColor();
-                                }
-                                else if (dealerTotal == playerTotal)
-                                {
-                                    Console.ForegroundColor = ConsoleColor.Magenta;
-                                    Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
-                                    Console.ResetColor();
-                                }
-                                else
-                                {
-                                    Console.ForegroundColor = ConsoleColor.Yellow;
-                                    Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
-                                    Console.ResetColor();
-                                }
+                            //    if (playerTotal > dealerTotal && playerTotal <= 21)
+                            //    {
+                            //        Console.ForegroundColor = ConsoleColor.Yellow;
+                            //        Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                            //        Console.ResetColor();
 
-                            }
+                            //    }
+                            //    else if (playerTotal < dealerTotal && dealerTotal <= 21)
+                            //    {
+                            //        Console.ForegroundColor = ConsoleColor.Magenta;
+                            //        Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+                            //        Console.ResetColor();
+                            //    }
+                            //    else if (dealerTotal == playerTotal)
+                            //    {
+                            //        Console.ForegroundColor = ConsoleColor.Magenta;
+                            //        Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+                            //        Console.ResetColor();
+                            //    }
+                            //    else
+                            //    {
+                            //        Console.ForegroundColor = ConsoleColor.Yellow;
+                            //        Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                            //        Console.ResetColor();
+                            //    }
+                            //
+                            //}
 
                         }
-
-                        if (firstBlackjack)
-                        {
-                            if (dealerTotal == 21)
-                            {
-                                Console.ForegroundColor = ConsoleColor.Magenta;
-                                Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
-                                Console.ResetColor();
-                            }
-                            else
-                            {
-                                Console.ForegroundColor = ConsoleColor.Yellow;
-                                Console.WriteLine("Congrats! You won the game! The dealer's total is {0}", dealerTotal);
-                                Console.ResetColor();
-                            }
-                            firstBlackjack = false;
-                        }
-
-
-
                     }
                     else if (playerList[j].state == State.BLACKJACK)
                     {
@@ -259,8 +239,8 @@ namespace BlackjackUpdated
         {
             player.cardAmount += 1;
             player.playerCards.Add(DealCard(deck));
-            player.total += player.playerCards[playerCardCount-1].Value;
-            Console.WriteLine("Your card is a(n) {0} and your new Total is {1}. ", player.playerCards[playerCardCount-1].Name, player.total);
+            player.total += player.playerCards[player.cardAmount-1].Value;
+            Console.WriteLine("Your card is a(n) {0} and your new Total is {1}. ", player.playerCards[player.cardAmount-1].Name, player.total);
 
             if (playerTotal > 21)
             {
