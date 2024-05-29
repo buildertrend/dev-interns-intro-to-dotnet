@@ -15,7 +15,6 @@ namespace BlackjackUpdated
         static readonly List<Card> playerCards = new List<Card>();
         //Add functionality for more than one player
         static readonly List<Player> playerStats = new List<Player>();
-
         static int playerTotal = 0;
         static int playerCardCount = -1;
         private static readonly List<Card> dealerCards = new List<Card>();
@@ -24,6 +23,9 @@ namespace BlackjackUpdated
         static int playerNum = 0;
         static int highestTotal;
         static int highestPlayer;
+        static int blackjackPlayer;
+        static Boolean trueBlackJack = false;
+
 
 
         //users to store the player choice (hit or stay)
@@ -83,9 +85,18 @@ namespace BlackjackUpdated
                         playerTotal += playerCards[0].Value;
                         playerTotal += playerCards[1].Value;
 
+                        //Check to see if the player has a black jack right away that ends the game
+                        if (playerTotal == 21)
+                        {
+                            trueBlackJack = true;
+                            blackjackPlayer = i;
+
+                        }
+
                         playerStats.Add(new Player() { Total = playerTotal, State = "Dealt"});
 
                         Console.WriteLine("Player {0} ", i + 1);
+                        //Display each players cards
                         DisplayWelcomeMessage();
 
                         playerTotal = 0;
@@ -109,45 +120,65 @@ namespace BlackjackUpdated
                     Environment.Exit(0);
                 }
 
-                for (int i = 0; i < playerNum; i++)
-                {
-                    //Check to see if the player has a black jack right away that ends the game
-                    Boolean trueBlackJack = false;
-                    if (playerStats[i].Total == 21)
+                if (trueBlackJack) { 
+                    DealDealerOut();
+                    //Check to see if the dealer also got blackjack to determine winner
+                    if (playerStats[blackjackPlayer].Total == 21 && playerStats[blackjackPlayer].Total != dealerTotal)
                     {
-                        trueBlackJack = true;
+                        Console.BackgroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Congrats! Player {0} got Blackjack and won the game!", blackjackPlayer + 1);
+                        Console.ResetColor();
+                    }
+                    else if (playerTotal == dealerTotal)
+                    {
+                        Console.BackgroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Sorry, everyone lost! Player {0} and the dealer tied with a blackjack", blackjackPlayer + 1);
+                        Console.ResetColor();
+                    }
+                }
+                else {
+                    //if no player automatically got a blackjack, let each player take their turn 
+                    for (int i = 0; i < playerNum; i++)
+                    {
+
+
+                        //if there is a true blackjack no need to ask whether the player wants to hit or stay 
+                        if (!trueBlackJack)
+                        {
+                            /* START GAME LOOP */
+                            do
+                            {
+                                Console.WriteLine("Player {0} Would you like to (H)it or (S)tay?", i + 1);
+                                playerChoice = Console.ReadLine().ToUpper();
+                            }
+
+                            while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
+
+                            if (playerChoice.Equals("H"))
+                            {
+                                //hit will get them a card / check the total and ask for another hit
+                                Hit(i);
+                                
+                            }
+
+                            if (playerChoice.Equals("S"))
+                            {
+                                playerStats[i].State = "Done";
+
+                            }
+
+                        }
+
+                       
 
                     }
+                    //find the highest amount among all of the players
+                    highestPlayer = ComparePlayers(playerNum);
+                    //compare the highest player to the dealer 
+                    CompareToDealer(highestPlayer);
 
 
-                    //if there is a true blackjack no need to ask whether the player wants to hit or stay 
-                    if (!trueBlackJack)
-                    {
-                        /* START GAME LOOP */
-                        do
-                        {
-                            Console.WriteLine("Player {0} Would you like to (H)it or (S)tay?", i + 1);
-                            playerChoice = Console.ReadLine().ToUpper();
-                        }
-
-                        while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
-
-                        if (playerChoice.Equals("H"))
-                        {
-                            //hit will get them a card / check the total and ask for another hit
-                            Hit(i);
-                        }
-
-                        if (playerChoice.Equals("S"))
-                        {
-                            playerStats[i].State = "Done";
-                        }
-                    }  
                 }
-
-                highestPlayer = ComparePlayers(playerNum);
-                CompareToDealer(highestPlayer);
-
                 /* END GAME LOOP */
 
                 Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
@@ -171,7 +202,7 @@ namespace BlackjackUpdated
 
 
             static private void CompareToDealer(int highestPlayer)
-        {
+            {   
             //Deal the dealer out if their current total is less than the player total
             DealDealerOut();
             //Check if the dealer busted 
@@ -194,24 +225,8 @@ namespace BlackjackUpdated
                 Console.WriteLine("Sorry, everyone lost! The highest player tied with the dealer. The dealer's total was {0}", dealerTotal);
             }
 
-            /*else
-            {
-                //Check to see if the dealer also got blackjack to determine winner
-                if (playerTotal == 21 && playerTotal != dealerTotal)
-                {
-                    Console.BackgroundColor = ConsoleColor.Green;
-                    Console.WriteLine("Congrats! You got Blackjack and won the game!");
-                    Console.ResetColor();
-                }
-                else if (playerTotal == dealerTotal)
-                {
-                    Console.BackgroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Sorry, you lost! You and the dealer tied");
-                    Console.ResetColor();
-                }
-
-            }*/
         }
+
         private static void CreateDeckOfCards()
         {
             string[] Name = { "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "jack", "queen", "king", "ace" };
@@ -266,6 +281,7 @@ namespace BlackjackUpdated
             {
                 Console.WriteLine("You busted!");
                 playerStats[playerNum].State = "Busted";
+                playerCardCount = -1;
             }
             else if (playerStats[playerNum].Total <= 21)
             {
@@ -310,10 +326,15 @@ namespace BlackjackUpdated
                 Console.ReadLine();
                 Console.Clear();
                 dealerTotal = 0;
-                playerCardCount = 1;
+                playerCardCount = -1;
                 playerTotal = 0;
                 playerCards.Clear();
                 dealerCards.Clear();
+                trueBlackJack = false;
+                playerNum = 0;
+                highestTotal = 0;
+                highestPlayer = 0;
+                
             }
             else if (playAgain.Equals("N"))
             {
