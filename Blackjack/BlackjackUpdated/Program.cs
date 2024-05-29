@@ -126,7 +126,7 @@ namespace BlackjackUpdated
         private static void DisplayWelcomeMessage()
         {
             Console.WriteLine("You were dealt the cards : {0} of {1} and {2} of {3}", playerCards[0].Name, playerCards[0].Suit, playerCards[1].Name, playerCards[1].Suit);
-            Console.WriteLine("Your playerTotal is {0} ", playerTotal);
+            Console.WriteLine("Your total is {0} ", playerTotal);
             Console.WriteLine("The dealer has the card : {0} of {1} ", dealerCards.FirstOrDefault().Name, dealerCards.FirstOrDefault().Suit);
 
         }
@@ -136,10 +136,10 @@ namespace BlackjackUpdated
             var newCard = DealCard();
             playerCards.Add(newCard);
             playerTotal += newCard.Value;
-            Console.WriteLine("You card is a(n) {0} of {1} and your new Total is {2}. ", newCard.Name, newCard.Suit, playerTotal);
+            Console.WriteLine("You card is a(n) {0} of {1} and your new total is {2}. ", newCard.Name, newCard.Suit, playerTotal);
             if (playerTotal > 21)
             {
-                Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
+                Console.WriteLine("You busted! Sorry! The dealer's total was {0}", dealerTotal);
 
             }
             else if (playerTotal <= 21)
