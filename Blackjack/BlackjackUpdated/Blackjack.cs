@@ -167,10 +167,19 @@ namespace BlackjackUpdated
                 if (player.Total > 21)
                 {
                     Console.WriteLine($"{player.Name} busted with a total of {player.Total}.");
-                }
+                } 
                 else if (dealerTotal > 21 || player.Total > dealerTotal)
                 {
-                    Console.WriteLine($"{player.Name} wins with a total of {player.Total}.");
+                    if (player.CardCount.Equals(1))
+                    {
+                        Console.WriteLine($"{player.Name} wins with a Blackjack.");
+
+                    } 
+                    else
+                    {
+                        Console.WriteLine($"{player.Name} wins with a total of {player.Total}.");
+
+                    }
                 }
                 else if (player.Total < dealerTotal)
                 {
