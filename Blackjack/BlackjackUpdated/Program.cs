@@ -41,15 +41,19 @@ namespace BlackjackUpdated
                 if (decision == "Y")
                 {
                     //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(15, 22);
-                    playerCards[0] = DealCard();
-                    playerCards[1] = DealCard();
+                    dealerCards[dealerCardCount] = DealCard();
+                    dealerCardCount++;
+                    dealerCards[dealerCardCount] = DealCard();
+                    dealerCardCount++;
+                    playerCards[playerCardCount] = DealCard();
+                    playerCardCount++;
+                    playerCards[playerCardCount] = DealCard();
+                    playerCardCount++;
 
                     playerTotal += playerCards[0].Value;
                     playerTotal += playerCards[1].Value;
-
-
-                    //TODO: The dealer is dealt one card face up, one card face down.
+                    dealerTotal += dealerCards[0].Value;
+                    dealerTotal += dealerCards[1].Value;
                     DisplayWelcomeMessage();
                 }
                 else
@@ -75,7 +79,19 @@ namespace BlackjackUpdated
                 {
                     if (playerTotal > dealerTotal && playerTotal <= 21)
                     {
-                        Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                        do
+                        {
+                            dealerCards[dealerCardCount] = DealCard();
+                            dealerCardCount++;
+                            dealerTotal = dealerCards[dealerCardCount].Value;
+                        }
+                        while (dealerTotal < playerTotal);
+                        if (dealerTotal.Equals(playerTotal)) {
+                           Console.WriteLine("Sorry, you lost because the dealer tied with you! The dealer's total was {0}", dealerTotal);
+                        } else
+                        {
+                            Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
+                        }
                     }
                     else if (playerTotal < dealerTotal)
                     {
@@ -84,7 +100,7 @@ namespace BlackjackUpdated
                 }
 
                 /* END GAME LOOP */
-
+                Console.WriteLine("The dealer other card was: {1}", dealerCards[1].Value);
                 Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
                 PlayAgain();
             }
@@ -97,7 +113,8 @@ namespace BlackjackUpdated
         {
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
-            //TODO: Inform the player the value of the dealer's visible card.
+            Console.WriteLine("The dealer has the card : {0} ", dealerCards[0].Name);
+
         }
 
         static void Hit()
