@@ -9,6 +9,7 @@ namespace BlackjackUpdated
     class Program
     {
         static Random cardRandomizer = new Random();
+        static Shoe shoe = new Shoe(2);
 
         static bool playing = true;
         static readonly List<Card> playerCards = new List<Card>();
@@ -28,28 +29,25 @@ namespace BlackjackUpdated
             {
                 //StartGame
                 playing = true;
+
                 try
                 {
                     Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("hi");
+                    Console.WriteLine("Could not start game!");
                 }
                 
                 var decision = Console.ReadLine().ToUpper();
 
                 if (decision == "Y")
                 {
-                    //Currently, just get a value between 16-21 for the dealer
-                    dealerCards.Add(Card.DealCard());
-                    dealerCards.Add(Card.DealCard());
+                    dealerCards.Add(shoe.Draw());
+                    dealerCards.Add(shoe.Draw());
 
-                    playerCards.Add(Card.DealCard());
-                    playerCards.Add(Card.DealCard());
-                    // dealerTotal = cardRandomizer.Next(15, 22);
-                    dealerCards[0] = Card.DealCard();
-                    dealerCards[1] = Card.DealCard();
+                    playerCards.Add(shoe.Draw());
+                    playerCards.Add(shoe.Draw());
 
                     dealerTotal += dealerCards[0].Value;
                     dealerTotal += dealerCards[1].Value;
@@ -57,7 +55,6 @@ namespace BlackjackUpdated
                     playerTotal += playerCards[0].Value;
                     playerTotal += playerCards[1].Value;
 
-                    //TODO: The dealer is dealt one card face up, one card face down.
                     DisplayWelcomeMessage();
 
                     if (playerTotal.Equals(21))
@@ -142,7 +139,7 @@ namespace BlackjackUpdated
         {
             Console.WriteLine("Dealer's score is < 16 - Hitting...");
             //dealerCardCount++;
-            dealerCards.Add(Card.DealCard());
+            dealerCards.Add(shoe.Draw());
             dealerTotal += dealerCards.Last().Value;
             Console.WriteLine("Dealer received a(n): {0}", dealerCards.Last().Name);
             // Remove the hidden card from the known value.

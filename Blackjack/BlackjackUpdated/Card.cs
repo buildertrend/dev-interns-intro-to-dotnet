@@ -6,12 +6,21 @@ using System.Threading.Tasks;
 
 namespace BlackjackUpdated
 {
+    internal enum Suit
+    {
+        SPADE = 0,
+        HEART = 1,
+        CLUB = 2,
+        DIAMOND = 3,
+    }
+
     internal class Card
     {
         static Random cardRandomizer = new Random();
 
         public int Value;
         public string Name;
+        public Suit Suit;
 
         public static Card DealCard()
         {
@@ -39,6 +48,11 @@ namespace BlackjackUpdated
                 13 => new Card() { Name = "Ace", Value = 11 },
                 _ => new Card() { Name = "Two", Value = 2 },
             };
+        }
+
+        public override string ToString()
+        {
+            return this.Name + " of " + this.Suit.ToString();
         }
     }
 }
