@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace BlackjackUpdated
 {
+    /// <summary>
+    /// Game of blackjack that can be played with multiple players
+    /// </summary>
     public class Blackjack
     {
         private List<Card> fullDeck;
@@ -12,6 +15,9 @@ namespace BlackjackUpdated
         private int dealerTotal;
         private Random cardRandomizer;
 
+        /// <summary>
+        /// Constructor for the game of blackjacik
+        /// </summary>
         public Blackjack()
         {
             InitializeDeck();
@@ -22,6 +28,10 @@ namespace BlackjackUpdated
             cardRandomizer = new Random();
         }
 
+        /// <summary>
+        /// Plays the game of blackjack with the selected number of players
+        /// </summary>
+        /// <param name="numberOfPlayers"></param>
         public void PlayGame(int numberOfPlayers)
         {
             InitializePlayers(numberOfPlayers);
@@ -36,6 +46,9 @@ namespace BlackjackUpdated
             DetermineWinners();
         }
 
+        /// <summary>
+        /// Resets the fullDeck class variable to be a full deck of cards
+        /// </summary>
         private void InitializeDeck()
         {
             fullDeck = new List<Card>
@@ -56,6 +69,10 @@ namespace BlackjackUpdated
             };
         }
 
+        /// <summary>
+        /// Initializes the players class list with the number of players in the params. Asks and assigns the name of each player as they are added
+        /// </summary>
+        /// <param name="numberOfPlayers"></param>
         private void InitializePlayers(int numberOfPlayers)
         {
             for (int i = 0; i < numberOfPlayers; i++)
@@ -65,6 +82,9 @@ namespace BlackjackUpdated
             }
         }
 
+        /// <summary>
+        /// Deals the inital two cards to each player and the dealer, as well as display the dealers first card
+        /// </summary>
         private void DealInitialCards()
         {
             dealerCards.Add(DealCard());
@@ -84,6 +104,10 @@ namespace BlackjackUpdated
             }
         }
 
+        /// <summary>
+        /// Method where the param player takes their specific turn. They can hit up untill they bust or stay.
+        /// </summary>
+        /// <param name="player"></param>
         private void PlayerTurn(Player player)
         {
             Console.WriteLine($"{player.Name}'s turn:");
@@ -117,6 +141,9 @@ namespace BlackjackUpdated
             }
         }
 
+        /// <summary>
+        /// Method for the dealers turn, who hits untill he has 17 or more points.
+        /// </summary>
         private void DealerTurn()
         {
             Console.WriteLine("Dealer's turn:");
@@ -130,6 +157,9 @@ namespace BlackjackUpdated
             }
         }
 
+        /// <summary>
+        /// Prints out in the consol which players beat, busted, or lost to the dealer
+        /// </summary>
         private void DetermineWinners()
         {
             foreach (var player in players)
@@ -153,6 +183,10 @@ namespace BlackjackUpdated
             }
         }
 
+        /// <summary>
+        /// Gets a card from the deck that hasn't been gotten before this game
+        /// </summary>
+        /// <returns>New card from the deck</returns>
         private Card DealCard()
         {
             int cardValue = cardRandomizer.Next(0, fullDeck.Count);
@@ -166,6 +200,12 @@ namespace BlackjackUpdated
             return fullDeck[cardValue];
         }
 
+        /// <summary>
+        /// Summation method that adds the points param to the total param and returns. This is for the Ace calculation as they can be 11 or 1 point depending if they bust the player/dealer
+        /// </summary>
+        /// <param name="total"></param>
+        /// <param name="points"></param>
+        /// <returns>New Total points</returns>
         private int AddPoints(int total, int points)
         {
             if (points != 11 || total + points <= 21)
@@ -179,6 +219,10 @@ namespace BlackjackUpdated
             return total;
         }
 
+        /// <summary>
+        /// Displays all of the cards of the selected player
+        /// </summary>
+        /// <param name="player"></param>
         private void DisplayPlayerCards(Player player)
         {
             Console.WriteLine($"{player.Name} was dealt:");
@@ -189,6 +233,9 @@ namespace BlackjackUpdated
             Console.WriteLine($"{player.Name}'s total is {player.Total}");
         }
 
+        /// <summary>
+        /// Displays the dealer's cards
+        /// </summary>
         private void DisplayDealerCards()
         {
             Console.WriteLine("Dealer's cards:");
