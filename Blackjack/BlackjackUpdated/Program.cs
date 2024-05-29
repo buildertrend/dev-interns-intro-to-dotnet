@@ -17,11 +17,13 @@ namespace BlackjackUpdated
         static readonly List<Player> playerStats = new List<Player>();
 
         static int playerTotal = 0;
-        static int playerCardCount = 1;
+        static int playerCardCount = -1;
         private static readonly List<Card> dealerCards = new List<Card>();
         static int dealerTotal = 0;
         static int dealerCardCount = 0;
         static int playerNum = 0;
+        static int highestTotal;
+        static int highestPlayer;
 
 
         //users to store the player choice (hit or stay)
@@ -81,14 +83,13 @@ namespace BlackjackUpdated
                         playerTotal += playerCards[0].Value;
                         playerTotal += playerCards[1].Value;
 
-                        playerStats.Add(new Player() { Total = playerTotal, State = "Dealt" });
+                        playerStats.Add(new Player() { Total = playerTotal, State = "Dealt"});
 
                         Console.WriteLine("Player {0} ", i + 1);
                         DisplayWelcomeMessage();
 
                         playerTotal = 0;
                         playerCards.Clear();
-
                     }
 
 
@@ -134,55 +135,18 @@ namespace BlackjackUpdated
                         if (playerChoice.Equals("H"))
                         {
                             //hit will get them a card / check the total and ask for another hit
-                            Hit();
+                            Hit(i);
                         }
 
                         if (playerChoice.Equals("S"))
                         {
                             playerStats[i].State = "Done";
-
-                            //Deal the dealer out if their current total is less than the player total
-                            DealDealerOut();
-                            //Check if the dealer busted 
-                            if (dealerTotal > 21)
-                            {
-                                Console.BackgroundColor = ConsoleColor.Green;
-                                Console.WriteLine("Congrats! You won the game! The dealer busted with {0}", dealerTotal);
-                                Console.ResetColor();
-
-                            }
-                            else if (playerTotal < dealerTotal)
-                            {
-                                Console.BackgroundColor = ConsoleColor.Red;
-                                Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
-                                Console.ResetColor();
-
-                            }
-                            else if (playerTotal == dealerTotal)
-                            {
-                                Console.WriteLine("Sorry, you lost! You tied with the dealer. The dealer's total was {0}", dealerTotal);
-                            }
                         }
-                    }
-
-                    else
-                    {
-                        //Check to see if the dealer also got blackjack to determine winner
-                        if (playerTotal == 21 && playerTotal != dealerTotal)
-                        {
-                            Console.BackgroundColor = ConsoleColor.Green;
-                            Console.WriteLine("Congrats! You got Blackjack and won the game!");
-                            Console.ResetColor();
-                        }
-                        else if (playerTotal == dealerTotal)
-                        {
-                            Console.BackgroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Sorry, you lost! You and the dealer tied");
-                            Console.ResetColor();
-                        }
-
-                    }
+                    }  
                 }
+
+                highestPlayer = ComparePlayers(playerNum);
+                CompareToDealer(highestPlayer);
 
                 /* END GAME LOOP */
 
@@ -191,6 +155,63 @@ namespace BlackjackUpdated
             }
         }
 
+        static private int ComparePlayers(int playerNum)
+        {
+            highestTotal = 0;
+            for (int i = 0; i < playerNum; i++)
+            {
+                if (playerStats[i].State != ("Busted") && playerStats[i].Total > highestTotal);
+                {
+                    highestTotal = playerStats[i].Total;
+                    highestPlayer = i;
+                }
+            }
+            return highestPlayer;
+        }
+
+
+            static private void CompareToDealer(int highestPlayer)
+        {
+            //Deal the dealer out if their current total is less than the player total
+            DealDealerOut();
+            //Check if the dealer busted 
+            if (dealerTotal > 21)
+            {
+                Console.BackgroundColor = ConsoleColor.Green;
+                Console.WriteLine("Congrats! Player {0} won the game. The dealer busted with {1}", highestPlayer + 1, dealerTotal);
+                Console.ResetColor();
+
+            }
+            else if (playerStats[highestPlayer].Total < dealerTotal)
+            {
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.WriteLine("Sorry, everyone lost! The dealer's total was {0}", dealerTotal);
+                Console.ResetColor();
+
+            }
+            else if (playerStats[highestPlayer].Total == dealerTotal)
+            {
+                Console.WriteLine("Sorry, everyone lost! The highest player tied with the dealer. The dealer's total was {0}", dealerTotal);
+            }
+
+            /*else
+            {
+                //Check to see if the dealer also got blackjack to determine winner
+                if (playerTotal == 21 && playerTotal != dealerTotal)
+                {
+                    Console.BackgroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Congrats! You got Blackjack and won the game!");
+                    Console.ResetColor();
+                }
+                else if (playerTotal == dealerTotal)
+                {
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Sorry, you lost! You and the dealer tied");
+                    Console.ResetColor();
+                }
+
+            }*/
+        }
         private static void CreateDeckOfCards()
         {
             string[] Name = { "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "jack", "queen", "king", "ace" };
@@ -211,7 +232,7 @@ namespace BlackjackUpdated
         private static void DealDealerOut()
         {
             int i = 2;
-            if (dealerTotal < playerTotal && playerTotal <= 21 && i < 11)
+            if (dealerTotal < playerStats[highestPlayer].Total && playerStats[highestPlayer].Total <= 21 && i < 11)
             {
                 while (dealerTotal < 21)
                 {
@@ -233,26 +254,20 @@ namespace BlackjackUpdated
 
         }
 
-        static void Hit()
+        static void Hit(int playerNum)
         {
-            
+            playerCardCount++;
             playerCards.Add(DealCard());
-            playerTotal += playerCards[playerCardCount].Value;
-            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
+            playerStats[playerNum].Total += playerCards[playerCardCount].Value;
+            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerStats[playerNum].Total);
 
-            //Is this true? I don't think it is.
-            //if (playerTotal.Equals(21))
-            //{
-                //Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
-
-            //}
-            if (playerTotal > 21)
+            
+            if (playerStats[playerNum].Total > 21)
             {
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.WriteLine("You busted! Sorry, you lost! The dealer's Total was {0}", dealerTotal);
-                Console.ResetColor();
+                Console.WriteLine("You busted!");
+                playerStats[playerNum].State = "Busted";
             }
-            else if (playerTotal <= 21)
+            else if (playerStats[playerNum].Total <= 21)
             {
                 do
                 {
@@ -262,7 +277,7 @@ namespace BlackjackUpdated
                 while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
                 if (playerChoice.ToUpper() == "H")
                 {
-                    Hit();
+                    Hit(playerNum);
                 }
             }
         }
@@ -279,9 +294,6 @@ namespace BlackjackUpdated
             return card;
         
         }
-
-
-        
 
         static void PlayAgain()
         {

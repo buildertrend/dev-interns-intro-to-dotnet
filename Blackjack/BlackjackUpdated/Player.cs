@@ -10,13 +10,7 @@ namespace Blackjack
     {
         public string State;
         public int Total;
-
-    }
-    public enum player_State
-    {
-        Dealt,
-        Busted,
-        Done
         
+
     }
 }
