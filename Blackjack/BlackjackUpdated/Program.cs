@@ -89,20 +89,8 @@ namespace BlackjackUpdated
 
                     if (playerChoice.Equals("S"))
                     {
-                        if (playerTotal > dealerTotal && playerTotal <= 21)
-                        {
-                            Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
-                        }
-                        else if (playerTotal <= dealerTotal)
-                        {
-                            Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
-                        }
-                        playing = false;
-                    }
-
-                    if (playing)
-                    {
-                        if (dealerTotal < 16)
+                        // Dealer continues to hit until > 16 points.
+                        while (dealerTotal < 16)
                         {
                             // Dealer hits
                             Console.WriteLine("Dealer's score is < 16 - Hitting...");
@@ -113,10 +101,17 @@ namespace BlackjackUpdated
                             // Remove the hidden card from the known value.
                             Console.WriteLine("Dealer's current (known) score: {0}", dealerTotal - dealerCards[1].Value);
                         }
-                        else
+                        Console.WriteLine("Dealer has 16 or more points. Staying...");
+
+                        if (playerTotal > dealerTotal && playerTotal <= 21)
                         {
-                            Console.WriteLine("Dealer has 16 or more points. Staying...");
+                            Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
                         }
+                        if (playerTotal <= dealerTotal)
+                        {
+                            Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+                        }
+                        playing = false;
                     }
                     /* END GAME LOOP */
                 }
@@ -147,6 +142,7 @@ namespace BlackjackUpdated
 
             if (playerTotal > 21)
             {
+                // 
                 Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
                 playing = false;
             }
