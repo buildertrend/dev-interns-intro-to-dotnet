@@ -16,6 +16,8 @@ namespace BlackjackUpdated
         static int dealerTotal = 0;
         static int dealerCardCount = 0;
 
+        //private static List<int> players = new List<int>();
+
         //users to store the player choice (hit or stay)
         static string playerChoice = "";
 
@@ -40,8 +42,13 @@ namespace BlackjackUpdated
 
                 if (decision == "Y")
                 {
+                    //Console.WriteLine("How many players are playing?");
                     //Currently, just get a value between 16-21 for the dealer
-                    dealerTotal = cardRandomizer.Next(15, 22);
+                    //dealerTotal = cardRandomizer.Next(15, 22);
+                    dealerCards[0] = DealCard();
+                    Console.WriteLine("The dealer's first card is " + dealerCards[0].Value);
+                    dealerCards[1] = DealCard();
+                    dealerTotal = dealerCards[0].Value + dealerCards[1].Value;
                     playerCards[0] = DealCard();
                     playerCards[1] = DealCard();
 
@@ -63,9 +70,9 @@ namespace BlackjackUpdated
                     Console.WriteLine("Would you like to (H)it or (S)tay?");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
-                while (!playerChoice.Equals("H") && !playerChoice.Equals("H"));
+                while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
 
-                if (playerChoice.Equals("H"))
+                if (playerChoice.Equals("H")) 
                 {
                     //hit will get them a card / check the total and ask for another hit
                     Hit();
@@ -80,6 +87,10 @@ namespace BlackjackUpdated
                     else if (playerTotal < dealerTotal)
                     {
                         Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
+                    } else
+                    {
+                        Console.WriteLine("Sorry, you lost! It was a tie and the dealer's total was {0}", dealerTotal);
+
                     }
                 }
 
@@ -108,7 +119,7 @@ namespace BlackjackUpdated
             Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
             //Is this true? I don't think it is.
-            if (playerTotal.Equals(21))
+            if (playerTotal.Equals(21) && playerCards.Length == 2)
             {
                 Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
 
@@ -134,16 +145,16 @@ namespace BlackjackUpdated
         }
 
         //TODO: Move this class to it's own file.
-        private class Card
-        {
-            public int Value;
-            public string Name;
-        }
+        //private class Card
+        //{
+        //    public int Value;
+        //    public string Name;
+        //}
 
         static Card DealCard()
         {
             int cardValue = cardRandomizer.Next(1, 14);
-            playerTotal += cardValue;
+            //playerTotal += cardValue;
             return GetCardValue(cardValue);
         }
 
