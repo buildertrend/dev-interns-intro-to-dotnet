@@ -82,13 +82,12 @@ namespace BlackjackUpdated
                     {
                         if (playerTotal > dealerTotal && playerTotal <= 21)
                         {
-                            do
+                            while (dealerTotal < playerTotal && dealerTotal < 16)
                             {
                                 var newCard = DealCard();
                                 dealerCards.Add(newCard);
                                 dealerTotal += newCard.Value;
                             }
-                            while (dealerTotal < playerTotal);
                             if (dealerTotal.Equals(playerTotal))
                             {
                                 Console.WriteLine("Sorry, you lost because the dealer tied with you! The dealer's total was {0}", dealerTotal);
@@ -97,6 +96,10 @@ namespace BlackjackUpdated
                             {
                                 Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
                             }
+                        }
+                        else if (dealerTotal.Equals(playerTotal))
+                        {
+                            Console.WriteLine("Sorry, you lost because the dealer tied with you! The dealer's total was {0}", dealerTotal);
                         }
                         else if (playerTotal < dealerTotal)
                         {
@@ -117,7 +120,7 @@ namespace BlackjackUpdated
         {
             Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
             Console.WriteLine("Your playerTotal is {0} ", playerTotal);
-            Console.WriteLine("The dealer has the card : {0} ", dealerCards[0].Name);
+            Console.WriteLine("The dealer has the card : {0} ", dealerCards.FirstOrDefault().Name);
 
         }
 
