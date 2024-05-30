@@ -27,7 +27,7 @@ namespace BlackjackUpdated
         static string playAgain = "Y";
 
         static readonly List<Player> playerList = new List<Player>();
-
+        static int playersDONE = 0;
 
         static int playerAmount = 1;
         static ConsoleColor[] colors = { ConsoleColor.Blue, ConsoleColor.Yellow, ConsoleColor.Green, ConsoleColor.Red, ConsoleColor.Cyan };
@@ -124,92 +124,138 @@ namespace BlackjackUpdated
 
 
                 /* START GAME LOOP */
-                
-                for (int j = 0; j < playerAmount; j++)      // players take turns when deciding to hit or stay
+                while (playersDONE != playerAmount)
                 {
-                    Console.ForegroundColor = colors[j];
 
-                    if (playerList[j].state == State.DECISION)
+
+                    for (int j = 0; j < playerAmount; j++)      // players take turns when deciding to hit or stay
                     {
-                        do
-                        {
-                            Console.WriteLine("Would you like to (H)it or (S)tay?");
-                            playerChoice = Console.ReadLine().ToUpper();
+                        Console.ForegroundColor = colors[j];
+                        Console.WriteLine("Player {0}: total is {1}", j + 1, playerList[j].total);
 
-                        }
-                        while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
-                        
-                        
-                        if (playerChoice.Equals("H"))
+                        if (playerList[j].state == State.DECISION)
                         {
-                            //hit will get them a card / check the total and ask for another hit
-                            Hit(playerList[j], deck);
-                        }
-                        if (playerChoice.Equals("S"))
-                        {
-                            playerList[j].state = State.DONE;
-
-                            if (playerTotal > 21)
+                            do
                             {
-                                Console.WriteLine("You busted! Sorry!");
-                                playerList[j].state = State.BUST;
+                                Console.WriteLine("Would you like to (H)it or (S)tay?");
+                                playerChoice = Console.ReadLine().ToUpper();
+
                             }
+                            while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
 
-                            //else
-                            //{
 
-                            //    int i = 2;
-                            //    //while (playerTotal > dealerTotal && playerTotal <= 21 && i < 11)
-                            //    while (dealerTotal < 17 && i < 11)
-                            //    {
-                            //        dealerCards[i - 1] = DealCard(deck);
-                            //        dealerTotal += dealerCards[i - 1].Value;
-                            //        dealerCardCount++;
-                            //        //Console.WriteLine(dealerTotal);
-                            //    }
+                            if (playerChoice.Equals("H"))
+                            {
+                                //hit will get them a card / check the total and ask for another hit
+                                Hit(playerList[j], deck);
+                            }
+                            if (playerChoice.Equals("S"))
+                            {
+                                playerList[j].state = State.DONE;
+                                playersDONE++;
 
-                            //    if (playerTotal > dealerTotal && playerTotal <= 21)
-                            //    {
-                            //        Console.ForegroundColor = ConsoleColor.Yellow;
-                            //        Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
-                            //        Console.ResetColor();
+                                if (playerList[j].total > 21)
+                                {
+                                    Console.WriteLine("You busted! Sorry!");
+                                    playerList[j].state = State.BUST;
+                                }
 
-                            //    }
-                            //    else if (playerTotal < dealerTotal && dealerTotal <= 21)
-                            //    {
-                            //        Console.ForegroundColor = ConsoleColor.Magenta;
-                            //        Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
-                            //        Console.ResetColor();
-                            //    }
-                            //    else if (dealerTotal == playerTotal)
-                            //    {
-                            //        Console.ForegroundColor = ConsoleColor.Magenta;
-                            //        Console.WriteLine("Sorry, you lost! The dealer's total was {0}", dealerTotal);
-                            //        Console.ResetColor();
-                            //    }
-                            //    else
-                            //    {
-                            //        Console.ForegroundColor = ConsoleColor.Yellow;
-                            //        Console.WriteLine("Congrats! You won the game! The dealer's total is {0} ", dealerTotal);
-                            //        Console.ResetColor();
-                            //    }
-                            //
-                            //}
-
+                            }
                         }
-                    }
-                    else if (playerList[j].state == State.BLACKJACK)
-                    {
-                        Console.WriteLine("Has Blackjack");
-                    }
+                        else if (playerList[j].state == State.DONE)
+                        {
+                            Console.WriteLine("Done");
+                        }
+                        else if (playerList[j].state == State.BLACKJACK)
+                        {
+                            Console.WriteLine("Has Blackjack");
+                        }
+                        else if (playerList[j].state == State.BUST)
+                        {
+                            Console.WriteLine("Bust");
+                        }
 
-                    Console.ResetColor();
+                        Console.ResetColor();
+                    }
                 }
 
-                
+                // Dealer hit's when under 17
+                while (dealerTotal < 17)
+                {
+                    Card c = DealCard(deck);
+                    dealerCards.Add(c);
+                    dealerTotal += c.Value;
+                    dealerCardCount++;
+                }
+
+
                 /* END GAME LOOP */
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine("\nRESULTS");
+                Console.ResetColor();
 
                 // evaluate dealerWins boolean
+                if (dealerWins)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Dealer Wins with Blackjack");
+                    Console.ResetColor();
+                }
+                else if(dealerTotal == 21)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Dealer Wins with total 21");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    int max = -300;
+                    int winner = -1;
+                    int blackjackAmount = 0;
+
+                    for (int j = 0; j < playerAmount; j++)
+                    {
+                        if (playerList[j].state == State.DONE)
+                        {
+                            if(max < playerList[j].total)
+                            {
+                                max = playerList[j].total;
+                                winner = j + 1;
+                            }
+                        }
+                        else if (playerList[j].state == State.BLACKJACK)
+                        {
+                            blackjackAmount++;
+                        }
+                    }
+
+                    if(blackjackAmount == 0 && playerList[winner-1].total == dealerTotal)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Dealer Wins with total {0}", dealerTotal);
+                        Console.ResetColor();
+                    }
+
+
+                    for (int j = 0; j < playerAmount; j++)
+                    {
+                        Console.ForegroundColor = colors[j];
+                        Console.WriteLine("Player {0}: {1}", j + 1, playerList[j].total);
+                        if(j + 1 == winner && blackjackAmount == 0)
+                        {
+                            Console.WriteLine("Congrats! You win. Dealer's total was: {0}", dealerTotal);
+                        }
+                        else if (playerList[j].state == State.BLACKJACK)
+                        {
+                            Console.WriteLine("Congrats! You win with a Blackjack. Dealer's total was: {0}", dealerTotal);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Sorry, you lost! Dealer's total was: {0}", dealerTotal);
+                        }
+                        Console.ResetColor();
+                    }
+                }
 
                 Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
                 PlayAgain();
@@ -225,7 +271,7 @@ namespace BlackjackUpdated
             for(int j = 0; j < playerAmount; j++)
             {
                 Console.ForegroundColor = colors[j];
-                Console.WriteLine("Player {0} was dealt cards : {1} and {2} ", j, playerList[j].playerCards[0].Name, playerList[j].playerCards[1].Name);
+                Console.WriteLine("Player {0} was dealt cards : {1} and {2} ", j+1, playerList[j].playerCards[0].Name, playerList[j].playerCards[1].Name);
                 Console.WriteLine("Total is {0} ", playerList[j].total);
                 Console.ResetColor();
             }
@@ -242,10 +288,11 @@ namespace BlackjackUpdated
             player.total += player.playerCards[player.cardAmount-1].Value;
             Console.WriteLine("Your card is a(n) {0} and your new Total is {1}. ", player.playerCards[player.cardAmount-1].Name, player.total);
 
-            if (playerTotal > 21)
+            if (player.total > 21)
             {
                 Console.WriteLine("You busted! Sorry!");
                 player.state = State.BUST;
+                playersDONE++;
             }
             return;
         }
@@ -301,6 +348,8 @@ namespace BlackjackUpdated
                 playerTotal = 0;
                 playerCards.Clear();
                 dealerCards.Clear();
+                playersDONE = 0;
+                playerList.Clear();
             }
             else if (playAgain.Equals("N"))
             {
