@@ -31,7 +31,7 @@ namespace BlackjackUpdated
                 //StartGame
                 try
                 {
-                    Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y)es (N)o");
+                    Console.WriteLine("Welcome to Blackjack - are you ready to play? (Y) Yes (N) No");
                 }
                 catch (Exception ex)
                 {
@@ -62,7 +62,7 @@ namespace BlackjackUpdated
 
                     if(playerTotal == 21)
                     {
-                        Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
+                        Console.WriteLine("You were dealt the cards: {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
                         Console.WriteLine("BLACKJACKKKKKKK!!!!");
                         break;
                     }
@@ -77,8 +77,8 @@ namespace BlackjackUpdated
                 /* START GAME LOOP */
                 do
                 {
-                    Console.WriteLine("The dealer's card is {0} ", dealerCards[0].Name);
-                    Console.WriteLine("Would you like to (H)it or (S)tay?");
+                    Console.WriteLine("The dealer's card is: {0} ", dealerCards[0].Name);
+                    Console.WriteLine("Would you like to (H) Hit or (S) Stay?");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
                 while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
@@ -117,7 +117,7 @@ namespace BlackjackUpdated
 
                 /* END GAME LOOP */
 
-                Console.WriteLine("Would you like to play again? (Y)es or (N)o?");
+                Console.WriteLine("Would you like to play again? (Y) Yes or (N) No?");
                 PlayAgain();
             }
         }
@@ -127,8 +127,8 @@ namespace BlackjackUpdated
         /// </summary>
         private static void DisplayWelcomeMessage()
         {
-            Console.WriteLine("You were dealt the cards : {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
-            Console.WriteLine("Your playerTotal is {0} ", playerTotal);
+            Console.WriteLine("You were dealt the cards: {0} and {1} ", playerCards[0].Name, playerCards[1].Name);
+            Console.WriteLine("Your player Total is: {0} ", playerTotal);
             //TODO: Inform the player the value of the dealer's visible card.
         }
 
@@ -138,24 +138,24 @@ namespace BlackjackUpdated
             //playerCards[playerCardCount] = DealCard();
             playerCards.Add(DealCard());
             playerTotal += playerCards[playerCardCount].Value;
-            Console.WriteLine("You card is a(n) {0} and your new Total is {1}. ", playerCards[playerCardCount].Name, playerTotal);
+            Console.WriteLine("You card is a(n) {0} and your new Total is: {1}. ", playerCards[playerCardCount].Name, playerTotal);
 
             //Is this true? I don't think it is.
             if (playerTotal.Equals(21))
             {
-                Console.WriteLine("You got Blackjack! The dealer's Total was {0}. ", dealerTotal);
+                Console.WriteLine("You got Blackjack! The dealer's Total was: {0}. ", dealerTotal);
 
             }
             else if (playerTotal > 21)
             {
-                Console.WriteLine("You busted! Sorry! The dealer's Total was {0}", dealerTotal);
+                Console.WriteLine("You busted! Sorry! The dealer's Total was: {0}", dealerTotal);
 
             }
             else if (playerTotal < 21)
             {
                 do
                 {
-                    Console.WriteLine("Would you like to hit or stay? h for hit s for stay");
+                    Console.WriteLine("Would you like to (H) Hit or (S) Stay?");
                     playerChoice = Console.ReadLine().ToUpper();
                 }
                 while (!playerChoice.Equals("H") && !playerChoice.Equals("S"));
