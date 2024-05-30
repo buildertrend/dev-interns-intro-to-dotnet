@@ -13,6 +13,8 @@ namespace Blackjack
 
         public void Populate()
         {
+            
+
             // Hearts
             this.cards.Push(new Card() { Name = "Two", Value = 2, Suit = "Hearts" });
             this.cards.Push(new Card() { Name = "Three", Value = 3, Suit = "Hearts" });
@@ -76,10 +78,10 @@ namespace Blackjack
         }
 
 
-        public void Shuffle<T>(Stack<T> stack)
+        public void Shuffle()
         {
             // Convert the stack to a list
-            List<T> list = stack.ToList();
+            List<Card> list = this.cards.ToList();
 
             // Shuffle the list
             Random rng = new Random();
@@ -88,17 +90,24 @@ namespace Blackjack
             {
                 n--;
                 int k = rng.Next(n + 1);
-                T value = list[k];
+                Card card = list[k];
                 list[k] = list[n];
-                list[n] = value;
+                list[n] = card;
             }
 
             // Clear the stack and push the shuffled items back into it
-            stack.Clear();
+            this.cards.Clear();
             foreach (var item in list)
             {
-                stack.Push(item);
+                this.cards.Push(item);
             }
+        }
+
+
+        // Method to deal the top card of the shuffled deck
+        public Card DealCard()
+        {
+            return this.cards.Pop();
         }
 
     }
