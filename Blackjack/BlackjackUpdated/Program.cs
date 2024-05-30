@@ -33,7 +33,7 @@ namespace BlackjackUpdated
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("An exception occured during runtime: ", ex);
+                    Console.WriteLine("An exception occured during runtime: {0}", ex);
 
                 }
 

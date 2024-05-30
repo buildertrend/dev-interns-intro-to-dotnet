@@ -11,11 +11,12 @@ namespace Blackjack
         public int total { get; set; }
         public PlayerStatus status { get; set; }
         public List<Card> cards { get; set; }
-        public int playerId { get; set; }
+        public int? playerId { get; set; }
         public Player()
         {
             total = 0;
             status = PlayerStatus.READY;
+            playerId = null;
             cards = new List<Card>();
         }
     }
